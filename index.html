@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ruta de Acopio — Mapa de ayuda para Venezuela</title>
+<meta name="description" content="Mapa colaborativo de centros de acopio de ayuda humanitaria para Venezuela, dentro y fuera del país." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="manifest-header">
+  <div class="wrap">
+    <p class="eyebrow">Terremotos en Venezuela · 24 junio 2026 · mapa colaborativo</p>
+    <h1>Ruta de Acopio<br /><span>para Venezuela</span></h1>
+    <p class="lede">
+      Encuentra dónde llevar tu donación en el exterior, o dónde recogerla
+      dentro de Venezuela, tras los terremotos del 24 de junio. La
+      información es recopilada de prensa y de la comunidad — los datos
+      cambian rápido, así que confirma horario y dirección antes de ir.
+      Los pines del mapa son aproximados; el botón "Cómo llegar" usa la
+      dirección exacta.
+    </p>
+    <dl class="stats">
+      <div><dt id="stat-total">0</dt><dd>centros activos</dd></div>
+      <div><dt id="stat-paises">0</dt><dd>países de origen</dd></div>
+      <div><dt id="stat-ciudades">0</dt><dd>ciudades en Venezuela</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="controls" aria-label="Filtros de búsqueda">
+    <div class="filter-group" role="group" aria-label="Filtrar por tipo">
+      <button class="filter-btn is-active" data-filter="todos" aria-pressed="true">Todos</button>
+      <button class="filter-btn" data-filter="internacional" aria-pressed="false">
+        <span class="dot dot--internacional"></span>Internacional
+      </button>
+      <button class="filter-btn" data-filter="nacional" aria-pressed="false">
+        <span class="dot dot--nacional"></span>Dentro de Venezuela
+      </button>
+    </div>
+
+    <div class="search-group">
+      <label for="search" class="sr-only">Buscar por ciudad, país o nombre</label>
+      <input type="search" id="search" placeholder="Buscar ciudad, país o nombre…" autocomplete="off" />
+    </div>
+
+    <!-- Reemplaza el href de abajo con tu propio link de Google Forms -->
+    <a id="form-link" class="btn-suggest" href="REEMPLAZA_CON_TU_LINK_DE_GOOGLE_FORM" target="_blank" rel="noopener">
+      + Sugerir un centro
+    </a>
+  </section>
+
+  <section class="content">
+    <div id="map" class="map" role="application" aria-label="Mapa de centros de acopio"></div>
+    <div class="list" id="list" aria-label="Lista de centros de acopio"></div>
+  </section>
+</main>
+
+<section class="resources wrap" aria-label="Otros recursos durante esta emergencia">
+  <h2>Otros recursos durante esta emergencia</h2>
+  <p class="resources-note">
+    No son centros de acopio, pero pueden servirte para otras necesidades
+    urgentes. Son sitios independientes — no los hemos verificado a fondo,
+    úsalos bajo tu propio criterio.
+  </p>
+  <ul class="resources-list">
+    <li>
+      <a href="https://terremotovenezuela.app/" target="_blank" rel="noopener">
+        <strong>Mapa de rescate y daños</strong>
+        terremotovenezuela.app — reportes de estructuras colapsadas y labores de rescate
+      </a>
+    </li>
+    <li>
+      <a href="https://venezuelatebusca.com/" target="_blank" rel="noopener">
+        <strong>Buscar / reportar a un familiar</strong>
+        venezuelatebusca.com — registro de personas desaparecidas
+      </a>
+    </li>
+    <li>
+      <a href="https://desaparecidosterremotovenezuela.com/" target="_blank" rel="noopener">
+        <strong>Otro registro de desaparecidos</strong>
+        desaparecidosterremotovenezuela.com — iniciativa independiente, mismo propósito
+      </a>
+    </li>
+  </ul>
+</section>
+
+<footer class="site-footer wrap">
+  <p>
+    Esta información es mantenida por la comunidad y puede no estar siempre
+    actualizada. Confirma horario y dirección con el centro antes de ir.
+    Última actualización: <span id="last-updated"></span>.
+  </p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="centros-data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
