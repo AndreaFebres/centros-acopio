@@ -474,7 +474,10 @@
       else if (map.ciudad === undefined && n.includes("ciudad")) map.ciudad = idx;
       else if (map.direccion === undefined && n.includes("direcc")) map.direccion = idx;
       else if (map.horario === undefined && n.includes("horario")) map.horario = idx;
-      else if (n.includes("contacto") || n.includes("telefono") || n.includes("whatsapp") || n.includes("correo") || n.includes("email") || n.includes("instagram") || n.includes("telegram")) contactoIdx.push(idx);
+      // NO recolectamos correos/emails como contacto público, para
+      // proteger la privacidad de quien llena el formulario. Solo
+      // teléfono, WhatsApp y redes públicas del centro.
+      else if (n.includes("contacto") || n.includes("telefono") || n.includes("whatsapp") || n.includes("instagram") || n.includes("telegram")) contactoIdx.push(idx);
       else if (map.insumos === undefined && (n.includes("cosas") || n.includes("insumo") || n.includes("recib") || n.includes("necesita") || n.includes("dona"))) map.insumos = idx;
     });
     // Puede haber varios campos de contacto separados (teléfono, correo,
