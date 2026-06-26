@@ -101,7 +101,7 @@
     INSUMOS.forEach((cat) => {
       const det = document.createElement("details");
       det.className = "need-cat";
-      if (cat.abierta) det.open = true;
+      det.open = true; // todas abiertas por defecto, pero colapsables
       const titulo = lang === "en" && cat.titulo_en ? cat.titulo_en : cat.titulo;
       const sum = document.createElement("summary");
       sum.textContent = titulo;
@@ -288,14 +288,21 @@
 
       ciudadesOrdenadas.forEach((ciudad) => {
         const centrosCiudad = ciudades[ciudad];
-        const ciudadHeader = document.createElement("h3");
-        ciudadHeader.className = "group-ciudad";
-        ciudadHeader.innerHTML = `${ciudad} <span class="group-count">${centrosCiudad.length}</span>`;
-        body.appendChild(ciudadHeader);
+        const ciudadDet = document.createElement("details");
+        ciudadDet.className = "group-ciudad-det";
+        ciudadDet.open = true; // las ciudades abren por defecto
+        const ciudadSum = document.createElement("summary");
+        ciudadSum.className = "group-ciudad";
+        ciudadSum.innerHTML = `${ciudad} <span class="group-count">${centrosCiudad.length}</span>`;
+        ciudadDet.appendChild(ciudadSum);
 
+        const ciudadBody = document.createElement("div");
+        ciudadBody.className = "group-ciudad-body";
         centrosCiudad.forEach((c) => {
-          body.appendChild(buildCard(c));
+          ciudadBody.appendChild(buildCard(c));
         });
+        ciudadDet.appendChild(ciudadBody);
+        body.appendChild(ciudadDet);
       });
 
       details.appendChild(body);

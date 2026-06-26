@@ -284,15 +284,34 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 .group-pais[open] > summary::before{ transform: rotate(90deg); }
 .group-pais-body{ padding: 0 12px 12px; }
+.group-ciudad-det{ margin: 6px 0; }
 .group-ciudad{
-  font-family: var(--font-mono);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--ink-soft);
-  margin: 14px 0 8px 2px;
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 12px 0 8px 0;
+  padding: 2px 0;
 }
-.group-ciudad:first-child{ margin-top: 2px; }
+.group-ciudad::-webkit-details-marker{ display: none; }
+.group-ciudad::before{
+  content: "›";
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--blue);
+  transition: transform 0.15s ease;
+}
+.group-ciudad-det[open] > .group-ciudad::before{ transform: rotate(90deg); }
+.group-ciudad-body{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .group-count{
   font-family: var(--font-mono);
   font-weight: 400;
