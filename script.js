@@ -532,6 +532,24 @@
         })
         .filter((c) => c.direccion); // ignora filas vacías o incompletas
 
+      // Evita centros repetidos: descarta los de la comunidad cuya
+      // dirección ya exista (en los oficiales o en otro de la comunidad).
+      // Normaliza para comparar sin importar mayúsculas, acentos ni espacios.
+      const normDir = (s) =>
+        (s || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^a-z0-9]+/g, " ")
+          .trim();
+      const direccionesVistas = new Set(CENTROS_DATA.map((c) => normDir(c.direccion)));
+      COMMUNITY_DATA = COMMUNITY_DATA.filter((c) => {
+        const clave = normDir(c.direccion);
+        if (!clave || direccionesVistas.has(clave)) return false;
+        direccionesVistas.add(clave);
+        return true;
+      });
+
       updateStats();
       applyFilters();
     } catch (err) {
