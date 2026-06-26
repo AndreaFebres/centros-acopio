@@ -65,6 +65,15 @@
     sinEspecificar: { es: "Sin especificar", en: "Not specified" },
     vacio: { es: "No hay centros que coincidan con tu búsqueda.<br>Intenta otro término o cambia el filtro.", en: "No centers match your search.<br>Try another term or change the filter." },
     sinNombreCentro: { es: "Centro sin nombre", en: "Unnamed center" },
+    whatsapp: { es: "WhatsApp", en: "WhatsApp" },
+    compartir: { es: "Compartir", en: "Share" },
+    cercaDeMi: { es: "📍 Cerca de mí", en: "📍 Near me" },
+    buscandoUbic: { es: "Buscando tu ubicación…", en: "Finding your location…" },
+    ordenadoCercania: { es: "✓ Ordenado por cercanía", en: "✓ Sorted by distance" },
+    sinUbic: { es: "No se pudo obtener tu ubicación", en: "Couldn't get your location" },
+    waMsg: { es: "Hola, vi su centro de acopio en la página Ruta de Acopio. ¿Siguen recibiendo donaciones?", en: "Hello, I saw your donation center on the Ruta de Acopio page. Are you still receiving donations?" },
+    shareCentroMsg: { es: "Centro de acopio para Venezuela:", en: "Donation center for Venezuela:" },
+    linkCopiado: { es: "✓ Copiado", en: "✓ Copied" },
   };
   function t(key) {
     return (I18N[key] && I18N[key][lang]) || (I18N[key] && I18N[key].es) || "";
@@ -225,9 +234,47 @@
   let includeCommunity = true;
   let COMMUNITY_DATA = [];
 
+  let userLocation = null; // {lat, lng} cuando se activa "Cerca de mí"
+
   function getFiltered() {
     const base = includeCommunity ? CENTROS_DATA.concat(COMMUNITY_DATA) : CENTROS_DATA;
     return base.filter(matchesFilter);
+  }
+
+  // Distancia aproximada en km entre dos puntos (fórmula haversine).
+  function distanciaKm(lat1, lng1, lat2, lng2) {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLng = ((lng2 - lng1) * Math.PI) / 180;
+    const a = Math.sin(dLat / 2) ** 2 +
+      Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  // Render alternativo: lista plana ordenada por cercanía al usuario.
+  function renderListaCercania(centros) {
+    listEl.innerHTML = "";
+    quickNavEl.innerHTML = "";
+    const conCoord = centros
+      .filter((c) => typeof c.lat === "number" && typeof c.lng === "number")
+      .map((c) => ({ c, d: distanciaKm(userLocation.lat, userLocation.lng, c.lat, c.lng) }))
+      .sort((a, b) => a.d - b.d);
+    const sinCoord = centros.filter((c) => typeof c.lat !== "number" || typeof c.lng !== "number");
+
+    if (conCoord.length === 0 && sinCoord.length === 0) {
+      listEl.innerHTML = `<p class="empty-state">${t("vacio")}</p>`;
+      return;
+    }
+    conCoord.forEach(({ c, d }) => {
+      const card = buildCard(c);
+      const dist = d < 1 ? "<1 km" : d < 1000 ? Math.round(d) + " km" : Math.round(d / 100) / 10 + " mil km";
+      const tag = document.createElement("p");
+      tag.className = "card-dist";
+      tag.textContent = "📍 " + dist;
+      card.insertBefore(tag, card.firstChild);
+      listEl.appendChild(card);
+    });
+    sinCoord.forEach((c) => listEl.appendChild(buildCard(c)));
   }
 
   /* =========================================================
@@ -310,6 +357,42 @@
     });
   }
 
+  // Extrae un número apto para WhatsApp del campo contacto (solo si
+  // parece teléfono). Devuelve solo dígitos, o null si no hay.
+  function waNumber(contacto) {
+    if (!contacto || contacto === "—") return null;
+    // toma el primer fragmento que tenga forma de teléfono
+    const m = contacto.match(/\+?[\d][\d\s().-]{6,}/);
+    if (!m) return null;
+    const digits = m[0].replace(/[^\d]/g, "");
+    return digits.length >= 7 ? digits : null;
+  }
+  function waUrl(c) {
+    const num = waNumber(c.contacto);
+    if (!num) return null;
+    return `https://wa.me/${num}?text=${encodeURIComponent(t("waMsg"))}`;
+  }
+
+  // Comparte un centro individual (Web Share API o copia al portapapeles).
+  async function shareCentro(c, btn) {
+    const texto = `${t("shareCentroMsg")} ${c.nombre} — ${c.direccion} (${c.ciudad}, ${c.pais})`;
+    const url = window.location.href;
+    if (navigator.share) {
+      try { await navigator.share({ title: c.nombre, text: texto, url }); } catch (e) {}
+    } else {
+      try {
+        await navigator.clipboard.writeText(texto + " " + url);
+        if (btn) {
+          const prev = btn.textContent;
+          btn.textContent = t("linkCopiado");
+          setTimeout(() => { btn.textContent = prev; }, 1800);
+        }
+      } catch (e) {
+        window.prompt("Copia:", texto + " " + url);
+      }
+    }
+  }
+
   function buildCard(c) {
     const tipo = resolveTipo(c);
     const card = document.createElement("article");
@@ -333,12 +416,16 @@
       })()}
       <div class="card-actions">
         <a href="${directionsUrl(c)}" target="_blank" rel="noopener">${t("comoLlegar")}</a>
+        ${waUrl(c) ? `<a class="card-wa" href="${waUrl(c)}" target="_blank" rel="noopener">💬 ${t("whatsapp")}</a>` : ""}
+        <button type="button" class="card-share-btn">↗ ${t("compartir")}</button>
         <a class="card-report" href="${REPORT_FORM_URL}" target="_blank" rel="noopener">${t("reportar")}</a>
       </div>
     `;
+    const shareBtn = card.querySelector(".card-share-btn");
+    if (shareBtn) shareBtn.addEventListener("click", (e) => { e.stopPropagation(); shareCentro(c, shareBtn); });
     card.addEventListener("click", (e) => {
-      // No interferir con los enlaces (Cómo llegar / Reportar)
-      if (e.target.tagName === "A") return;
+      // No interferir con los enlaces ni botones
+      if (e.target.tagName === "A" || e.target.tagName === "BUTTON") return;
       selectCenter(c.id, true);
     });
     card.addEventListener("keydown", (e) => {
@@ -582,7 +669,11 @@
 
   function applyFilters() {
     const filtered = getFiltered();
-    renderList(filtered);
+    if (userLocation) {
+      renderListaCercania(filtered);
+    } else {
+      renderList(filtered);
+    }
     renderMarkers(filtered); // no hace nada si el mapa no está cargado
   }
 
@@ -676,6 +767,38 @@
   }
   wireShareButton(document.getElementById("share-btn"));
   wireShareButton(document.getElementById("share-btn-top"));
+
+  const nearBtn = document.getElementById("near-me");
+  if (nearBtn) {
+    nearBtn.addEventListener("click", () => {
+      if (userLocation) {
+        userLocation = null;
+        nearBtn.classList.remove("is-active");
+        nearBtn.textContent = lang === "en" ? "📍 Near me" : "📍 Cerca de mí";
+        applyFilters();
+        return;
+      }
+      if (!navigator.geolocation) { alert(t("sinUbic")); return; }
+      const prev = nearBtn.textContent;
+      nearBtn.textContent = t("buscandoUbic");
+      nearBtn.disabled = true;
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          nearBtn.disabled = false;
+          nearBtn.classList.add("is-active");
+          nearBtn.textContent = t("ordenadoCercania");
+          applyFilters();
+        },
+        () => {
+          nearBtn.disabled = false;
+          nearBtn.textContent = prev;
+          alert(t("sinUbic"));
+        },
+        { timeout: 10000 }
+      );
+    });
+  }
 
   renderInsumos();
   updateStats();
