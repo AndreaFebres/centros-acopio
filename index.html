@@ -6,9 +6,6 @@
 <title>Ruta de Acopio — Mapa de ayuda para Venezuela</title>
 <meta name="description" content="Mapa colaborativo de centros de acopio de ayuda humanitaria para Venezuela, dentro y fuera del país." />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -22,8 +19,11 @@
       dentro de Venezuela, tras los terremotos del 24 de junio. La
       información es recopilada de prensa y de la comunidad — los datos
       cambian rápido, así que confirma horario y dirección antes de ir.
-      Los pines del mapa son aproximados; el botón "Cómo llegar" usa la
-      dirección exacta.
+    </p>
+    <p class="lede lede--light">
+      📶 Página liviana: por defecto solo carga la lista de direcciones.
+      El mapa visual es opcional, para no gastar tus datos si tienes
+      señal débil.
     </p>
     <dl class="stats">
       <div><dt id="stat-total">0</dt><dd>centros activos</dd></div>
@@ -50,13 +50,22 @@
       <input type="search" id="search" placeholder="Buscar ciudad, país o nombre…" autocomplete="off" />
     </div>
 
+    <button type="button" id="toggle-map" class="filter-btn" aria-pressed="false">
+      🗺️ Ver mapa <span class="btn-hint">(usa datos)</span>
+    </button>
+
+    <label class="community-toggle" id="community-toggle-wrap" style="display:none;">
+      <input type="checkbox" id="community-toggle" checked />
+      Incluir sugerencias de la comunidad (sin verificar)
+    </label>
+
     <!-- Reemplaza el href de abajo con tu propio link de Google Forms -->
-    <a id="form-link" class="btn-suggest" href="REEMPLAZA_CON_TU_LINK_DE_GOOGLE_FORM" target="_blank" rel="noopener">
+    <a id="form-link" class="btn-suggest" href="https://forms.gle/jXUmggJMLqtojTeK9" target="_blank" rel="noopener">
       + Sugerir un centro
     </a>
   </section>
 
-  <section class="content">
+  <section class="content" id="content">
     <div id="map" class="map" role="application" aria-label="Mapa de centros de acopio"></div>
     <div class="list" id="list" aria-label="Lista de centros de acopio"></div>
   </section>
@@ -99,7 +108,6 @@
   </p>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="centros-data.js"></script>
 <script src="script.js"></script>
 </body>

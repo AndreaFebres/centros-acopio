@@ -1,36 +1,29 @@
 /**
  * SCRIPT.JS
- * Lógica del mapa, filtros, búsqueda y sincronización con la lista.
- * No necesitas tocar este archivo para agregar centros — eso se
- * hace en centros-data.js.
+ * Lógica de filtros, búsqueda y lista — funciona sin internet adicional
+ * más allá de cargar la página. El mapa (Leaflet + OpenStreetMap) es
+ * pesado en datos, así que NO se carga solo: se descarga únicamente
+ * si la persona toca el botón "Ver mapa". Así alguien con señal débil
+ * puede ver direcciones, teléfonos y horarios sin gastar datos de más.
+ *
+ * No necesitas tocar este archivo para agregar centros — eso se hace
+ * en centros-data.js.
  */
 
 (function () {
-  const map = L.map("map", { scrollWheelZoom: true }).setView([8.0, -66.0], 5);
-
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 18,
-  }).addTo(map);
-
-  function stampIcon(tipo) {
-    return L.divIcon({
-      className: "stamp-icon",
-      html: `<span class="stamp stamp--${tipo}"></span>`,
-      iconSize: [18, 18],
-      iconAnchor: [9, 9],
-      popupAnchor: [0, -10],
-    });
-  }
-
   const listEl = document.getElementById("list");
   const searchEl = document.getElementById("search");
-  const filterBtns = Array.from(document.querySelectorAll(".filter-btn"));
+  const contentEl = document.getElementById("content");
+  const toggleMapBtn = document.getElementById("toggle-map");
+  // Ojo: el selector se limita a .filter-group para NO incluir el
+  // botón "Ver mapa" (también tiene la clase .filter-btn por estilo,
+  // pero su lógica es independiente del filtro de tipo).
+  const filterBtns = Array.from(document.querySelectorAll(".filter-group .filter-btn"));
 
   let currentFilter = "todos";
   let currentQuery = "";
   let selectedId = null;
+  let map = null; // se crea solo cuando se activa el mapa
   const markersById = {};
 
   function directionsUrl(c) {
@@ -38,8 +31,13 @@
     return `https://www.google.com/maps/search/?api=1&query=${query}`;
   }
 
+  function resolveTipo(c) {
+    if (c.tipo === "internacional" || c.tipo === "nacional") return c.tipo;
+    return (c.pais || "").trim().toLowerCase() === "venezuela" ? "nacional" : "internacional";
+  }
+
   function matchesFilter(c) {
-    if (currentFilter !== "todos" && c.tipo !== currentFilter) return false;
+    if (currentFilter !== "todos" && resolveTipo(c) !== currentFilter) return false;
     if (!currentQuery) return true;
     const haystack = `${c.nombre} ${c.ciudad} ${c.pais} ${c.direccion}`.toLowerCase();
     return haystack.includes(currentQuery);
@@ -49,21 +47,17 @@
     return tipo === "internacional" ? "Internacional" : "Dentro de Venezuela";
   }
 
-  function renderMarkers(centros) {
-    Object.values(markersById).forEach((m) => map.removeLayer(m));
-    Object.keys(markersById).forEach((k) => delete markersById[k]);
+  let includeCommunity = true;
+  let COMMUNITY_DATA = [];
 
-    centros.forEach((c) => {
-      const marker = L.marker([c.lat, c.lng], { icon: stampIcon(c.tipo) }).addTo(map);
-      marker.bindPopup(
-        `<b>${c.nombre}</b><br>${c.ciudad}, ${c.pais}<br>${c.direccion}<br>` +
-          `<a href="${directionsUrl(c)}" target="_blank" rel="noopener">Cómo llegar →</a>`
-      );
-      marker.on("click", () => selectCenter(c.id, false));
-      markersById[c.id] = marker;
-    });
+  function getFiltered() {
+    const base = includeCommunity ? CENTROS_DATA.concat(COMMUNITY_DATA) : CENTROS_DATA;
+    return base.filter(matchesFilter);
   }
 
+  /* =========================================================
+     LISTA — esto es lo que carga siempre, sin pedir nada extra
+     ========================================================= */
   function renderList(centros) {
     listEl.innerHTML = "";
 
@@ -73,19 +67,21 @@
     }
 
     centros.forEach((c) => {
+      const tipo = resolveTipo(c);
       const card = document.createElement("article");
-      card.className = "card";
-      card.dataset.tipo = c.tipo;
+      card.className = "card" + (c.esComunidad ? " card--comunidad" : "");
+      card.dataset.tipo = tipo;
       card.dataset.id = c.id;
       card.tabIndex = 0;
       card.innerHTML = `
         <div class="card-top">
           <h3 class="card-name">${c.nombre}</h3>
-          <span class="badge badge--${c.tipo}">${tipoLabel(c.tipo)}</span>
+          <span class="badge badge--${tipo}">${tipoLabel(tipo)}</span>
         </div>
+        ${c.esComunidad ? `<span class="badge badge--comunidad">Sin verificar · de la comunidad</span>` : ""}
         <p class="card-meta"><strong>${c.ciudad}</strong>, ${c.pais}<br>${c.direccion}</p>
-        <p class="card-tags">Recibe: ${c.insumos.join(", ")}</p>
-        <p class="card-meta">${c.horario} · ${c.contacto}</p>
+        <p class="card-tags">Recibe: ${c.insumos.join(", ") || "Sin especificar"}</p>
+        <p class="card-meta">${c.horario}${c.contacto && c.contacto !== "—" ? " · " + c.contacto : ""}</p>
         <div class="card-actions">
           <a href="${directionsUrl(c)}" target="_blank" rel="noopener">Cómo llegar</a>
         </div>
@@ -98,11 +94,197 @@
     });
   }
 
+  /* =========================================================
+     MAPA — solo se construye si el usuario lo pide
+     ========================================================= */
+  function loadLeafletAssets() {
+    if (window.L) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      document.head.appendChild(link);
+
+      const script = document.createElement("script");
+      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error("No se pudo cargar el mapa (sin conexión?)"));
+      document.body.appendChild(script);
+    });
+  }
+
+  function stampIcon(tipo) {
+    return L.divIcon({
+      className: "stamp-icon",
+      html: `<span class="stamp stamp--${tipo}"></span>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9],
+      popupAnchor: [0, -10],
+    });
+  }
+
+  async function ensureMap() {
+    if (map) return;
+    await loadLeafletAssets();
+    map = L.map("map", { scrollWheelZoom: true }).setView([8.0, -66.0], 5);
+    // detectRetina queda deliberadamente apagado (default) para no
+    // duplicar el peso de cada imagen del mapa en celulares de pantalla
+    // muy densa (como el S22 Ultra).
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 18,
+    }).addTo(map);
+  }
+
+  function renderMarkers(centros) {
+    if (!map) return; // el mapa todavía no se cargó — no hay nada que hacer
+    Object.values(markersById).forEach((m) => map.removeLayer(m));
+    Object.keys(markersById).forEach((k) => delete markersById[k]);
+
+    centros.forEach((c) => {
+      if (typeof c.lat !== "number" || typeof c.lng !== "number") return; // sin coordenadas, no va al mapa
+      const marker = L.marker([c.lat, c.lng], { icon: stampIcon(resolveTipo(c)) }).addTo(map);
+      marker.bindPopup(
+        `<b>${c.nombre}</b><br>${c.ciudad}, ${c.pais}<br>${c.direccion}<br>` +
+          `<a href="${directionsUrl(c)}" target="_blank" rel="noopener">Cómo llegar →</a>`
+      );
+      marker.on("click", () => selectCenter(c.id, false));
+      markersById[c.id] = marker;
+    });
+  }
+
+  toggleMapBtn.addEventListener("click", async () => {
+    const isShowing = contentEl.classList.contains("show-map");
+
+    if (isShowing) {
+      contentEl.classList.remove("show-map");
+      toggleMapBtn.setAttribute("aria-pressed", "false");
+      toggleMapBtn.innerHTML = `🗺️ Ver mapa <span class="btn-hint">(usa datos)</span>`;
+      return;
+    }
+
+    contentEl.classList.add("show-map");
+    toggleMapBtn.disabled = true;
+    toggleMapBtn.textContent = "Cargando mapa…";
+
+    try {
+      await ensureMap();
+      renderMarkers(getFiltered());
+      toggleMapBtn.setAttribute("aria-pressed", "true");
+      toggleMapBtn.innerHTML = `🗺️ Ocultar mapa`;
+      setTimeout(() => map && map.invalidateSize(), 60);
+    } catch (err) {
+      contentEl.classList.remove("show-map");
+      toggleMapBtn.innerHTML = `🗺️ Ver mapa <span class="btn-hint">(usa datos)</span>`;
+      alert("No se pudo cargar el mapa. Revisa tu conexión e intenta de nuevo — la lista sigue funcionando normal.");
+    } finally {
+      toggleMapBtn.disabled = false;
+    }
+  });
+
+  /* =========================================================
+     SUGERENCIAS DE LA COMUNIDAD — vía la hoja de respuestas
+     del Google Form, publicada como CSV (ver README).
+     Falla en silencio si no está configurado o no hay internet:
+     la página sigue funcionando normal con la lista oficial.
+     ========================================================= */
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], field = "", inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else inQuotes = false;
+        } else field += ch;
+      } else if (ch === '"') inQuotes = true;
+      else if (ch === ",") { row.push(field); field = ""; }
+      else if (ch === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+      else if (ch === "\r") { /* ignorar */ }
+      else field += ch;
+    }
+    if (field.length || row.length) { row.push(field); rows.push(row); }
+    return rows.filter((r) => r.some((cell) => cell.trim() !== ""));
+  }
+
+  function normalizeHeader(s) {
+    return (s || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  }
+
+  function buildColumnMap(headers) {
+    const map = {};
+    headers.forEach((h, idx) => {
+      const n = normalizeHeader(h);
+      if (map.pais === undefined && n.includes("pais")) map.pais = idx;
+      else if (map.ciudad === undefined && n.includes("ciudad")) map.ciudad = idx;
+      else if (map.direccion === undefined && n.includes("direcc")) map.direccion = idx;
+      else if (map.horario === undefined && n.includes("horario")) map.horario = idx;
+      else if (map.nombre === undefined && (n.includes("persona") || n.includes("instituci"))) map.nombre = idx;
+      else if (map.insumos === undefined && (n.includes("cosas") || n.includes("insumo") || n.includes("recib"))) map.insumos = idx;
+    });
+    return map;
+  }
+
+  async function loadCommunitySuggestions() {
+    if (!SHEET_CSV_URL || SHEET_CSV_URL.includes("PEGA_AQUI")) return;
+    try {
+      const res = await fetch(SHEET_CSV_URL);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const text = await res.text();
+      const rows = parseCSV(text);
+      if (rows.length < 2) return;
+
+      const map = buildColumnMap(rows[0]);
+      COMMUNITY_DATA = rows
+        .slice(1)
+        .map((r, i) => ({
+          id: "comunidad-" + i,
+          nombre: (r[map.nombre] || "Centro sugerido por la comunidad").trim(),
+          pais: (r[map.pais] || "").trim() || "Sin especificar",
+          ciudad: (r[map.ciudad] || "").trim(),
+          direccion: (r[map.direccion] || "").trim(),
+          horario: (r[map.horario] || "Por confirmar").trim(),
+          contacto: "—",
+          insumos: (r[map.insumos] || "")
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean),
+          notas: "",
+          esComunidad: true,
+          lat: null,
+          lng: null,
+        }))
+        .filter((c) => c.direccion); // ignora filas vacías o incompletas
+
+      if (COMMUNITY_DATA.length > 0) {
+        const toggleWrap = document.getElementById("community-toggle-wrap");
+        if (toggleWrap) toggleWrap.style.display = "flex";
+      }
+      applyFilters();
+    } catch (err) {
+      console.warn("No se pudieron cargar sugerencias de la comunidad:", err);
+    }
+  }
+
+  document.getElementById("community-toggle")?.addEventListener("change", (e) => {
+    includeCommunity = e.target.checked;
+    applyFilters();
+  });
+
+  /* =========================================================
+     SELECCIÓN / FILTROS / BÚSQUEDA
+     ========================================================= */
   function selectCenter(id, flyTo) {
     selectedId = id;
     document.querySelectorAll(".card").forEach((card) => {
       card.classList.toggle("is-selected", Number(card.dataset.id) === id);
     });
+    if (!map) return; // sin mapa cargado, la selección solo resalta la tarjeta
     const marker = markersById[id];
     if (marker) {
       marker.openPopup();
@@ -111,9 +293,9 @@
   }
 
   function applyFilters() {
-    const filtered = CENTROS_DATA.filter(matchesFilter);
-    renderMarkers(filtered);
+    const filtered = getFiltered();
     renderList(filtered);
+    renderMarkers(filtered); // no hace nada si el mapa no está cargado
   }
 
   function updateStats() {
@@ -122,10 +304,10 @@
     const ciudadesEl = document.getElementById("stat-ciudades");
 
     const paises = new Set(
-      CENTROS_DATA.filter((c) => c.tipo === "internacional").map((c) => c.pais)
+      CENTROS_DATA.filter((c) => resolveTipo(c) === "internacional").map((c) => c.pais)
     );
     const ciudadesVzla = new Set(
-      CENTROS_DATA.filter((c) => c.tipo === "nacional").map((c) => c.ciudad)
+      CENTROS_DATA.filter((c) => resolveTipo(c) === "nacional").map((c) => c.ciudad)
     );
 
     totalEl.textContent = CENTROS_DATA.length;
@@ -160,4 +342,5 @@
 
   updateStats();
   applyFilters();
+  loadCommunitySuggestions();
 })();

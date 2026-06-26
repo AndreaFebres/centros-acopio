@@ -10,24 +10,36 @@
  *
  *   id        : número único (no repetir)
  *   nombre    : nombre del centro / organización / parroquia
- *   tipo      : "internacional"  -> recibe donaciones en el EXTERIOR
- *               "nacional"       -> entrega/distribuye DENTRO de Venezuela
+ *   tipo      : OPCIONAL. "internacional" o "nacional". Si lo omites,
+ *               se calcula solo: país = Venezuela -> nacional,
+ *               cualquier otro país -> internacional.
  *   pais      : país donde está ubicado
  *   ciudad    : ciudad y, si aplica, estado/provincia
  *   direccion : dirección legible para humanos
  *   lat, lng  : coordenadas (decimales). Para conseguirlas:
  *               abre Google Maps, click derecho sobre el punto -> copian
  *               las coordenadas, ej: 10.4806, -66.9036
- *   contacto  : teléfono, WhatsApp o email de contacto
+ *   contacto  : teléfono, WhatsApp o email de contacto (opcional)
  *   horario   : horario de atención
  *   insumos   : arreglo de strings con lo que aceptan
- *   notas     : cualquier aclaración (ej: "solo medicinas selladas")
+ *   notas     : cualquier aclaración (opcional, ej: "solo medicinas selladas")
  *
  * Para AGREGAR un centro nuevo: copia un bloque completo {...},
  * pégalo antes del corchete final "]", cambia el id por uno que no
  * exista todavía, y rellena los datos reales.
  * ----------------------------------------------------------------
  */
+
+// ============================================================
+// SUGERENCIAS DE LA COMUNIDAD (vía tu Google Form)
+// ------------------------------------------------------------
+// Si pegas aquí el link CSV publicado de la hoja de respuestas de tu
+// Google Form, las respuestas aparecen SOLAS en la página — marcadas
+// como "Sin verificar" — sin que tengas que copiarlas a mano.
+// Cómo conseguir ese link: ver el README, sección "Sugerencias
+// automáticas". Si lo dejas como está, simplemente no se activa esta
+// función y la página sigue funcionando normal con la lista de abajo.
+const SHEET_CSV_URL = "PEGA_AQUI_EL_LINK_CSV_PUBLICADO_DE_TU_GOOGLE_SHEET";
 
 // Fecha en que se verificó por última vez esta lista. Cámbiala cada vez
 // que edites los datos, para que el pie de página muestre algo real.

@@ -31,6 +31,63 @@ específica).
 
 ---
 
+## 0. Modo liviano (importante para señal débil)
+
+La página pesa **~31 KB en total** al abrirse (sin contar lo que ya
+trae el navegador). Eso es porque:
+
+- Las tipografías son del sistema (no se descarga ninguna fuente).
+- El mapa (Leaflet + las imágenes del mapa) **no carga solo** — la
+  lista de direcciones, teléfonos y horarios aparece de inmediato, y
+  el mapa visual solo se descarga si alguien toca el botón
+  "🗺️ Ver mapa". Eso evita gastarle datos a quien tiene señal mala.
+- El botón "Cómo llegar" no depende del mapa: abre Google Maps con la
+  dirección en texto, así que funciona aunque nunca se cargue el mapa.
+
+Si quieres cambiar esto (por ejemplo, mostrar el mapa siempre), dímelo
+y te lo ajusto — pero para Venezuela ahora mismo, lo liviano es lo que
+más conviene.
+
+## 0.5. Sugerencias automáticas del Google Form (opcional, recomendado)
+
+Con esto, lo que la gente responda en tu Google Form aparece solo en
+la página — marcado como "Sin verificar · de la comunidad" — sin que
+tengas que copiar nada a mano. Pasos desde el celular:
+
+1. Abre tu Google Form → toca la pestaña **Respuestas** (arriba).
+2. Toca el ícono verde de Sheets (📊) para crear la hoja de cálculo
+   de respuestas, si todavía no existe.
+3. Se abre Google Sheets con las respuestas. Toca los **tres puntos ⋮**
+   arriba a la derecha → si no ves "Compartir y exportar", toca antes
+   los tres puntos del navegador Brave → **Sitio de escritorio**, y
+   vuelve a intentar.
+4. Busca la opción **Compartir** → **Publicar en la Web** (o
+   "Publish to web").
+5. En el tipo de documento elige tu hoja (normalmente "Hoja 1" /
+   "Sheet1"), y en formato elige **CSV**.
+6. Toca **Publicar** y confirma.
+7. Te da un link largo que empieza con
+   `https://docs.google.com/spreadsheets/d/e/...` y termina en
+   `output=csv` — cópialo completo.
+8. Abre `centros-data.js`, busca la línea:
+   ```js
+   const SHEET_CSV_URL = "PEGA_AQUI_EL_LINK_CSV_PUBLICADO_DE_TU_GOOGLE_SHEET";
+   ```
+   y pega tu link entre las comillas.
+
+Listo — sube de nuevo ese archivo a GitHub y las respuestas nuevas
+empezarán a aparecer solas (puede tardar uno o dos minutos en
+reflejarse cada vez que alguien responde).
+
+**Por qué quedan marcadas "sin verificar":** así nadie confunde un
+dato sin revisar con uno confirmado por ti. Si una sugerencia es mala,
+incorrecta o spam, no necesitas tocar código: dile a la gente el
+checkbox "Incluir sugerencias de la comunidad" que aparece junto a los
+filtros — desmárcalo y desaparecen todas de un toque (vuelve a
+aparecer cuando lo marques otra vez). Si en cambio confirmas que una
+sugerencia es buena y quieres que se vea como oficial, cópiala a mano
+dentro del arreglo `CENTROS_DATA` en el mismo archivo.
+
 ## 1. Agregar, corregir o quitar centros
 
 Abre `centros-data.js` con cualquier editor de texto (incluso el
