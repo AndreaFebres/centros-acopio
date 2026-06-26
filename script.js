@@ -323,15 +323,22 @@
 
   function buildColumnMap(headers) {
     const map = {};
+    const contactoIdx = [];
     headers.forEach((h, idx) => {
       const n = normalizeHeader(h);
-      if (map.pais === undefined && n.includes("pais")) map.pais = idx;
+      // El nombre/recepción puede llamarse "persona", "institución",
+      // "local", "recepción", etc. — capturamos cualquiera de esos.
+      if (map.nombre === undefined && (n.includes("persona") || n.includes("instituci") || n.includes("local") || n.includes("recepc"))) map.nombre = idx;
+      else if (map.pais === undefined && n.includes("pais")) map.pais = idx;
       else if (map.ciudad === undefined && n.includes("ciudad")) map.ciudad = idx;
       else if (map.direccion === undefined && n.includes("direcc")) map.direccion = idx;
       else if (map.horario === undefined && n.includes("horario")) map.horario = idx;
-      else if (map.nombre === undefined && (n.includes("persona") || n.includes("instituci"))) map.nombre = idx;
-      else if (map.insumos === undefined && (n.includes("cosas") || n.includes("insumo") || n.includes("recib"))) map.insumos = idx;
+      else if (n.includes("contacto") || n.includes("telefono") || n.includes("whatsapp") || n.includes("correo") || n.includes("email") || n.includes("instagram") || n.includes("telegram")) contactoIdx.push(idx);
+      else if (map.insumos === undefined && (n.includes("cosas") || n.includes("insumo") || n.includes("recib") || n.includes("necesita") || n.includes("dona"))) map.insumos = idx;
     });
+    // Puede haber varios campos de contacto separados (teléfono, correo,
+    // redes...). Los guardamos todos para unirlos después.
+    map.contactoIdx = contactoIdx;
     return map;
   }
 
@@ -347,29 +354,38 @@
       const map = buildColumnMap(rows[0]);
       COMMUNITY_DATA = rows
         .slice(1)
-        .map((r, i) => ({
-          id: "comunidad-" + i,
-          nombre: (r[map.nombre] || "Centro sugerido por la comunidad").trim(),
-          pais: (r[map.pais] || "").trim() || "Sin especificar",
-          ciudad: (r[map.ciudad] || "").trim(),
-          direccion: (r[map.direccion] || "").trim(),
-          horario: (r[map.horario] || "Por confirmar").trim(),
-          contacto: "—",
-          insumos: (r[map.insumos] || "")
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean),
-          notas: "",
-          esComunidad: true,
-          lat: null,
-          lng: null,
-        }))
+        .map((r, i) => {
+          // Une todos los campos de contacto que existan (teléfono,
+          // correo, redes) en un solo texto separado por " · ".
+          const contacto = (map.contactoIdx || [])
+            .map((idx) => (r[idx] || "").trim())
+            .filter(Boolean)
+            .join(" · ");
+          return {
+            id: "comunidad-" + i,
+            nombre: (map.nombre !== undefined ? r[map.nombre] : "" || "").trim() || "Centro sugerido por la comunidad",
+            pais: (map.pais !== undefined ? r[map.pais] : "" || "").trim() || "Sin especificar",
+            ciudad: (map.ciudad !== undefined ? r[map.ciudad] : "" || "").trim(),
+            direccion: (map.direccion !== undefined ? r[map.direccion] : "" || "").trim(),
+            horario: (map.horario !== undefined ? r[map.horario] : "" || "").trim() || "Por confirmar",
+            contacto: contacto || "—",
+            insumos: (map.insumos !== undefined ? r[map.insumos] : "" || "")
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean),
+            notas: "",
+            esComunidad: true,
+            lat: null,
+            lng: null,
+          };
+        })
         .filter((c) => c.direccion); // ignora filas vacías o incompletas
 
       if (COMMUNITY_DATA.length > 0) {
         const toggleWrap = document.getElementById("community-toggle-wrap");
         if (toggleWrap) toggleWrap.style.display = "flex";
       }
+      updateStats();
       applyFilters();
     } catch (err) {
       console.warn("No se pudieron cargar sugerencias de la comunidad:", err);
@@ -378,6 +394,7 @@
 
   document.getElementById("community-toggle")?.addEventListener("change", (e) => {
     includeCommunity = e.target.checked;
+    updateStats();
     applyFilters();
   });
 
@@ -408,14 +425,18 @@
     const paisesEl = document.getElementById("stat-paises");
     const ciudadesEl = document.getElementById("stat-ciudades");
 
+    // Cuenta los oficiales + los de la comunidad (si están activos),
+    // para que los números reflejen lo que realmente se ve en la lista.
+    const todos = includeCommunity ? CENTROS_DATA.concat(COMMUNITY_DATA) : CENTROS_DATA;
+
     const paises = new Set(
-      CENTROS_DATA.filter((c) => resolveTipo(c) === "internacional").map((c) => c.pais)
+      todos.filter((c) => resolveTipo(c) === "internacional").map((c) => c.pais)
     );
     const ciudadesVzla = new Set(
-      CENTROS_DATA.filter((c) => resolveTipo(c) === "nacional").map((c) => c.ciudad)
+      todos.filter((c) => resolveTipo(c) === "nacional").map((c) => c.ciudad)
     );
 
-    totalEl.textContent = CENTROS_DATA.length;
+    totalEl.textContent = todos.length;
     paisesEl.textContent = paises.size;
     ciudadesEl.textContent = ciudadesVzla.size;
   }

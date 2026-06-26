@@ -1,21 +1,25 @@
 /* =========================================================
-   TOKENS
+   TOKENS — paleta limpia, sin tonos de "sello postal"
    ========================================================= */
 :root{
-  --paper: #EFEAE0;
-  --paper-deep: #E3DDC8;
-  --card: #F7F4EC;
-  --ink: #20262B;
-  --ink-soft: #565F55;
-  --line: #C7BEA0;
+  --paper: #F6F5F1;
+  --paper-deep: #EDEBE3;
+  --card: #FFFFFF;
+  --ink: #1C2421;
+  --ink-soft: #5C665F;
+  --line: #E3E0D6;
   --blue: #2B5C8A;
-  --blue-soft: #DCE6EE;
+  --blue-soft: #EAF1F7;
   --red: #B23A2E;
-  --red-soft: #F1DCD8;
+  --red-soft: #FBEAE7;
   --gold: #C98A2C;
+  --gold-soft: #FBF0DD;
   --amber: #9C6B12;
-  --amber-soft: #F3E3C6;
-  --radius: 10px;
+  --amber-soft: #FBF0DC;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow-sm: 0 1px 2px rgba(20, 30, 25, 0.05), 0 1px 1px rgba(20, 30, 25, 0.04);
+  --shadow-md: 0 4px 14px rgba(20, 30, 25, 0.08);
   --font-display: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "Roboto Mono", Menlo, Consolas, monospace;
@@ -28,7 +32,8 @@ body{
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
-  line-height: 1.5;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 20px; }
 .sr-only{
@@ -39,8 +44,9 @@ a{ color: var(--blue); }
 
 /* visible keyboard focus everywhere */
 a:focus-visible, button:focus-visible, input:focus-visible{
-  outline: 3px solid var(--gold);
+  outline: 2.5px solid var(--gold);
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -48,59 +54,57 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 
 /* =========================================================
-   HEADER — "manifiesto de envío"
+   HEADER
    ========================================================= */
 .manifest-header{
   background: var(--paper-deep);
-  padding: 48px 0 32px;
-  border-bottom: 3px dashed var(--line);
+  padding: 44px 0 30px;
 }
 .eyebrow{
   font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.14em;
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  margin: 0 0 14px;
+  margin: 0 0 12px;
 }
 .manifest-header h1{
   font-family: var(--font-display);
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  font-size: clamp(34px, 6vw, 58px);
-  line-height: 1.05;
-  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+  font-size: clamp(32px, 5.6vw, 52px);
+  line-height: 1.08;
+  margin: 0 0 14px;
 }
 .manifest-header h1 span{ color: var(--blue); }
 .lede{
-  max-width: 640px;
-  font-size: 16px;
+  max-width: 620px;
+  font-size: 15.5px;
   color: var(--ink-soft);
-  margin: 0 0 14px;
+  margin: 0 0 12px;
 }
 .lede--light{
   font-size: 13px;
-  margin: 0 0 28px;
+  margin: 0 0 26px;
 }
 .stats{
   display:flex;
-  gap: 36px;
+  gap: 32px;
   margin: 0;
   flex-wrap: wrap;
 }
 .stats div{ display:flex; flex-direction:column-reverse; gap:2px; }
 .stats dt{
-  font-family: var(--font-mono);
-  font-size: 32px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
   color: var(--ink);
   margin:0;
 }
 .stats dd{
-  font-size: 12px;
+  font-size: 11.5px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   color: var(--ink-soft);
   margin:0;
 }
@@ -111,36 +115,38 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .controls{
   display:flex;
   align-items:center;
-  gap: 14px;
+  gap: 10px;
   flex-wrap: wrap;
-  padding: 24px 20px 18px;
+  padding: 20px 20px 16px;
 }
 .filter-group{ display:flex; gap:8px; flex-wrap:wrap; }
 .filter-btn{
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 600;
-  border: 1.5px solid var(--line);
+  border: 1px solid var(--line);
   background: var(--card);
   color: var(--ink-soft);
   border-radius: 999px;
-  padding: 8px 14px;
+  padding: 9px 15px;
   cursor: pointer;
   display:inline-flex;
   align-items:center;
   gap:6px;
+  box-shadow: var(--shadow-sm);
 }
+.filter-btn:hover{ border-color: var(--blue); color: var(--ink); }
 .filter-btn.is-active{
   background: var(--ink);
   border-color: var(--ink);
-  color: var(--paper);
+  color: #fff;
 }
-.dot{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+.dot{ width:7px; height:7px; border-radius:50%; display:inline-block; }
 .dot--internacional{ background: var(--blue); }
 .dot--nacional{ background: var(--red); }
 
 .search-group{ flex: 1 1 220px; min-width: 200px; }
-.btn-hint{ font-size: 11px; opacity: 0.7; }
+.btn-hint{ font-size: 11px; opacity: 0.65; }
 .filter-btn[aria-pressed="true"]#toggle-map{ background: var(--blue); border-color: var(--blue); color: #fff; }
 .community-toggle{
   display: flex;
@@ -155,47 +161,52 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   width:100%;
   font-family: var(--font-body);
   font-size: 14px;
-  padding: 9px 14px;
-  border: 1.5px solid var(--line);
+  padding: 10px 15px;
+  border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--card);
   color: var(--ink);
+  box-shadow: var(--shadow-sm);
 }
 #search::placeholder{ color: var(--ink-soft); }
 
 .btn-suggest{
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: 700;
+  font-size: 13.5px;
   background: var(--gold);
-  color: var(--ink);
+  color: #fff;
   text-decoration: none;
-  padding: 10px 16px;
+  padding: 11px 18px;
   border-radius: 999px;
   white-space: nowrap;
+  display: inline-block;
+  box-shadow: var(--shadow-sm);
+  transition: transform .1s ease, box-shadow .1s ease;
 }
-.btn-suggest:hover{ background: #b97c22; }
+.btn-suggest:hover{ background: #b97c22; transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
 /* =========================================================
    CONTENT — mapa + lista
    ========================================================= */
 .content{
   display: block;
-  padding: 0 20px 40px;
+  padding: 4px 20px 36px;
   max-width: 1120px;
   margin: 0 auto;
 }
 .content.show-map{
   display: grid;
   grid-template-columns: 1.3fr 1fr;
-  gap: 18px;
+  gap: 16px;
 }
 .map{
   display: none;
   height: 460px;
   border-radius: var(--radius);
-  border: 1.5px solid var(--line);
+  border: 1px solid var(--line);
   background: var(--card);
+  box-shadow: var(--shadow-sm);
 }
 .content.show-map .map{ display: block; }
 .list-wrap{
@@ -208,7 +219,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   gap: 6px;
   overflow-x: auto;
   padding-bottom: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   -webkit-overflow-scrolling: touch;
 }
 .quick-nav:empty{ display: none; margin: 0; padding: 0; }
@@ -218,20 +229,24 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
-  background: var(--paper-deep);
-  border: 1.5px solid var(--line);
+  background: var(--card);
+  border: 1px solid var(--line);
   color: var(--ink);
   border-radius: 999px;
-  padding: 6px 12px;
+  padding: 7px 13px;
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
 }
 .quick-nav-btn:hover{ border-color: var(--gold); }
+
 .group-pais{
-  margin: 10px 0;
-  border-bottom: 1.5px solid var(--line);
-  padding-bottom: 6px;
+  margin: 6px 0;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
-.group-pais:first-of-type{ margin-top: 2px; }
+.group-pais + .group-pais{ margin-top: 10px; }
 .group-pais > summary{
   list-style: none;
   cursor: pointer;
@@ -239,36 +254,37 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   align-items: center;
   gap: 8px;
   font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  font-size: 14.5px;
+  font-weight: 700;
   color: var(--ink);
-  padding: 6px 0;
+  padding: 13px 14px;
 }
+.group-pais > summary:hover{ background: var(--paper-deep); }
 .group-pais > summary::-webkit-details-marker{ display: none; }
 .group-pais > summary::before{
-  content: "▸";
+  content: "›";
   display: inline-block;
-  font-size: 12px;
+  font-size: 16px;
+  font-weight: 700;
   color: var(--ink-soft);
   transition: transform 0.15s ease;
 }
 .group-pais[open] > summary::before{ transform: rotate(90deg); }
-.group-pais-body{ padding-top: 4px; }
+.group-pais-body{ padding: 0 12px 12px; }
 .group-ciudad{
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--ink-soft);
-  margin: 10px 0 6px 2px;
+  margin: 14px 0 8px 2px;
 }
+.group-ciudad:first-child{ margin-top: 2px; }
 .group-count{
   font-family: var(--font-mono);
   font-weight: 400;
-  opacity: 0.6;
-  font-size: 0.85em;
+  opacity: 0.55;
+  font-size: 0.82em;
 }
 .list{
   height: 460px;
@@ -280,20 +296,20 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 .content:not(.show-map) .list{ height: auto; max-height: none; }
 
-/* tarjeta tipo "etiqueta de carga" */
+/* tarjeta de centro */
 .card{
   position:relative;
-  background: var(--card);
-  border: 1.5px solid var(--line);
-  border-left: 4px solid var(--blue);
-  border-radius: var(--radius);
-  padding: 12px 14px 12px 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
   cursor:pointer;
-  transition: transform .12s ease, box-shadow .12s ease;
+  transition: box-shadow .12s ease, border-color .12s ease;
 }
 .card[data-tipo="nacional"]{ border-left-color: var(--red); }
-.card:hover{ transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
-.card.is-selected{ outline: 2px solid var(--gold); }
+.card:hover{ box-shadow: var(--shadow-md); border-color: var(--ink); }
+.card.is-selected{ outline: 2px solid var(--gold); outline-offset: 1px; }
 
 .card-top{
   display:flex;
@@ -304,19 +320,17 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .card-name{
   font-family: var(--font-display);
   font-size: 15px;
-  text-transform: uppercase;
-  letter-spacing: 0.01em;
+  font-weight: 700;
+  letter-spacing: -0.005em;
   margin: 0;
 }
 .badge{
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  border: 1.5px dashed currentColor;
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   border-radius: 999px;
-  padding: 2px 8px;
+  padding: 3px 9px;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -324,15 +338,14 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .badge--nacional{ color: var(--red); background: var(--red-soft); }
 .badge--comunidad{
   display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   color: var(--amber);
   background: var(--amber-soft);
   border-radius: 999px;
-  padding: 2px 8px;
+  padding: 3px 9px;
   margin-top: 6px;
 }
 .card--comunidad{ border-left-style: dashed; }
@@ -356,19 +369,20 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   gap: 14px;
 }
 .card-actions a{
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 12.5px;
+  font-weight: 700;
   text-decoration: none;
-  border-bottom: 1px solid currentColor;
+  color: var(--blue);
 }
+.card-actions a:hover{ text-decoration: underline; }
 
 .empty-state{
-  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--ink-soft);
   text-align:center;
-  padding: 40px 10px;
-  border: 1.5px dashed var(--line);
+  padding: 36px 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
 }
 
@@ -376,18 +390,18 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .stamp-icon{ background: transparent; border: none; }
 .stamp{
   display:block;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  border: 2.5px solid var(--card);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  border: 2.5px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 .stamp--internacional{ background: var(--blue); }
 .stamp--nacional{ background: var(--red); }
 
 /* popup de Leaflet con tipografía propia */
 .leaflet-popup-content{ font-family: var(--font-body); font-size: 13px; }
-.leaflet-popup-content b{ font-family: var(--font-display); text-transform: uppercase; }
+.leaflet-popup-content b{ font-family: var(--font-display); }
 
 /* =========================================================
    CALLOUTS — sugerir centro / comentarios
@@ -396,7 +410,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  padding: 8px 20px 32px;
+  padding: 4px 20px 30px;
 }
 .callout{
   flex: 1 1 320px;
@@ -404,15 +418,16 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   flex-direction: column;
   gap: 14px;
   justify-content: space-between;
-  background: var(--paper-deep);
-  border: 2px dashed var(--gold);
-  border-radius: var(--radius);
-  padding: 20px;
+  background: var(--gold-soft);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
 }
-.callout--comments{ border-color: var(--blue); }
+.callout--comments{ background: var(--blue-soft); border-left-color: var(--blue); }
 .callout-text h2{
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: 16.5px;
   font-weight: 800;
   margin: 0 0 6px;
 }
@@ -424,17 +439,14 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 .btn-suggest--big{
   align-self: flex-start;
-  font-size: 15px;
-  padding: 14px 22px;
-  box-shadow: 0 3px 0 var(--amber);
+  font-size: 14.5px;
+  padding: 13px 20px;
 }
-.btn-suggest--big:hover{ transform: translateY(1px); box-shadow: 0 2px 0 var(--amber); }
 .btn-suggest--alt{
   background: var(--blue);
   color: #fff;
-  box-shadow: 0 3px 0 #1d4567;
 }
-.btn-suggest--alt:hover{ background: #234d73; box-shadow: 0 2px 0 #1d4567; }
+.btn-suggest--alt:hover{ background: #234d73; }
 
 @media (max-width: 600px){
   .callout{ flex: 1 1 100%; }
@@ -444,12 +456,11 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 /* =========================================================
    OTROS RECURSOS
    ========================================================= */
-.resources{ padding: 8px 20px 28px; }
+.resources{ padding: 4px 20px 26px; }
 .resources h2{
   font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: 0.01em;
-  font-size: 18px;
+  font-size: 17px;
+  font-weight: 800;
   margin: 0 0 6px;
 }
 .resources-note{
@@ -469,20 +480,20 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .resources-list a{
   display: block;
   background: var(--card);
-  border: 1.5px dashed var(--line);
-  border-radius: var(--radius);
-  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
   font-size: 13px;
   color: var(--ink-soft);
   text-decoration: none;
+  box-shadow: var(--shadow-sm);
 }
 .resources-list a:hover{ border-color: var(--gold); }
 .resources-list strong{
   display: block;
   font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  font-size: 12.5px;
+  font-weight: 700;
+  font-size: 13px;
   color: var(--ink);
 }
 
@@ -490,10 +501,10 @@ a:focus-visible, button:focus-visible, input:focus-visible{
    FOOTER
    ========================================================= */
 .site-footer{
-  padding: 20px 20px 60px;
+  padding: 18px 20px 56px;
   font-size: 12.5px;
   color: var(--ink-soft);
-  border-top: 1.5px dashed var(--line);
+  border-top: 1px solid var(--line);
 }
 
 /* =========================================================
