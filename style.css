@@ -371,6 +371,58 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .leaflet-popup-content b{ font-family: var(--font-display); text-transform: uppercase; }
 
 /* =========================================================
+   CALLOUTS — sugerir centro / comentarios
+   ========================================================= */
+.callouts{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 8px 20px 32px;
+}
+.callout{
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: space-between;
+  background: var(--paper-deep);
+  border: 2px dashed var(--gold);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.callout--comments{ border-color: var(--blue); }
+.callout-text h2{
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+.callout-text p{
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin: 0;
+  max-width: 480px;
+}
+.btn-suggest--big{
+  align-self: flex-start;
+  font-size: 15px;
+  padding: 14px 22px;
+  box-shadow: 0 3px 0 var(--amber);
+}
+.btn-suggest--big:hover{ transform: translateY(1px); box-shadow: 0 2px 0 var(--amber); }
+.btn-suggest--alt{
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 3px 0 #1d4567;
+}
+.btn-suggest--alt:hover{ background: #234d73; box-shadow: 0 2px 0 #1d4567; }
+
+@media (max-width: 600px){
+  .callout{ flex: 1 1 100%; }
+  .btn-suggest--big{ align-self: stretch; text-align: center; }
+}
+
+/* =========================================================
    OTROS RECURSOS
    ========================================================= */
 .resources{ padding: 8px 20px 28px; }

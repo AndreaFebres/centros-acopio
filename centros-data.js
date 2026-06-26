@@ -39,7 +39,7 @@
 // Cómo conseguir ese link: ver el README, sección "Sugerencias
 // automáticas". Si lo dejas como está, simplemente no se activa esta
 // función y la página sigue funcionando normal con la lista de abajo.
-const SHEET_CSV_URL = "PEGA_AQUI_EL_LINK_CSV_PUBLICADO_DE_TU_GOOGLE_SHEET";
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1t0W5c8u7u01mT2FGCC2Plvmc8fBxm1bjqRgvTDHSTxE/export?format=csv&gid=913383518";
 
 // Fecha en que se verificó por última vez esta lista. Cámbiala cada vez
 // que edites los datos, para que el pie de página muestre algo real.

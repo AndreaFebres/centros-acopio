@@ -430,6 +430,15 @@
     formLink.style.display = "none";
   }
 
+  // Mismo criterio para el bloque de comentarios: solo se muestra
+  // cuando le pegues un link real de Google Forms en index.html.
+  const commentsLink = document.getElementById("comments-link");
+  const calloutComments = document.getElementById("callout-comments");
+  if (commentsLink && calloutComments) {
+    const isConfigured = !commentsLink.getAttribute("href").includes("PEGA_AQUI_TU_LINK");
+    calloutComments.style.display = isConfigured ? "flex" : "none";
+  }
+
   updateStats();
   applyFilters();
   loadCommunitySuggestions();

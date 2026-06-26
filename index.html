@@ -59,10 +59,10 @@
       Incluir sugerencias de la comunidad (sin verificar)
     </label>
 
-    <!-- Reemplaza el href de abajo con tu propio link de Google Forms -->
-    <a id="form-link" class="btn-suggest" href="https://forms.gle/jXUmggJMLqtojTeK9" target="_blank" rel="noopener">
-      + Sugerir un centro
-    </a>
+    <label class="community-toggle" id="community-toggle-wrap" style="display:none;">
+      <input type="checkbox" id="community-toggle" checked />
+      Incluir sugerencias de la comunidad (sin verificar)
+    </label>
   </section>
 
   <section class="content" id="content">
@@ -73,6 +73,37 @@
     </div>
   </section>
 </main>
+
+<section class="callouts wrap">
+  <div class="callout callout--suggest" id="callout-suggest">
+    <div class="callout-text">
+      <h2>📝 ¿Conoces un centro que no está aquí?</h2>
+      <p>
+        El botón de abajo es para eso: cuéntanos la dirección, el
+        horario y qué están recibiendo. Cada dato que agregues hace
+        que esta lista sirva para más gente.
+      </p>
+    </div>
+    <!-- Reemplaza el href de abajo con tu propio link de Google Forms -->
+    <a id="form-link" class="btn-suggest btn-suggest--big" href="https://forms.gle/jXUmggJMLqtojTeK9" target="_blank" rel="noopener">
+      + Sugerir un centro
+    </a>
+  </div>
+
+  <div class="callout callout--comments" id="callout-comments" style="display:none;">
+    <div class="callout-text">
+      <h2>💬 ¿Te falta algo en esta página?</h2>
+      <p>
+        Escríbenos qué necesitas, qué información no encuentras, o
+        algo que te gustaría ver aquí. Leemos todos los comentarios.
+      </p>
+    </div>
+    <!-- Cuando tengas tu Google Form de comentarios, pega el link abajo -->
+    <a id="comments-link" class="btn-suggest btn-suggest--big btn-suggest--alt" href="https://forms.gle/p365MYFTvPXbgvqu6" target="_blank" rel="noopener">
+      💬 Dejar un comentario
+    </a>
+  </div>
+</section>
 
 <section class="resources wrap" aria-label="Otros recursos durante esta emergencia">
   <h2>Otros recursos durante esta emergencia</h2>
