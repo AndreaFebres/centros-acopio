@@ -85,6 +85,10 @@
       b.classList.toggle("is-active", on);
     });
     renderInsumos(); // los insumos también cambian de idioma
+    const fechaEl = document.getElementById("last-updated");
+    if (fechaEl) {
+      fechaEl.textContent = new Date().toLocaleDateString(next === "en" ? "en-US" : "es-VE", { year: "numeric", month: "long", day: "numeric" });
+    }
     applyFilters(); // re-renderiza tarjetas con el idioma nuevo
   }
 
@@ -418,7 +422,7 @@
     } catch (err) {
       contentEl.classList.remove("show-map");
       toggleMapBtn.innerHTML = `🗺️ Ver mapa <span class="btn-hint">(usa datos)</span>`;
-      alert("No se pudo cargar el mapa. Revisa tu conexión e intenta de nuevo — la lista sigue funcionando normal.");
+      alert("No se pudo cargar el mapa. Revisa tu conexión e intenta de nuevo, la lista sigue funcionando normal.");
     } finally {
       toggleMapBtn.disabled = false;
     }
@@ -591,7 +595,15 @@
     applyFilters();
   });
 
-  document.getElementById("last-updated").textContent = ULTIMA_ACTUALIZACION;
+  // La fecha se pone sola con la fecha de hoy del dispositivo, así
+  // siempre muestra algo actual sin que tengas que editar nada.
+  (function setFecha() {
+    const el = document.getElementById("last-updated");
+    if (!el) return;
+    const hoy = new Date();
+    const locale = lang === "en" ? "en-US" : "es-VE";
+    el.textContent = hoy.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" });
+  })();
 
   // Oculta el botón "Sugerir un centro" mientras no se configure un
   // link real de Google Forms, para no publicar un enlace roto.
@@ -612,6 +624,30 @@
   document.querySelectorAll(".lang-btn").forEach((btn) => {
     btn.addEventListener("click", () => applyLang(btn.dataset.lang));
   });
+
+  function wireShareButton(btn) {
+    if (!btn) return;
+    const defaultLabel = () => (lang === "en" ? "📲 Share this page" : "📲 Compartir esta página");
+    btn.addEventListener("click", async () => {
+      const url = window.location.href;
+      const texto = lang === "en"
+        ? "Aid Route for Venezuela, find where to bring donations after the June 24 earthquakes:"
+        : "Ruta de Acopio para Venezuela, encuentra dónde llevar donaciones tras los terremotos del 24 de junio:";
+      if (navigator.share) {
+        try { await navigator.share({ title: "Ruta de Acopio", text: texto, url }); } catch (e) {}
+      } else {
+        try {
+          await navigator.clipboard.writeText(url);
+          btn.textContent = lang === "en" ? "✓ Link copied" : "✓ Enlace copiado";
+          setTimeout(() => { btn.textContent = defaultLabel(); }, 2000);
+        } catch (e) {
+          window.prompt(lang === "en" ? "Copy this link:" : "Copia este enlace:", url);
+        }
+      }
+    });
+  }
+  wireShareButton(document.getElementById("share-btn"));
+  wireShareButton(document.getElementById("share-btn-top"));
 
   renderInsumos();
   updateStats();

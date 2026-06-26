@@ -624,6 +624,53 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 
 /* =========================================================
+   MENSAJES DE COMPARTIR
+   ========================================================= */
+.share-top{
+  background: #fff;
+  border: 1.5px solid var(--green);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  max-width: 640px;
+  margin: 2px 0 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+.share-top-text{
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.45;
+}
+@media (max-width: 600px){
+  #share-btn-top{ align-self: stretch; text-align: center; }
+}
+.share-bottom{
+  background: linear-gradient(135deg, #EAF3FA 0%, #E3F6EE 100%);
+  border-radius: var(--radius);
+  padding: 26px 22px;
+  margin-bottom: 24px;
+}
+.share-bottom h2{
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 800;
+  margin: 0 0 10px;
+  color: var(--ink);
+}
+.share-bottom p{
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  max-width: 680px;
+  margin: 0 0 12px;
+}
+#share-btn{ border: none; cursor: pointer; margin-top: 4px; }
+
+/* =========================================================
    FOOTER
    ========================================================= */
 .site-footer{

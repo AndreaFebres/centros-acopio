@@ -65,7 +65,7 @@ const CENTROS_DATA = [
   },
   {
     id: 2,
-    nombre: "Doral Legacy Park — Community Center",
+    nombre: "Doral Legacy Park, Community Center",
     tipo: "internacional",
     pais: "Estados Unidos",
     ciudad: "Doral, FL",
@@ -121,7 +121,7 @@ const CENTROS_DATA = [
   },
   {
     id: 6,
-    nombre: "GEM — punto de acopio La Ceiba Tire Shop",
+    nombre: "GEM, punto de acopio La Ceiba Tire Shop",
     tipo: "internacional",
     pais: "Estados Unidos",
     ciudad: "Miami, FL",
@@ -176,7 +176,7 @@ const CENTROS_DATA = [
     contacto: "—",
     horario: "",
     insumos: ["Agua potable", "Alimentos no perecederos", "Insumos médicos", "Ropa"],
-    notas: "Dato aportado por la comunidad — confirma horario antes de ir.",
+    notas: "Dato aportado por la comunidad, confirma horario antes de ir.",
   },
   {
     id: 10,
@@ -215,7 +215,7 @@ const CENTROS_DATA = [
   // cambia muy rápido.
   {
     id: 12,
-    nombre: "Comando ConVzla — Miranda",
+    nombre: "Comando ConVzla, Miranda",
     tipo: "nacional",
     pais: "Venezuela",
     ciudad: "Caracas (Altamira), Miranda",
@@ -229,7 +229,7 @@ const CENTROS_DATA = [
   },
   {
     id: 13,
-    nombre: "Comando ConVzla — Aragua",
+    nombre: "Comando ConVzla, Aragua",
     tipo: "nacional",
     pais: "Venezuela",
     ciudad: "Maracay, Aragua",
@@ -257,7 +257,7 @@ const CENTROS_DATA = [
   },
   {
     id: 15,
-    nombre: "Voluntad Popular / Comando ConVzla — Carabobo",
+    nombre: "Voluntad Popular / Comando ConVzla, Carabobo",
     tipo: "nacional",
     pais: "Venezuela",
     ciudad: "Valencia, Carabobo",
