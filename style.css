@@ -367,6 +367,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   margin-top: 10px;
   display:flex;
   gap: 14px;
+  align-items: center;
 }
 .card-actions a{
   font-size: 12.5px;
@@ -375,6 +376,12 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   color: var(--blue);
 }
 .card-actions a:hover{ text-decoration: underline; }
+.card-report{
+  margin-left: auto;
+  color: var(--amber) !important;
+  font-weight: 600 !important;
+  font-size: 11.5px !important;
+}
 
 .empty-state{
   font-size: 13px;

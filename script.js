@@ -27,6 +27,13 @@
   let map = null; // se crea solo cuando se activa el mapa
   const markersById = {};
 
+  // Formulario al que se envían los reportes de "Reportar este centro".
+  // Usamos el mismo Google Form de comentarios. Si tu formulario tiene
+  // un campo de respuesta corta como primera pregunta, Google permite
+  // prellenarlo con ?entry... pero como no sabemos el ID del campo,
+  // simplemente abrimos el formulario; la persona escribe el centro.
+  const REPORT_FORM_URL = "https://forms.gle/p365MYFTvPXbgvqu6";
+
   function directionsUrl(c) {
     const query = encodeURIComponent(`${c.direccion}, ${c.ciudad}, ${c.pais}`);
     return `https://www.google.com/maps/search/?api=1&query=${query}`;
@@ -229,9 +236,14 @@
       })()}
       <div class="card-actions">
         <a href="${directionsUrl(c)}" target="_blank" rel="noopener">Cómo llegar</a>
+        <a class="card-report" href="${REPORT_FORM_URL}" target="_blank" rel="noopener">⚠ Reportar este centro</a>
       </div>
     `;
-    card.addEventListener("click", () => selectCenter(c.id, true));
+    card.addEventListener("click", (e) => {
+      // No interferir con los enlaces (Cómo llegar / Reportar)
+      if (e.target.tagName === "A") return;
+      selectCenter(c.id, true);
+    });
     card.addEventListener("keydown", (e) => {
       if (e.key === "Enter") selectCenter(c.id, true);
     });
@@ -427,22 +439,12 @@
         })
         .filter((c) => c.direccion); // ignora filas vacías o incompletas
 
-      if (COMMUNITY_DATA.length > 0) {
-        const toggleWrap = document.getElementById("community-toggle-wrap");
-        if (toggleWrap) toggleWrap.style.display = "flex";
-      }
       updateStats();
       applyFilters();
     } catch (err) {
       console.warn("No se pudieron cargar sugerencias de la comunidad:", err);
     }
   }
-
-  document.getElementById("community-toggle")?.addEventListener("change", (e) => {
-    includeCommunity = e.target.checked;
-    updateStats();
-    applyFilters();
-  });
 
   /* =========================================================
      SELECCIÓN / FILTROS / BÚSQUEDA
