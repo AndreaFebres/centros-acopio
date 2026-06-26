@@ -76,13 +76,47 @@
     return FLAGS[normalizeHeader(pais)] || "🌍";
   }
 
+  // Unifica las distintas formas en que la gente escribe un mismo país
+  // (EEUU, USA, "Estados unidos", etc.) en un nombre canónico, para que
+  // no aparezcan como países separados en la lista.
+  const PAIS_ALIASES = {
+    "estados unidos": "Estados Unidos",
+    eeuu: "Estados Unidos",
+    "ee uu": "Estados Unidos",
+    usa: "Estados Unidos",
+    "united states": "Estados Unidos",
+    "estados unidos de america": "Estados Unidos",
+    venezuela: "Venezuela",
+    vzla: "Venezuela",
+    ve: "Venezuela",
+    colombia: "Colombia",
+    ecuador: "Ecuador",
+    espana: "España",
+    spain: "España",
+    peru: "Perú",
+    chile: "Chile",
+    argentina: "Argentina",
+    mexico: "México",
+    panama: "Panamá",
+    brasil: "Brasil",
+    brazil: "Brasil",
+    "republica dominicana": "República Dominicana",
+  };
+  function canonicalPais(pais) {
+    const n = normalizeHeader(pais);
+    if (PAIS_ALIASES[n]) return PAIS_ALIASES[n];
+    // Si no está en la lista, al menos limpia espacios repetidos.
+    const limpio = (pais || "").trim().replace(/\s+/g, " ");
+    return limpio || "Sin especificar";
+  }
+
   // Agrupa una lista de centros en { pais: { ciudad: [centros] } },
   // ordenando países y ciudades alfabéticamente para que sea fácil
   // ubicarlos.
   function groupByPaisCiudad(centros) {
     const groups = {};
     centros.forEach((c) => {
-      const pais = (c.pais || "Sin especificar").trim() || "Sin especificar";
+      const pais = canonicalPais(c.pais);
       const ciudad = (c.ciudad || "Sin especificar").trim() || "Sin especificar";
       if (!groups[pais]) groups[pais] = {};
       if (!groups[pais][ciudad]) groups[pais][ciudad] = [];
@@ -185,9 +219,14 @@
         <span class="badge badge--${tipo}">${tipoLabel(tipo)}</span>
       </div>
       ${c.esComunidad ? `<span class="badge badge--comunidad">Sin verificar · de la comunidad</span>` : ""}
-      <p class="card-meta">${c.direccion}</p>
+      ${c.sinNombre ? "" : `<p class="card-meta">${c.direccion}</p>`}
       <p class="card-tags">Recibe: ${c.insumos.join(", ") || "Sin especificar"}</p>
-      <p class="card-meta">${c.horario}${c.contacto && c.contacto !== "—" ? " · " + c.contacto : ""}</p>
+      ${(() => {
+        const horario = (c.horario || "").trim();
+        const contacto = c.contacto && c.contacto !== "—" ? c.contacto.trim() : "";
+        const partes = [horario, contacto].filter(Boolean);
+        return partes.length ? `<p class="card-meta">${partes.join(" · ")}</p>` : "";
+      })()}
       <div class="card-actions">
         <a href="${directionsUrl(c)}" target="_blank" rel="noopener">Cómo llegar</a>
       </div>
@@ -361,12 +400,19 @@
             .map((idx) => (r[idx] || "").trim())
             .filter(Boolean)
             .join(" · ");
+          const nombreRaw = (map.nombre !== undefined ? r[map.nombre] : "" || "").trim();
+          const direccionRaw = (map.direccion !== undefined ? r[map.direccion] : "" || "").trim();
           return {
             id: "comunidad-" + i,
-            nombre: (map.nombre !== undefined ? r[map.nombre] : "" || "").trim() || "Centro sugerido por la comunidad",
+            // Si no pusieron nombre, usamos la dirección como título
+            // para que la tarjeta no quede sin encabezado.
+            nombre: nombreRaw || direccionRaw || "Centro sin nombre",
+            // Si el nombre vino vacío y usamos la dirección como título,
+            // no la repetimos abajo (quedaría duplicada).
+            sinNombre: !nombreRaw,
             pais: (map.pais !== undefined ? r[map.pais] : "" || "").trim() || "Sin especificar",
             ciudad: (map.ciudad !== undefined ? r[map.ciudad] : "" || "").trim(),
-            direccion: (map.direccion !== undefined ? r[map.direccion] : "" || "").trim(),
+            direccion: direccionRaw,
             horario: (map.horario !== undefined ? r[map.horario] : "" || "").trim() || "Por confirmar",
             contacto: contacto || "—",
             insumos: (map.insumos !== undefined ? r[map.insumos] : "" || "")
@@ -430,7 +476,7 @@
     const todos = includeCommunity ? CENTROS_DATA.concat(COMMUNITY_DATA) : CENTROS_DATA;
 
     const paises = new Set(
-      todos.filter((c) => resolveTipo(c) === "internacional").map((c) => c.pais)
+      todos.filter((c) => resolveTipo(c) === "internacional").map((c) => canonicalPais(c.pais))
     );
     const ciudadesVzla = new Set(
       todos.filter((c) => resolveTipo(c) === "nacional").map((c) => c.ciudad)
