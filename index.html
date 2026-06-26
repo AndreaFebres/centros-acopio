@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Ruta de Acopio — Mapa de ayuda para las victimas del terremoto del 24 de Junio del 2026 en Venezuela</title>
-<meta name="description" content="Ayudanos a comunicar la informacion. Este es el Mapa colaborativo de centros de acopio de ayuda humanitaria para Venezuela, dentro y fuera del país." />
+<title>Ruta de Acopio — Mapa de ayuda para Venezuela</title>
+<meta name="description" content="Mapa colaborativo de centros de acopio de ayuda humanitaria para Venezuela, dentro y fuera del país." />
 
 <link rel="stylesheet" href="style.css" />
 </head>
@@ -15,11 +15,10 @@
     <p class="eyebrow">Terremotos en Venezuela · 24 junio 2026 · mapa colaborativo</p>
     <h1>Ruta de Acopio<br /><span>para Venezuela</span></h1>
     <p class="lede">
-      Encuentra dónde llevar tu donación en el exterior o 
+      Encuentra dónde llevar tu donación en el exterior, o dónde recogerla
       dentro de Venezuela, tras los terremotos del 24 de junio. La
-      información es recopilada de prensa y de la comunidad, los datos
-      cambian rápido, así que confirma horario y dirección antes de ir. 
-      Y si tienes nueva informacion o mas actualizada por favor ayudanos a agregarla a esta pagina. 
+      información es recopilada de prensa y de la comunidad — los datos
+      cambian rápido, así que confirma horario y dirección antes de ir.
     </p>
     <p class="lede lede--light">
       📶 Página liviana: por defecto solo carga la lista de direcciones.
@@ -68,7 +67,10 @@
 
   <section class="content" id="content">
     <div id="map" class="map" role="application" aria-label="Mapa de centros de acopio"></div>
-    <div class="list" id="list" aria-label="Lista de centros de acopio"></div>
+    <div class="list-wrap">
+      <div class="quick-nav" id="quick-nav" aria-label="Saltar a un país"></div>
+      <div class="list" id="list" aria-label="Lista de centros de acopio"></div>
+    </div>
   </section>
 </main>
 

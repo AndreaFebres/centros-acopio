@@ -12,6 +12,7 @@
 
 (function () {
   const listEl = document.getElementById("list");
+  const quickNavEl = document.getElementById("quick-nav");
   const searchEl = document.getElementById("search");
   const contentEl = document.getElementById("content");
   const toggleMapBtn = document.getElementById("toggle-map");
@@ -47,6 +48,49 @@
     return tipo === "internacional" ? "Internacional" : "Dentro de Venezuela";
   }
 
+  function slugify(s) {
+    return (s || "")
+      .toString()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+  }
+
+  const FLAGS = {
+    venezuela: "🇻🇪",
+    "estados unidos": "🇺🇸",
+    ecuador: "🇪🇨",
+    colombia: "🇨🇴",
+    espana: "🇪🇸",
+    peru: "🇵🇪",
+    chile: "🇨🇱",
+    argentina: "🇦🇷",
+    mexico: "🇲🇽",
+    panama: "🇵🇦",
+    brasil: "🇧🇷",
+    "republica dominicana": "🇩🇴",
+  };
+  function flagFor(pais) {
+    return FLAGS[normalizeHeader(pais)] || "🌍";
+  }
+
+  // Agrupa una lista de centros en { pais: { ciudad: [centros] } },
+  // ordenando países y ciudades alfabéticamente para que sea fácil
+  // ubicarlos.
+  function groupByPaisCiudad(centros) {
+    const groups = {};
+    centros.forEach((c) => {
+      const pais = (c.pais || "Sin especificar").trim() || "Sin especificar";
+      const ciudad = (c.ciudad || "Sin especificar").trim() || "Sin especificar";
+      if (!groups[pais]) groups[pais] = {};
+      if (!groups[pais][ciudad]) groups[pais][ciudad] = [];
+      groups[pais][ciudad].push(c);
+    });
+    return groups;
+  }
+
   let includeCommunity = true;
   let COMMUNITY_DATA = [];
 
@@ -56,42 +100,88 @@
   }
 
   /* =========================================================
-     LISTA — esto es lo que carga siempre, sin pedir nada extra
+     LISTA — agrupada por país y luego por ciudad, para que sea
+     fácil ubicar el centro más cercano. Esto es lo que carga
+     siempre, sin pedir nada extra por internet.
      ========================================================= */
   function renderList(centros) {
     listEl.innerHTML = "";
+    quickNavEl.innerHTML = "";
 
     if (centros.length === 0) {
       listEl.innerHTML = `<p class="empty-state">No hay centros que coincidan con tu búsqueda.<br>Intenta otro término o cambia el filtro.</p>`;
       return;
     }
 
-    centros.forEach((c) => {
-      const tipo = resolveTipo(c);
-      const card = document.createElement("article");
-      card.className = "card" + (c.esComunidad ? " card--comunidad" : "");
-      card.dataset.tipo = tipo;
-      card.dataset.id = c.id;
-      card.tabIndex = 0;
-      card.innerHTML = `
-        <div class="card-top">
-          <h3 class="card-name">${c.nombre}</h3>
-          <span class="badge badge--${tipo}">${tipoLabel(tipo)}</span>
-        </div>
-        ${c.esComunidad ? `<span class="badge badge--comunidad">Sin verificar · de la comunidad</span>` : ""}
-        <p class="card-meta"><strong>${c.ciudad}</strong>, ${c.pais}<br>${c.direccion}</p>
-        <p class="card-tags">Recibe: ${c.insumos.join(", ") || "Sin especificar"}</p>
-        <p class="card-meta">${c.horario}${c.contacto && c.contacto !== "—" ? " · " + c.contacto : ""}</p>
-        <div class="card-actions">
-          <a href="${directionsUrl(c)}" target="_blank" rel="noopener">Cómo llegar</a>
-        </div>
-      `;
-      card.addEventListener("click", () => selectCenter(c.id, true));
-      card.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") selectCenter(c.id, true);
+    const groups = groupByPaisCiudad(centros);
+    const paisesOrdenados = Object.keys(groups).sort((a, b) => a.localeCompare(b, "es"));
+
+    // Barra de salto rápido por país (solo si hay más de uno)
+    if (paisesOrdenados.length > 1) {
+      paisesOrdenados.forEach((pais) => {
+        const total = Object.values(groups[pais]).reduce((sum, arr) => sum + arr.length, 0);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "quick-nav-btn";
+        btn.textContent = `${flagFor(pais)} ${pais} (${total})`;
+        btn.addEventListener("click", () => {
+          const target = document.getElementById("group-" + slugify(pais));
+          if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        quickNavEl.appendChild(btn);
       });
-      listEl.appendChild(card);
+    }
+
+    paisesOrdenados.forEach((pais) => {
+      const ciudades = groups[pais];
+      const ciudadesOrdenadas = Object.keys(ciudades).sort((a, b) => a.localeCompare(b, "es"));
+      const totalPais = ciudadesOrdenadas.reduce((sum, c) => sum + ciudades[c].length, 0);
+
+      const paisHeader = document.createElement("h2");
+      paisHeader.className = "group-pais";
+      paisHeader.id = "group-" + slugify(pais);
+      paisHeader.innerHTML = `${flagFor(pais)} ${pais} <span class="group-count">${totalPais}</span>`;
+      listEl.appendChild(paisHeader);
+
+      ciudadesOrdenadas.forEach((ciudad) => {
+        const centrosCiudad = ciudades[ciudad];
+        const ciudadHeader = document.createElement("h3");
+        ciudadHeader.className = "group-ciudad";
+        ciudadHeader.innerHTML = `${ciudad} <span class="group-count">${centrosCiudad.length}</span>`;
+        listEl.appendChild(ciudadHeader);
+
+        centrosCiudad.forEach((c) => {
+          listEl.appendChild(buildCard(c));
+        });
+      });
     });
+  }
+
+  function buildCard(c) {
+    const tipo = resolveTipo(c);
+    const card = document.createElement("article");
+    card.className = "card" + (c.esComunidad ? " card--comunidad" : "");
+    card.dataset.tipo = tipo;
+    card.dataset.id = c.id;
+    card.tabIndex = 0;
+    card.innerHTML = `
+      <div class="card-top">
+        <h4 class="card-name">${c.nombre}</h4>
+        <span class="badge badge--${tipo}">${tipoLabel(tipo)}</span>
+      </div>
+      ${c.esComunidad ? `<span class="badge badge--comunidad">Sin verificar · de la comunidad</span>` : ""}
+      <p class="card-meta">${c.direccion}</p>
+      <p class="card-tags">Recibe: ${c.insumos.join(", ") || "Sin especificar"}</p>
+      <p class="card-meta">${c.horario}${c.contacto && c.contacto !== "—" ? " · " + c.contacto : ""}</p>
+      <div class="card-actions">
+        <a href="${directionsUrl(c)}" target="_blank" rel="noopener">Cómo llegar</a>
+      </div>
+    `;
+    card.addEventListener("click", () => selectCenter(c.id, true));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") selectCenter(c.id, true);
+    });
+    return card;
   }
 
   /* =========================================================
