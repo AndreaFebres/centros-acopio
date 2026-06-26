@@ -2,24 +2,26 @@
    TOKENS — paleta limpia, sin tonos de "sello postal"
    ========================================================= */
 :root{
-  --paper: #F6F5F1;
-  --paper-deep: #EDEBE3;
+  --paper: #FFFFFF;
+  --paper-deep: #F0F5F4;
   --card: #FFFFFF;
-  --ink: #1C2421;
-  --ink-soft: #5C665F;
-  --line: #E3E0D6;
-  --blue: #2B5C8A;
-  --blue-soft: #EAF1F7;
-  --red: #B23A2E;
-  --red-soft: #FBEAE7;
-  --gold: #C98A2C;
-  --gold-soft: #FBF0DD;
-  --amber: #9C6B12;
-  --amber-soft: #FBF0DC;
+  --ink: #16302B;
+  --ink-soft: #5A6B66;
+  --line: #E2E9E7;
+  --blue: #1F6FB2;
+  --blue-soft: #E6F0F8;
+  --red: #C0473B;
+  --red-soft: #FAE9E7;
+  --gold: #128C7E;
+  --gold-soft: #E2F4F1;
+  --amber: #0E7C6E;
+  --amber-soft: #E2F4F1;
+  --green: #1FA871;
+  --green-soft: #E3F6EE;
   --radius: 14px;
   --radius-sm: 10px;
-  --shadow-sm: 0 1px 2px rgba(20, 30, 25, 0.05), 0 1px 1px rgba(20, 30, 25, 0.04);
-  --shadow-md: 0 4px 14px rgba(20, 30, 25, 0.08);
+  --shadow-sm: 0 1px 2px rgba(20, 40, 35, 0.05), 0 1px 1px rgba(20, 40, 35, 0.04);
+  --shadow-md: 0 4px 16px rgba(20, 60, 50, 0.09);
   --font-display: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "Roboto Mono", Menlo, Consolas, monospace;
@@ -57,8 +59,9 @@ a:focus-visible, button:focus-visible, input:focus-visible{
    HEADER
    ========================================================= */
 .manifest-header{
-  background: var(--paper-deep);
+  background: linear-gradient(135deg, #EAF3FA 0%, #E3F6EE 100%);
   padding: 44px 0 30px;
+  border-bottom: 1px solid var(--line);
 }
 .eyebrow{
   font-family: var(--font-mono);
@@ -98,7 +101,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   font-family: var(--font-display);
   font-size: 28px;
   font-weight: 800;
-  color: var(--ink);
+  color: var(--blue);
   margin:0;
 }
 .stats dd{
@@ -184,7 +187,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   box-shadow: var(--shadow-sm);
   transition: transform .1s ease, box-shadow .1s ease;
 }
-.btn-suggest:hover{ background: #b97c22; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-suggest:hover{ background: #0E7468; transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
 /* =========================================================
    CONTENT — mapa + lista
@@ -299,7 +302,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 /* tarjeta de centro */
 .card{
   position:relative;
-  background: var(--paper);
+  background: #FBFDFC;
   border: 1px solid var(--line);
   border-left: 3px solid var(--blue);
   border-radius: var(--radius-sm);
