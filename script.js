@@ -290,7 +290,7 @@
         const centrosCiudad = ciudades[ciudad];
         const ciudadDet = document.createElement("details");
         ciudadDet.className = "group-ciudad-det";
-        ciudadDet.open = true; // las ciudades abren por defecto
+        ciudadDet.open = false; // las ciudades inician colapsadas
         const ciudadSum = document.createElement("summary");
         ciudadSum.className = "group-ciudad";
         ciudadSum.innerHTML = `${ciudad} <span class="group-count">${centrosCiudad.length}</span>`;
