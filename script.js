@@ -60,7 +60,7 @@
     reportar: { es: "⚠ Reportar este centro", en: "⚠ Report this center" },
     internacional: { es: "Internacional", en: "International" },
     nacional: { es: "Dentro de Venezuela", en: "Inside Venezuela" },
-    sinVerificar: { es: "Sin verificar · de la comunidad", en: "Unverified · from the community" },
+    sinVerificar: { es: "Agregado por la comunidad", en: "Added by the community" },
     recibe: { es: "Recibe:", en: "Accepts:" },
     sinEspecificar: { es: "Sin especificar", en: "Not specified" },
     vacio: { es: "No hay centros que coincidan con tu búsqueda.<br>Intenta otro término o cambia el filtro.", en: "No centers match your search.<br>Try another term or change the filter." },
