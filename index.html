@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Ruta de Acopio de donaciones para las victimas del terremoto del 24 de Junio. 
-  Mapa de centros de ayuda para Venezuela</title>
+<title>Ruta de Acopio para Venezuela — Mapa de centros de ayuda</title>
 <meta name="description" content="Mapa colaborativo de centros de acopio de ayuda humanitaria para Venezuela, dentro y fuera del país." />
-
 <link rel="stylesheet" href="style.css" />
 <script data-goatcounter="https://ayudavzla.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
@@ -15,46 +13,148 @@
 
 <header class="manifest-header">
   <div class="wrap">
-    <p class="eyebrow">Terremotos en Venezuela · 24 junio 2026 · mapa colaborativo</p>
-    <h1>Ruta de Acopio<br /><span>para Venezuela</span></h1>
-    <p class="lede">
-      Encuentra dónde llevar tu donación en el exterior, o
-      dentro de Venezuela, tras los terremotos del 24 de junio. La
-      información es recopilada de prensa, redes sociales y de la comunidad, 
-      los datos cambian rápido, así que confirma horario y dirección antes de ir.
-    </p>
-    <p class="lede lede--light">
-      📶 Página liviana: por defecto solo carga la lista de direcciones.
-      El mapa visual es opcional, para no gastar tus datos si tienes
-      señal débil.
-    </p>
+    <div class="lang-bar">
+      <button type="button" class="lang-btn is-active" data-lang="es">ES</button>
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <p class="eyebrow" data-es="Terremotos en Venezuela · 24 junio 2026 · mapa colaborativo" data-en="Earthquakes in Venezuela · June 24, 2026 · collaborative map">Terremotos en Venezuela · 24 junio 2026 · mapa colaborativo</p>
+    <h1><span data-es="Ruta de Acopio" data-en="Aid Route">Ruta de Acopio</span><br /><span class="accent" data-es="para Venezuela" data-en="for Venezuela">para Venezuela</span></h1>
+    <p class="lede" data-es="Encuentra dónde llevar tu donación en el exterior o dentro de Venezuela, tras los terremotos del 24 de junio. La información es recopilada de prensa, redes sociales y de la comunidad; los datos cambian rápido, así que confirma horario y dirección antes de ir." data-en="Find where to drop off your donation abroad or inside Venezuela, after the June 24 earthquakes. Information is gathered from press, social media and the community; details change fast, so confirm hours and address before going.">Encuentra dónde llevar tu donación en el exterior o dentro de Venezuela, tras los terremotos del 24 de junio. La información es recopilada de prensa, redes sociales y de la comunidad; los datos cambian rápido, así que confirma horario y dirección antes de ir.</p>
+    <p class="lede lede--light" data-es="📶 Página liviana: por defecto solo carga la lista de direcciones. El mapa visual es opcional, para no gastar tus datos si tienes señal débil." data-en="📶 Lightweight page: by default it only loads the list of addresses. The visual map is optional, to save your data if you have a weak signal.">📶 Página liviana: por defecto solo carga la lista de direcciones. El mapa visual es opcional, para no gastar tus datos si tienes señal débil.</p>
     <dl class="stats">
-      <div><dt id="stat-total">0</dt><dd>centros activos</dd></div>
-      <div><dt id="stat-paises">0</dt><dd>países de origen</dd></div>
-      <div><dt id="stat-ciudades">0</dt><dd>ciudades en Venezuela</dd></div>
+      <div><dt id="stat-total">0</dt><dd data-es="centros activos" data-en="active centers">centros activos</dd></div>
+      <div><dt id="stat-paises">0</dt><dd data-es="países de origen" data-en="origin countries">países de origen</dd></div>
+      <div><dt id="stat-ciudades">0</dt><dd data-es="ciudades en Venezuela" data-en="cities in Venezuela">ciudades en Venezuela</dd></div>
     </dl>
   </div>
 </header>
 
+<section class="needs-bar wrap">
+  <details class="needs" id="needs">
+    <summary>
+      <span class="needs-title" data-es="🔴 ¿No sabes qué donar? Esto es lo más necesitado ahora" data-en="🔴 Not sure what to donate? These are the most needed items right now">🔴 ¿No sabes qué donar? Esto es lo más necesitado ahora</span>
+    </summary>
+    <div class="needs-body">
+      <!-- ====== EDITA AQUÍ LA LISTA DE INSUMOS MÁS NECESITADOS ======
+           Cada categoría es un <details>. El <summary> es el título.
+           Dentro, los <li> son los ejemplos concretos.
+           data-es = español, data-en = inglés. -->
+      <div class="needs-cats">
+        <details class="need-cat" open>
+          <summary data-es="⛑️ Implementos de rescate (lo más urgente)" data-en="⛑️ Rescue equipment (most urgent)">⛑️ Implementos de rescate (lo más urgente)</summary>
+          <ul>
+            <li data-es="Cascos de seguridad" data-en="Safety helmets">Cascos de seguridad</li>
+            <li data-es="Guantes de trabajo resistentes" data-en="Heavy-duty work gloves">Guantes de trabajo resistentes</li>
+            <li data-es="Martillos, picos y palas" data-en="Hammers, pickaxes and shovels">Martillos, picos y palas</li>
+            <li data-es="Chalecos reflectantes" data-en="Reflective vests">Chalecos reflectantes</li>
+            <li data-es="Cuerdas y lonas resistentes" data-en="Ropes and heavy-duty tarps">Cuerdas y lonas resistentes</li>
+            <li data-es="Mascarillas para polvo y escombros" data-en="Dust/debris masks">Mascarillas para polvo y escombros</li>
+          </ul>
+        </details>
+
+        <details class="need-cat">
+          <summary data-es="💧 Agua potable" data-en="💧 Drinking water">💧 Agua potable</summary>
+          <ul>
+            <li data-es="Agua embotellada sellada" data-en="Sealed bottled water">Agua embotellada sellada</li>
+            <li data-es="Bidones o garrafas de agua" data-en="Water jugs or containers">Bidones o garrafas de agua</li>
+            <li data-es="Pastillas potabilizadoras" data-en="Water purification tablets">Pastillas potabilizadoras</li>
+          </ul>
+        </details>
+
+        <details class="need-cat">
+          <summary data-es="🏥 Insumos médicos y primeros auxilios" data-en="🏥 Medical and first-aid supplies">🏥 Insumos médicos y primeros auxilios</summary>
+          <ul>
+            <li data-es="Kits de primeros auxilios" data-en="First-aid kits">Kits de primeros auxilios</li>
+            <li data-es="Gasas, vendas y alcohol" data-en="Gauze, bandages and alcohol">Gasas, vendas y alcohol</li>
+            <li data-es="Guantes de látex y suero fisiológico" data-en="Latex gloves and IV saline">Guantes de látex y suero fisiológico</li>
+            <li data-es="Analgésicos (acetaminofén, ibuprofeno)" data-en="Pain relievers (acetaminophen, ibuprofen)">Analgésicos (acetaminofén, ibuprofeno)</li>
+            <li data-es="Antibióticos y antisépticos" data-en="Antibiotics and antiseptics">Antibióticos y antisépticos</li>
+          </ul>
+        </details>
+
+        <details class="need-cat">
+          <summary data-es="🥫 Alimentos no perecederos" data-en="🥫 Non-perishable food">🥫 Alimentos no perecederos</summary>
+          <ul>
+            <li data-es="Enlatados (atún, sardinas, granos)" data-en="Canned goods (tuna, sardines, beans)">Enlatados (atún, sardinas, granos)</li>
+            <li data-es="Harina, arroz y pasta" data-en="Flour, rice and pasta">Harina, arroz y pasta</li>
+            <li data-es="Aceite, azúcar y sal" data-en="Oil, sugar and salt">Aceite, azúcar y sal</li>
+            <li data-es="Barras energéticas y galletas" data-en="Energy bars and crackers">Barras energéticas y galletas</li>
+            <li data-es="Verifica fechas de vencimiento" data-en="Check expiration dates">Verifica fechas de vencimiento</li>
+          </ul>
+        </details>
+
+        <details class="need-cat">
+          <summary data-es="👶 Bebés y niños" data-en="👶 Babies and children">👶 Bebés y niños</summary>
+          <ul>
+            <li data-es="Pañales de bebé (todas las tallas)" data-en="Baby diapers (all sizes)">Pañales de bebé (todas las tallas)</li>
+            <li data-es="Fórmula infantil" data-en="Infant formula">Fórmula infantil</li>
+            <li data-es="Toallitas húmedas" data-en="Baby wipes">Toallitas húmedas</li>
+            <li data-es="Comida para bebé (compotas)" data-en="Baby food (purees)">Comida para bebé (compotas)</li>
+          </ul>
+        </details>
+
+        <details class="need-cat">
+          <summary data-es="🧼 Higiene personal" data-en="🧼 Personal hygiene">🧼 Higiene personal</summary>
+          <ul>
+            <li data-es="Jabón de baño y de lavar" data-en="Bath and laundry soap">Jabón de baño y de lavar</li>
+            <li data-es="Toallas sanitarias" data-en="Sanitary pads">Toallas sanitarias</li>
+            <li data-es="Pañales de adulto" data-en="Adult diapers">Pañales de adulto</li>
+            <li data-es="Cepillos y pasta dental" data-en="Toothbrushes and toothpaste">Cepillos y pasta dental</li>
+            <li data-es="Papel higiénico y desodorante" data-en="Toilet paper and deodorant">Papel higiénico y desodorante</li>
+          </ul>
+        </details>
+
+        <details class="need-cat">
+          <summary data-es="🔦 Luz y energía" data-en="🔦 Light and power">🔦 Luz y energía</summary>
+          <ul>
+            <li data-es="Linternas" data-en="Flashlights">Linternas</li>
+            <li data-es="Pilas (AA y AAA)" data-en="Batteries (AA and AAA)">Pilas (AA y AAA)</li>
+            <li data-es="Power banks (cargadores portátiles)" data-en="Power banks">Power banks (cargadores portátiles)</li>
+            <li data-es="Velas y fósforos" data-en="Candles and matches">Velas y fósforos</li>
+          </ul>
+        </details>
+
+        <details class="need-cat">
+          <summary data-es="🛏️ Abrigo y refugio" data-en="🛏️ Shelter and warmth">🛏️ Abrigo y refugio</summary>
+          <ul>
+            <li data-es="Cobijas y mantas" data-en="Blankets">Cobijas y mantas</li>
+            <li data-es="Carpas y casas de campaña" data-en="Tents">Carpas y casas de campaña</li>
+            <li data-es="Suéteres y ropa de abrigo (prioridad)" data-en="Sweaters and warm clothing (priority)">Suéteres y ropa de abrigo (prioridad)</li>
+            <li data-es="Ropa limpia en buen estado" data-en="Clean clothing in good condition">Ropa limpia en buen estado</li>
+          </ul>
+        </details>
+
+        <details class="need-cat">
+          <summary data-es="🐾 Mascotas" data-en="🐾 Pets">🐾 Mascotas</summary>
+          <ul>
+            <li data-es="Comida para perros y gatos" data-en="Dog and cat food">Comida para perros y gatos</li>
+          </ul>
+        </details>
+      </div>
+      <p class="needs-note" data-es="Esta lista se actualiza según lo que reportan los centros." data-en="This list is updated based on what centers report.">Esta lista se actualiza según lo que reportan los centros.</p>
+    </div>
+  </details>
+</section>
+
 <main class="wrap">
   <section class="controls" aria-label="Filtros de búsqueda">
     <div class="filter-group" role="group" aria-label="Filtrar por tipo">
-      <button class="filter-btn is-active" data-filter="todos" aria-pressed="true">Todos</button>
+      <button class="filter-btn is-active" data-filter="todos" aria-pressed="true" data-es="Todos" data-en="All">Todos</button>
       <button class="filter-btn" data-filter="internacional" aria-pressed="false">
-        <span class="dot dot--internacional"></span>Internacional
+        <span class="dot dot--internacional"></span><span data-es="Internacional" data-en="International">Internacional</span>
       </button>
       <button class="filter-btn" data-filter="nacional" aria-pressed="false">
-        <span class="dot dot--nacional"></span>Dentro de Venezuela
+        <span class="dot dot--nacional"></span><span data-es="Dentro de Venezuela" data-en="Inside Venezuela">Dentro de Venezuela</span>
       </button>
     </div>
 
     <div class="search-group">
-      <label for="search" class="sr-only">Buscar por ciudad, país o nombre</label>
-      <input type="search" id="search" placeholder="Buscar ciudad, país o nombre…" autocomplete="off" />
+      <label for="search" class="sr-only">Buscar</label>
+      <input type="search" id="search" placeholder="Buscar ciudad, país o nombre…" data-ph-es="Buscar ciudad, país o nombre…" data-ph-en="Search city, country or name…" autocomplete="off" />
     </div>
 
     <button type="button" id="toggle-map" class="filter-btn" aria-pressed="false">
-      🗺️ Ver mapa <span class="btn-hint">(usa datos)</span>
+      🗺️ <span data-es="Ver mapa" data-en="Show map">Ver mapa</span> <span class="btn-hint" data-es="(usa datos)" data-en="(uses data)">(usa datos)</span>
     </button>
   </section>
 
@@ -70,71 +170,51 @@
 <section class="callouts wrap">
   <div class="callout callout--suggest" id="callout-suggest">
     <div class="callout-text">
-      <h2>📝 ¿Conoces un centro que no está aquí?</h2>
-      <p>
-        El botón de abajo es para eso: cuéntanos la dirección, el
-        horario y qué están recibiendo. Cada dato que agregues hace
-        que esta lista sirva para más gente.
-      </p>
+      <h2 data-es="📝 ¿Conoces un centro que no está aquí?" data-en="📝 Know a center that's not listed?">📝 ¿Conoces un centro que no está aquí?</h2>
+      <p data-es="El botón de abajo es para eso: cuéntanos la dirección, el horario y qué están recibiendo. Cada dato que agregues hace que esta lista sirva para más gente." data-en="That's what the button below is for: tell us the address, hours and what they're receiving. Every detail you add helps more people.">El botón de abajo es para eso: cuéntanos la dirección, el horario y qué están recibiendo. Cada dato que agregues hace que esta lista sirva para más gente.</p>
     </div>
-    <!-- Reemplaza el href de abajo con tu propio link de Google Forms -->
-    <a id="form-link" class="btn-suggest btn-suggest--big" href="https://forms.gle/jXUmggJMLqtojTeK9" target="_blank" rel="noopener">
-      + Sugerir un centro
-    </a>
+    <a id="form-link" class="btn-suggest btn-suggest--big" href="https://forms.gle/jXUmggJMLqtojTeK9" target="_blank" rel="noopener" data-es="+ Sugerir un centro" data-en="+ Suggest a center">+ Sugerir un centro</a>
   </div>
 </section>
 
-<section class="resources wrap" aria-label="Otros recursos durante esta emergencia">
-  <h2>Otros recursos durante esta emergencia</h2>
-  <p class="resources-note">
-    No son centros de acopio, pero pueden servirte para otras necesidades
-    urgentes. Son sitios independientes, no los hemos verificado a fondo,
-    úsalos bajo tu propio criterio.
-  </p>
+<section class="resources wrap" aria-label="Otros recursos">
+  <h2 data-es="Otros recursos durante esta emergencia" data-en="Other resources during this emergency">Otros recursos durante esta emergencia</h2>
+  <p class="resources-note" data-es="No son centros de acopio, pero pueden servirte para otras necesidades urgentes. Son sitios independientes, no los hemos verificado a fondo; úsalos bajo tu propio criterio." data-en="These are not donation centers, but may help with other urgent needs. They are independent sites we haven't fully vetted; use at your own discretion.">No son centros de acopio, pero pueden servirte para otras necesidades urgentes. Son sitios independientes, no los hemos verificado a fondo; úsalos bajo tu propio criterio.</p>
   <ul class="resources-list">
     <li>
       <a href="https://terremotovenezuela.app/" target="_blank" rel="noopener">
-        <strong>Mapa de rescate y daños</strong>
-        terremotovenezuela.app — reportes de estructuras colapsadas y labores de rescate
+        <strong data-es="Mapa de rescate y daños" data-en="Rescue and damage map">Mapa de rescate y daños</strong>
+        <span data-es="terremotovenezuela.app — reportes de estructuras colapsadas y rescate" data-en="terremotovenezuela.app — reports of collapsed structures and rescue">terremotovenezuela.app — reportes de estructuras colapsadas y rescate</span>
       </a>
     </li>
     <li>
       <a href="https://venezuelatebusca.com/" target="_blank" rel="noopener">
-        <strong>Buscar / reportar a un familiar</strong>
-        venezuelatebusca.com — registro de personas desaparecidas
+        <strong data-es="Buscar / reportar a un familiar" data-en="Find / report a relative">Buscar / reportar a un familiar</strong>
+        <span data-es="venezuelatebusca.com — registro de personas desaparecidas" data-en="venezuelatebusca.com — missing persons registry">venezuelatebusca.com — registro de personas desaparecidas</span>
       </a>
     </li>
     <li>
       <a href="https://desaparecidosterremotovenezuela.com/" target="_blank" rel="noopener">
-        <strong>Otro registro de desaparecidos</strong>
-        desaparecidosterremotovenezuela.com — iniciativa independiente, mismo propósito
+        <strong data-es="Otro registro de desaparecidos" data-en="Another missing persons registry">Otro registro de desaparecidos</strong>
+        <span data-es="desaparecidosterremotovenezuela.com — iniciativa independiente" data-en="desaparecidosterremotovenezuela.com — independent initiative">desaparecidosterremotovenezuela.com — iniciativa independiente</span>
       </a>
     </li>
   </ul>
 </section>
 
 <section class="callouts callouts--bottom wrap">
-  <div class="callout callout--comments" id="callout-comments" style="display:none;">
+  <div class="callout callout--comments" id="callout-comments">
     <div class="callout-text">
-      <h2>💬 ¿Te falta algo en esta página o hay algún dato incorrecto?</h2>
-      <p>
-        Escríbenos qué necesitas, qué información no encuentras, se debe corregir, o
-        algo que te gustaría ver aquí. Leemos todos los comentarios.
-      </p>
+      <h2 data-es="💬 ¿Te falta algo o hay un dato incorrecto?" data-en="💬 Missing something or found an error?">💬 ¿Te falta algo o hay un dato incorrecto?</h2>
+      <p data-es="Escríbenos qué necesitas, qué información no encuentras o se debe corregir, o algo que te gustaría ver aquí." data-en="Tell us what you need, what information is missing or should be corrected, or anything you'd like to see here.">Escríbenos qué necesitas, qué información no encuentras o se debe corregir, o algo que te gustaría ver aquí.</p>
     </div>
-    <!-- Cuando tengas tu Google Form de comentarios, pega el link abajo -->
-    <a id="comments-link" class="btn-suggest btn-suggest--big btn-suggest--alt" href="https://forms.gle/p365MYFTvPXbgvqu6" target="_blank" rel="noopener">
-      💬 Dejar un comentario
-    </a>
+    <a id="comments-link" class="btn-suggest btn-suggest--big btn-suggest--alt" href="https://forms.gle/p365MYFTvPXbgvqu6" target="_blank" rel="noopener" data-es="💬 Dejar un comentario" data-en="💬 Leave a comment">💬 Dejar un comentario</a>
   </div>
 </section>
 
 <footer class="site-footer wrap">
-  <p>
-    Esta información es mantenida por la comunidad y puede no estar siempre
-    actualizada. Confirma horario y dirección con el centro antes de ir.
-    Última actualización: <span id="last-updated"></span>.
-  </p>
+  <p data-es="Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Confirma horario y dirección con el centro antes de ir." data-en="This information is community-maintained and may not always be up to date. Confirm hours and address with the center before going.">Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Confirma horario y dirección con el centro antes de ir.</p>
+  <p><span data-es="Última actualización:" data-en="Last updated:">Última actualización:</span> <span id="last-updated"></span></p>
 </footer>
 
 <script src="centros-data.js"></script>

@@ -27,6 +27,40 @@
   let map = null; // se crea solo cuando se activa el mapa
   const markersById = {};
 
+  // ===== Idioma (ES por defecto). Liviano: sin librerías. =====
+  let lang = "es";
+  const I18N = {
+    comoLlegar: { es: "Cómo llegar", en: "Get directions" },
+    reportar: { es: "⚠ Reportar este centro", en: "⚠ Report this center" },
+    internacional: { es: "Internacional", en: "International" },
+    nacional: { es: "Dentro de Venezuela", en: "Inside Venezuela" },
+    sinVerificar: { es: "Sin verificar · de la comunidad", en: "Unverified · from the community" },
+    recibe: { es: "Recibe:", en: "Accepts:" },
+    sinEspecificar: { es: "Sin especificar", en: "Not specified" },
+    vacio: { es: "No hay centros que coincidan con tu búsqueda.<br>Intenta otro término o cambia el filtro.", en: "No centers match your search.<br>Try another term or change the filter." },
+    sinNombreCentro: { es: "Centro sin nombre", en: "Unnamed center" },
+  };
+  function t(key) {
+    return (I18N[key] && I18N[key][lang]) || (I18N[key] && I18N[key].es) || "";
+  }
+  function applyLang(next) {
+    lang = next;
+    document.documentElement.lang = next;
+    document.querySelectorAll("[data-es]").forEach((el) => {
+      const val = el.getAttribute("data-" + next);
+      if (val !== null) el.textContent = val;
+    });
+    document.querySelectorAll("[data-ph-es]").forEach((el) => {
+      const val = el.getAttribute("data-ph-" + next);
+      if (val !== null) el.placeholder = val;
+    });
+    document.querySelectorAll(".lang-btn").forEach((b) => {
+      const on = b.dataset.lang === next;
+      b.classList.toggle("is-active", on);
+    });
+    applyFilters(); // re-renderiza tarjetas con el idioma nuevo
+  }
+
   // Formulario al que se envían los reportes de "Reportar este centro".
   // Usamos el mismo Google Form de comentarios. Si tu formulario tiene
   // un campo de respuesta corta como primera pregunta, Google permite
@@ -52,7 +86,7 @@
   }
 
   function tipoLabel(tipo) {
-    return tipo === "internacional" ? "Internacional" : "Dentro de Venezuela";
+    return tipo === "internacional" ? t("internacional") : t("nacional");
   }
 
   function slugify(s) {
@@ -150,7 +184,7 @@
     quickNavEl.innerHTML = "";
 
     if (centros.length === 0) {
-      listEl.innerHTML = `<p class="empty-state">No hay centros que coincidan con tu búsqueda.<br>Intenta otro término o cambia el filtro.</p>`;
+      listEl.innerHTML = `<p class="empty-state">${t("vacio")}</p>`;
       return;
     }
 
@@ -225,9 +259,9 @@
         <h4 class="card-name">${c.nombre}</h4>
         <span class="badge badge--${tipo}">${tipoLabel(tipo)}</span>
       </div>
-      ${c.esComunidad ? `<span class="badge badge--comunidad">Sin verificar · de la comunidad</span>` : ""}
+      ${c.esComunidad ? `<span class="badge badge--comunidad">${t("sinVerificar")}</span>` : ""}
       ${c.sinNombre ? "" : `<p class="card-meta">${c.direccion}</p>`}
-      <p class="card-tags">Recibe: ${c.insumos.join(", ") || "Sin especificar"}</p>
+      <p class="card-tags">${t("recibe")} ${c.insumos.join(", ") || t("sinEspecificar")}</p>
       ${(() => {
         const horario = (c.horario || "").trim();
         const contacto = c.contacto && c.contacto !== "—" ? c.contacto.trim() : "";
@@ -235,8 +269,8 @@
         return partes.length ? `<p class="card-meta">${partes.join(" · ")}</p>` : "";
       })()}
       <div class="card-actions">
-        <a href="${directionsUrl(c)}" target="_blank" rel="noopener">Cómo llegar</a>
-        <a class="card-report" href="${REPORT_FORM_URL}" target="_blank" rel="noopener">⚠ Reportar este centro</a>
+        <a href="${directionsUrl(c)}" target="_blank" rel="noopener">${t("comoLlegar")}</a>
+        <a class="card-report" href="${REPORT_FORM_URL}" target="_blank" rel="noopener">${t("reportar")}</a>
       </div>
     `;
     card.addEventListener("click", (e) => {
@@ -302,7 +336,7 @@
       const marker = L.marker([c.lat, c.lng], { icon: stampIcon(resolveTipo(c)) }).addTo(map);
       marker.bindPopup(
         `<b>${c.nombre}</b><br>${c.ciudad}, ${c.pais}<br>${c.direccion}<br>` +
-          `<a href="${directionsUrl(c)}" target="_blank" rel="noopener">Cómo llegar →</a>`
+          `<a href="${directionsUrl(c)}" target="_blank" rel="noopener">${t("comoLlegar")} →</a>`
       );
       marker.on("click", () => selectCenter(c.id, false));
       markersById[c.id] = marker;
@@ -522,6 +556,10 @@
     const isConfigured = !commentsLink.getAttribute("href").includes("PEGA_AQUI_TU_LINK");
     calloutComments.style.display = isConfigured ? "flex" : "none";
   }
+
+  document.querySelectorAll(".lang-btn").forEach((btn) => {
+    btn.addEventListener("click", () => applyLang(btn.dataset.lang));
+  });
 
   updateStats();
   applyFilters();
