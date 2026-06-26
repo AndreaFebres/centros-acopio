@@ -11,6 +11,32 @@
  */
 
 (function () {
+  // Fusiona los centros que la dueña agrega en mis-centros.js (formato
+  // simple) con los oficiales de centros-data.js. Convierte el texto de
+  // insumos en lista y les asigna un id automático. Si mis-centros.js no
+  // existe, no pasa nada.
+  if (typeof MIS_CENTROS !== "undefined" && Array.isArray(MIS_CENTROS) && typeof CENTROS_DATA !== "undefined") {
+    let maxId = CENTROS_DATA.reduce((m, c) => Math.max(m, Number(c.id) || 0), 0);
+    MIS_CENTROS.forEach((c) => {
+      if (!c || !c.nombre || !c.direccion) return; // ignora bloques vacíos
+      maxId += 1;
+      CENTROS_DATA.push({
+        id: maxId,
+        nombre: c.nombre,
+        pais: c.pais || "Sin especificar",
+        ciudad: c.ciudad || "",
+        direccion: c.direccion,
+        horario: c.horario || "",
+        contacto: c.contacto || "—",
+        insumos: typeof c.insumos === "string"
+          ? c.insumos.split(",").map((s) => s.trim()).filter(Boolean)
+          : Array.isArray(c.insumos) ? c.insumos : [],
+        notas: c.notas || "",
+        // tipo se calcula solo (Venezuela -> nacional); no es comunidad.
+      });
+    });
+  }
+
   const listEl = document.getElementById("list");
   const quickNavEl = document.getElementById("quick-nav");
   const searchEl = document.getElementById("search");
@@ -58,7 +84,33 @@
       const on = b.dataset.lang === next;
       b.classList.toggle("is-active", on);
     });
+    renderInsumos(); // los insumos también cambian de idioma
     applyFilters(); // re-renderiza tarjetas con el idioma nuevo
+  }
+
+  // Construye la lista de insumos desde insumos.js. Si ese archivo no
+  // existe o está vacío, simplemente no muestra nada (no rompe la página).
+  function renderInsumos() {
+    const cont = document.getElementById("needs-cats");
+    if (!cont || typeof INSUMOS === "undefined" || !Array.isArray(INSUMOS)) return;
+    cont.innerHTML = "";
+    INSUMOS.forEach((cat) => {
+      const det = document.createElement("details");
+      det.className = "need-cat";
+      if (cat.abierta) det.open = true;
+      const titulo = lang === "en" && cat.titulo_en ? cat.titulo_en : cat.titulo;
+      const sum = document.createElement("summary");
+      sum.textContent = titulo;
+      det.appendChild(sum);
+      const ul = document.createElement("ul");
+      (cat.items || []).forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = lang === "en" && item.en ? item.en : item.es;
+        ul.appendChild(li);
+      });
+      det.appendChild(ul);
+      cont.appendChild(det);
+    });
   }
 
   // Formulario al que se envían los reportes de "Reportar este centro".
@@ -561,6 +613,7 @@
     btn.addEventListener("click", () => applyLang(btn.dataset.lang));
   });
 
+  renderInsumos();
   updateStats();
   applyFilters();
   loadCommunitySuggestions();
