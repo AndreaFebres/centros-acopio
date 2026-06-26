@@ -227,16 +227,35 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 .quick-nav-btn:hover{ border-color: var(--gold); }
 .group-pais{
+  margin: 10px 0;
+  border-bottom: 1.5px solid var(--line);
+  padding-bottom: 6px;
+}
+.group-pais:first-of-type{ margin-top: 2px; }
+.group-pais > summary{
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-display);
   font-size: 14px;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--ink);
-  margin: 18px 0 6px;
-  padding-bottom: 4px;
-  border-bottom: 2px solid var(--ink);
+  padding: 6px 0;
 }
-.group-pais:first-of-type{ margin-top: 2px; }
+.group-pais > summary::-webkit-details-marker{ display: none; }
+.group-pais > summary::before{
+  content: "▸";
+  display: inline-block;
+  font-size: 12px;
+  color: var(--ink-soft);
+  transition: transform 0.15s ease;
+}
+.group-pais[open] > summary::before{ transform: rotate(90deg); }
+.group-pais-body{ padding-top: 4px; }
 .group-ciudad{
   font-family: var(--font-mono);
   font-size: 11.5px;

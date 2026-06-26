@@ -126,7 +126,10 @@
         btn.textContent = `${flagFor(pais)} ${pais} (${total})`;
         btn.addEventListener("click", () => {
           const target = document.getElementById("group-" + slugify(pais));
-          if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (target) {
+            target.open = true;
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
         });
         quickNavEl.appendChild(btn);
       });
@@ -137,23 +140,35 @@
       const ciudadesOrdenadas = Object.keys(ciudades).sort((a, b) => a.localeCompare(b, "es"));
       const totalPais = ciudadesOrdenadas.reduce((sum, c) => sum + ciudades[c].length, 0);
 
-      const paisHeader = document.createElement("h2");
-      paisHeader.className = "group-pais";
-      paisHeader.id = "group-" + slugify(pais);
-      paisHeader.innerHTML = `${flagFor(pais)} ${pais} <span class="group-count">${totalPais}</span>`;
-      listEl.appendChild(paisHeader);
+      const details = document.createElement("details");
+      details.className = "group-pais";
+      details.id = "group-" + slugify(pais);
+      // Si solo hay un país en el resultado actual, ábrelo de una vez
+      // (no tiene sentido obligar a tocarlo). Si hay varios, quedan
+      // colapsados para no obligar a bajar tanto.
+      details.open = paisesOrdenados.length === 1;
+
+      const summary = document.createElement("summary");
+      summary.innerHTML = `${flagFor(pais)} ${pais} <span class="group-count">${totalPais}</span>`;
+      details.appendChild(summary);
+
+      const body = document.createElement("div");
+      body.className = "group-pais-body";
 
       ciudadesOrdenadas.forEach((ciudad) => {
         const centrosCiudad = ciudades[ciudad];
         const ciudadHeader = document.createElement("h3");
         ciudadHeader.className = "group-ciudad";
         ciudadHeader.innerHTML = `${ciudad} <span class="group-count">${centrosCiudad.length}</span>`;
-        listEl.appendChild(ciudadHeader);
+        body.appendChild(ciudadHeader);
 
         centrosCiudad.forEach((c) => {
-          listEl.appendChild(buildCard(c));
+          body.appendChild(buildCard(c));
         });
       });
+
+      details.appendChild(body);
+      listEl.appendChild(details);
     });
   }
 
