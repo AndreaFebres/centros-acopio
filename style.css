@@ -526,6 +526,63 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   margin-top: 10px;
 }
 .guia-tip p{ font-size: 14px; color: var(--ink); margin: 0; line-height: 1.55; }
+
+/* App destacada (Bridgefy) */
+.app-hero{
+  background: linear-gradient(135deg, #192A46 0%, #103A46 100%);
+  border-radius: var(--radius);
+  padding: 24px 22px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-md);
+}
+.app-hero-tag{
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #16302B;
+  background: #40C4A0;
+  border-radius: 999px;
+  padding: 5px 12px;
+  margin-bottom: 12px;
+}
+.app-hero-title{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 38px;
+  color: #fff;
+  margin: 0 0 10px;
+  line-height: 1;
+}
+.app-hero-desc{ color: #DCE8EE; font-size: 15px; line-height: 1.55; margin: 0 0 12px; }
+.app-hero-desc strong{ color: #9FE8D4; }
+.app-hero-how{ color: #B8CAD4; font-size: 13.5px; line-height: 1.55; margin: 0 0 16px; }
+.app-hero-how strong{ color: #fff; }
+
+/* Botones de tienda */
+.store-btns{ display: flex; gap: 10px; flex-wrap: wrap; }
+.store-btn{
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 11px 16px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.store-btn--play{ background: var(--green); color: #fff; }
+.store-btn--play:hover{ background: #168f60; }
+.store-btn--apple{ background: var(--ink); color: #fff; }
+.store-btn--apple:hover{ background: #000; }
+.app-hero .store-btn--play{ background: #40C4A0; color: #0C2B26; }
+.app-hero .store-btn--apple{ background: #fff; color: #16302B; }
+
+.apps-divider{
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 20px 0 12px;
+}
 .guia-section-divider{
   font-size: 13px;
   font-weight: 600;
