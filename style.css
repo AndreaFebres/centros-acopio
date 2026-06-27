@@ -462,14 +462,30 @@ a:focus-visible, button:focus-visible, input:focus-visible{
    GUÍA DE EMERGENCIA
    ========================================================= */
 .guia-wrap{ padding-top: 18px; padding-bottom: 40px; }
+.guia-main{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding-bottom: 40px;
+}
+/* La primera sección (contactos) ocupa todo el ancho y resalta */
+.guia-main > .guia-sec:first-child{
+  grid-column: 1 / -1;
+  border-left-color: var(--blue);
+}
+.guia-main > .guia-sec:first-child > summary::after{ color: var(--blue); }
+/* Cuando un módulo está abierto, ocupa todo el ancho para leerse cómodo */
+.guia-sec[open]{ grid-column: 1 / -1; }
 .guia-sec{
   background: #fff;
   border: 1px solid var(--line);
   border-left: 4px solid var(--red);
   border-radius: var(--radius-sm);
-  margin-bottom: 12px;
+  margin-bottom: 0;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  height: fit-content;
 }
 .guia-sec > summary{
   list-style: none;
@@ -478,10 +494,11 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   align-items: center;
   gap: 8px;
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--ink);
-  padding: 16px 18px;
+  padding: 15px 16px;
+  line-height: 1.25;
 }
 .guia-sec > summary::-webkit-details-marker{ display: none; }
 .guia-sec > summary::after{
@@ -490,9 +507,13 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   font-size: 20px;
   color: var(--red);
   font-weight: 700;
+  flex-shrink: 0;
 }
 .guia-sec[open] > summary::after{ content: "–"; }
 .guia-body{ padding: 0 18px 18px; }
+@media (max-width: 720px){
+  .guia-main{ grid-template-columns: 1fr; }
+}
 .guia-body p{ font-size: 14.5px; color: var(--ink); line-height: 1.6; margin: 0 0 12px; }
 .guia-body ul{ margin: 0 0 14px; padding-left: 22px; }
 .guia-body li{ font-size: 14.5px; color: var(--ink); line-height: 1.55; margin-bottom: 8px; }
@@ -530,6 +551,33 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   margin: 24px auto 0;
   max-width: 560px;
 }
+
+/* =========================================================
+   BANNER PROMO (llamar a la familia)
+   ========================================================= */
+.promo-ad{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 1120px;
+  margin: 0 auto 18px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--green) 100%);
+  border-radius: var(--radius);
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+}
+.promo-ad:hover{ filter: brightness(1.06); }
+.promo-ad-icon{ font-size: 32px; flex-shrink: 0; }
+.promo-ad-text{ display: flex; flex-direction: column; gap: 3px; }
+.promo-ad-text strong{
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1.2;
+}
+.promo-ad-text span{ color: rgba(255,255,255,0.92); font-size: 13.5px; line-height: 1.35; }
 
 /* =========================================================
    NAVEGACIÓN ENTRE PÁGINAS

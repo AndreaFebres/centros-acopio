@@ -1,20 +1,16 @@
 /**
  * HOSPITALES.JS — lógica de la página de hospitales/clínicas.
- * Liviano: solo lista + buscador + idioma. Sin mapa.
+ * Liviano: solo lista + buscador + idioma. Sin mapa, sin público/privado.
  */
 (function () {
   const listEl = document.getElementById("hosp-list");
   const searchEl = document.getElementById("hosp-search");
-  const filterBtns = Array.from(document.querySelectorAll(".filter-btn[data-hfilter]"));
 
   let lang = "es";
-  let currentFilter = "todos";
   let currentQuery = "";
   let COMMUNITY = [];
 
   const T = {
-    publico: { es: "Público", en: "Public" },
-    privado: { es: "Privado", en: "Private" },
     comunidad: { es: "Agregado por la comunidad", en: "Added by the community" },
     vacio: { es: "No hay resultados para tu búsqueda.", en: "No results for your search." },
     llamar: { es: "📞 Llamar", en: "📞 Call" },
@@ -40,21 +36,15 @@
 
   function normTel(tel) {
     if (!tel) return null;
-    const d = tel.replace(/[^\d]/g, "");
+    const m = String(tel).match(/\+?[\d][\d\s().-]{6,}/);
+    if (!m) return null;
+    const d = m[0].replace(/[^\d]/g, "");
     return d.length >= 7 ? d : null;
-  }
-
-  function tipoLabel(tipo) {
-    const n = (tipo || "").toLowerCase();
-    if (n.includes("priv")) return t("privado");
-    return t("publico");
   }
 
   function getAll() {
     const base = (typeof HOSPITALES_DATA !== "undefined" ? HOSPITALES_DATA : []).concat(COMMUNITY);
     return base.filter((h) => {
-      if (currentFilter === "publico" && !(h.tipo || "").toLowerCase().includes("púb") && !(h.tipo || "").toLowerCase().includes("pub")) return false;
-      if (currentFilter === "privado" && !(h.tipo || "").toLowerCase().includes("priv")) return false;
       if (!currentQuery) return true;
       return `${h.nombre} ${h.ciudad} ${h.direccion}`.toLowerCase().includes(currentQuery);
     });
@@ -71,19 +61,17 @@
       const tel = normTel(h.telefono);
       const card = document.createElement("article");
       card.className = "card" + (h.esComunidad ? " card--comunidad" : "");
-      card.dataset.tipo = (h.tipo || "").toLowerCase().includes("priv") ? "privado" : "publico";
       card.innerHTML = `
         <div class="card-top">
           <h3 class="card-name">${h.nombre}</h3>
-          <span class="badge badge--${card.dataset.tipo}">${tipoLabel(h.tipo)}</span>
         </div>
         ${h.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
-        <p class="card-meta"><strong>${h.ciudad}</strong>${h.direccion ? "<br>" + h.direccion : ""}</p>
+        ${h.ciudad || h.direccion ? `<p class="card-meta">${h.ciudad ? "<strong>" + h.ciudad + "</strong>" : ""}${h.ciudad && h.direccion ? "<br>" : ""}${h.direccion || ""}</p>` : ""}
         ${h.nota ? `<p class="card-tags">${h.nota}</p>` : ""}
-        <div class="card-actions">
-          ${tel ? `<a href="tel:${tel}">${t("llamar")}</a>` : ""}
-          ${tel ? `<a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>` : ""}
-        </div>
+        ${tel ? `<div class="card-actions">
+          <a href="tel:${tel}">${t("llamar")}</a>
+          <a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>
+        </div>` : ""}
       `;
       listEl.appendChild(card);
     });
@@ -115,39 +103,26 @@
       if (rows.length < 2) return;
       const head = rows[0].map(norm);
       const col = (...keys) => head.findIndex((h) => keys.some((k) => h.includes(k)));
-      const iNombre = col("nombre", "hospital", "clinica", "centro");
-      const iTipo = col("tipo", "publico", "privado");
-      const iCiudad = col("ciudad");
+      const iNombre = col("nombre", "hospital", "clinica", "instituc", "centro");
       const iDir = col("direcc");
-      const iTel = col("telefono", "contacto", "whatsapp");
-      const iNota = col("nota", "observ", "detalle");
+      const iTel = col("contacto", "telefono", "whatsapp");
       COMMUNITY = rows.slice(1).map((r) => ({
-        nombre: (r[iNombre] || "").trim() || "Centro sin nombre",
-        tipo: (r[iTipo] || "").trim(),
-        ciudad: (r[iCiudad] || "").trim(),
-        direccion: (r[iDir] || "").trim(),
-        telefono: (r[iTel] || "").trim(),
-        nota: (r[iNota] || "").trim(),
+        nombre: (r[iNombre] || "").trim() || "Sin nombre",
+        ciudad: "",
+        direccion: (iDir >= 0 ? r[iDir] || "" : "").trim(),
+        telefono: (iTel >= 0 ? r[iTel] || "" : "").trim(),
+        nota: "",
         esComunidad: true,
-      })).filter((h) => h.nombre && h.nombre !== "Centro sin nombre");
+      })).filter((h) => h.nombre && h.nombre !== "Sin nombre");
       render();
     } catch (e) {
       console.warn("No se pudieron cargar sugerencias de hospitales:", e);
     }
   }
 
-  // Wire up
-  filterBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      filterBtns.forEach((b) => { b.classList.toggle("is-active", b === btn); b.setAttribute("aria-pressed", b === btn ? "true" : "false"); });
-      currentFilter = btn.dataset.hfilter;
-      render();
-    });
-  });
   searchEl.addEventListener("input", (e) => { currentQuery = e.target.value.trim().toLowerCase(); render(); });
   document.querySelectorAll(".lang-btn").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
 
-  // Link del formulario de sugerencias
   const formBtn = document.getElementById("hosp-form-link");
   if (formBtn) {
     if (typeof HOSP_FORM_URL !== "undefined" && HOSP_FORM_URL && !HOSP_FORM_URL.includes("PEGA_AQUI")) {

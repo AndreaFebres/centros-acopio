@@ -9,7 +9,6 @@
  *
  *   {
  *     nombre: "Nombre del hospital o clínica",
- *     tipo: "Público",        // "Público" o "Privado"
  *     ciudad: "Caracas",
  *     direccion: "Dirección o zona",
  *     telefono: "0212-0000000", // si no hay, deja ""
@@ -30,14 +29,13 @@ const HOSP_SHEET_CSV_URL = "PEGA_AQUI_EL_LINK_CSV_DE_TU_GOOGLE_FORM_DE_HOSPITALE
 
 // Link de tu Google Form para que la comunidad sugiera hospitales.
 // (Crea un formulario nuevo y pega aquí su link forms.gle/...)
-const HOSP_FORM_URL = "PEGA_AQUI_TU_LINK_DE_GOOGLE_FORM_DE_HOSPITALES";
+const HOSP_FORM_URL = "https://forms.gle/M3cCtdQ127D8ZhjR7";
 
 const HOSPITALES_DATA = [
   // Recopilados de prensa (Univisión, CNN, El Colombiano) el 25/06/2026.
   // Verifica disponibilidad antes de acudir, la situación cambia rápido.
   {
     nombre: "Hospital Dr. Domingo Luciani",
-    tipo: "Público",
     ciudad: "Caracas (El Llanito)",
     direccion: "El Llanito, Caracas",
     telefono: "",
@@ -45,7 +43,6 @@ const HOSPITALES_DATA = [
   },
   {
     nombre: "Hospital Periférico de Catia",
-    tipo: "Público",
     ciudad: "Caracas (Catia)",
     direccion: "Catia, Caracas",
     telefono: "",
@@ -53,7 +50,6 @@ const HOSPITALES_DATA = [
   },
   {
     nombre: "Hospital General Regional Dr. José María Vargas",
-    tipo: "Público",
     ciudad: "La Guaira",
     direccion: "La Guaira",
     telefono: "",
@@ -61,7 +57,6 @@ const HOSPITALES_DATA = [
   },
   {
     nombre: "Clínica El Ávila",
-    tipo: "Privado",
     ciudad: "Caracas (Altamira)",
     direccion: "Av. San Juan Bosco con 6ta transversal, Altamira",
     telefono: "0212-2761111",
@@ -69,7 +64,6 @@ const HOSPITALES_DATA = [
   },
   {
     nombre: "Hospital de campaña — Catia La Mar",
-    tipo: "Público",
     ciudad: "Catia La Mar, La Guaira",
     direccion: "Catia La Mar",
     telefono: "",
@@ -77,7 +71,6 @@ const HOSPITALES_DATA = [
   },
   {
     nombre: "Hospital de Morón",
-    tipo: "Público",
     ciudad: "Morón, Carabobo",
     direccion: "Morón",
     telefono: "",
