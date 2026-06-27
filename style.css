@@ -459,6 +459,108 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .leaflet-popup-content b{ font-family: var(--font-display); }
 
 /* =========================================================
+   GUÍA DE EMERGENCIA
+   ========================================================= */
+.guia-wrap{ padding-top: 18px; padding-bottom: 40px; }
+.guia-sec{
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--red);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.guia-sec > summary{
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  padding: 16px 18px;
+}
+.guia-sec > summary::-webkit-details-marker{ display: none; }
+.guia-sec > summary::after{
+  content: "+";
+  margin-left: auto;
+  font-size: 20px;
+  color: var(--red);
+  font-weight: 700;
+}
+.guia-sec[open] > summary::after{ content: "–"; }
+.guia-body{ padding: 0 18px 18px; }
+.guia-body p{ font-size: 14.5px; color: var(--ink); line-height: 1.6; margin: 0 0 12px; }
+.guia-body ul{ margin: 0 0 14px; padding-left: 22px; }
+.guia-body li{ font-size: 14.5px; color: var(--ink); line-height: 1.55; margin-bottom: 8px; }
+.guia-body strong{ color: var(--ink); font-weight: 700; }
+.guia-tip{
+  background: var(--gold-soft);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-top: 10px;
+}
+.guia-tip p{ font-size: 14px; color: var(--ink); margin: 0; line-height: 1.55; }
+.guia-section-divider{
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-align: center;
+  margin: 18px 0 10px;
+  padding: 10px 14px;
+  background: var(--paper-deep);
+  border-radius: var(--radius-sm);
+}
+.guia-nota{
+  background: var(--red-soft);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13.5px !important;
+  color: var(--ink) !important;
+}
+.contactos li{ font-size: 15px; }
+.guia-cierre{
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin: 24px auto 0;
+  max-width: 560px;
+}
+
+/* =========================================================
+   NAVEGACIÓN ENTRE PÁGINAS
+   ========================================================= */
+.page-nav{
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.page-nav a{
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--blue);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 14px;
+}
+.page-nav a.is-current{
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.badge--publico{ color: var(--blue); background: var(--blue-soft); }
+.badge--privado{ color: var(--green); background: var(--green-soft); }
+.card[data-tipo="publico"]{ border-left-color: var(--blue); }
+.card[data-tipo="privado"]{ border-left-color: var(--green); }
+
+/* =========================================================
    IDIOMA + INSUMOS MÁS NECESITADOS
    ========================================================= */
 .lang-bar{

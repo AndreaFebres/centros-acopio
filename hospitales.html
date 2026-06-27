@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hospitales y clínicas atendiendo — Venezuela</title>
+<meta name="description" content="Hospitales y clínicas que están atendiendo heridos tras los terremotos en Venezuela." />
+<link rel="stylesheet" href="style.css" />
+<script data-goatcounter="https://ayudavzla.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<header class="manifest-header">
+  <div class="wrap">
+    <div class="lang-bar">
+      <button type="button" class="lang-btn is-active" data-lang="es">ES</button>
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <nav class="page-nav">
+      <a href="index.html" data-es="← Centros de acopio" data-en="← Donation centers">← Centros de acopio</a>
+      <a href="hospitales.html" class="is-current" data-es="Hospitales y clínicas" data-en="Hospitals & clinics">Hospitales y clínicas</a>
+      <a href="guia.html" data-es="Guía de emergencia" data-en="Emergency guide">Guía de emergencia</a>
+      <a href="llamar.html" data-es="Llamar a tu familia" data-en="Call your family">Llamar a tu familia</a>
+    </nav>
+    <p class="eyebrow" data-es="Terremotos en Venezuela · 24 junio 2026" data-en="Earthquakes in Venezuela · June 24, 2026">Terremotos en Venezuela · 24 junio 2026</p>
+    <h1><span data-es="Hospitales y clínicas" data-en="Hospitals & clinics">Hospitales y clínicas</span><br /><span class="accent" data-es="que están atendiendo" data-en="currently treating patients">que están atendiendo</span></h1>
+    <p class="lede" data-es="Centros de salud públicos y privados que están recibiendo y atendiendo heridos. Muchos están saturados; si puedes, llama antes de acudir para confirmar disponibilidad." data-en="Public and private health centers receiving and treating the injured. Many are overwhelmed; if you can, call before going to confirm availability.">Centros de salud públicos y privados que están recibiendo y atendiendo heridos. Muchos están saturados; si puedes, llama antes de acudir para confirmar disponibilidad.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="controls" aria-label="Filtros">
+    <div class="filter-group" role="group">
+      <button class="filter-btn is-active" data-hfilter="todos" aria-pressed="true" data-es="Todos" data-en="All">Todos</button>
+      <button class="filter-btn" data-hfilter="publico" aria-pressed="false" data-es="Públicos" data-en="Public">Públicos</button>
+      <button class="filter-btn" data-hfilter="privado" aria-pressed="false" data-es="Privados" data-en="Private">Privados</button>
+    </div>
+    <div class="search-group">
+      <label for="hosp-search" class="sr-only">Buscar</label>
+      <input type="search" id="hosp-search" placeholder="Buscar hospital o ciudad…" data-ph-es="Buscar hospital o ciudad…" data-ph-en="Search hospital or city…" autocomplete="off" />
+    </div>
+  </section>
+
+  <section class="content" id="content">
+    <div class="list-wrap">
+      <div class="list" id="hosp-list" aria-label="Lista de hospitales y clínicas"></div>
+    </div>
+  </section>
+</main>
+
+<section class="callouts wrap">
+  <div class="callout callout--suggest">
+    <div class="callout-text">
+      <h2 data-es="🏥 ¿Conoces un hospital o clínica atendiendo?" data-en="🏥 Know a hospital or clinic that's treating people?">🏥 ¿Conoces un hospital o clínica atendiendo?</h2>
+      <p data-es="Ayúdanos a mantener esta lista al día. Cuéntanos el nombre, la ciudad y el teléfono si lo tienes." data-en="Help us keep this list current. Tell us the name, city and phone if you have it.">Ayúdanos a mantener esta lista al día. Cuéntanos el nombre, la ciudad y el teléfono si lo tienes.</p>
+    </div>
+    <a id="hosp-form-link" class="btn-suggest btn-suggest--big" href="#" target="_blank" rel="noopener" data-es="+ Sugerir un hospital" data-en="+ Suggest a hospital">+ Sugerir un hospital</a>
+  </div>
+</section>
+
+<footer class="site-footer wrap">
+  <p data-es="Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Muchos centros están saturados: confirma por teléfono antes de acudir." data-en="This information is community-maintained and may not always be up to date. Many centers are overwhelmed: confirm by phone before going.">Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Muchos centros están saturados: confirma por teléfono antes de acudir.</p>
+</footer>
+
+<script src="hospitales-data.js"></script>
+<script src="hospitales.js"></script>
+</body>
+</html>
