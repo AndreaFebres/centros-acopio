@@ -417,15 +417,21 @@
       <div class="card-actions">
         <a href="${directionsUrl(c)}" target="_blank" rel="noopener">${t("comoLlegar")}</a>
         ${waUrl(c) ? `<a class="card-wa" href="${waUrl(c)}" target="_blank" rel="noopener">💬 ${t("whatsapp")}</a>` : ""}
-        <button type="button" class="card-share-btn">↗ ${t("compartir")}</button>
+        <a href="#" class="card-share-link" role="button">↗ ${t("compartir")}</a>
         <a class="card-report" href="${REPORT_FORM_URL}" target="_blank" rel="noopener">${t("reportar")}</a>
       </div>
     `;
-    const shareBtn = card.querySelector(".card-share-btn");
-    if (shareBtn) shareBtn.addEventListener("click", (e) => { e.stopPropagation(); shareCentro(c, shareBtn); });
+    const shareLink = card.querySelector(".card-share-link");
+    if (shareLink) {
+      shareLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        shareCentro(c, shareLink);
+      });
+    }
     card.addEventListener("click", (e) => {
-      // No interferir con los enlaces ni botones
-      if (e.target.tagName === "A" || e.target.tagName === "BUTTON") return;
+      // No interferir con los enlaces
+      if (e.target.tagName === "A" || e.target.closest("a")) return;
       selectCenter(c.id, true);
     });
     card.addEventListener("keydown", (e) => {
