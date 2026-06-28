@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Refugios y albergues — Terremoto Venezuela</title>
+<meta name="description" content="Refugios y albergues temporales para personas afectadas por los terremotos en Venezuela." />
+<link rel="stylesheet" href="style.css" />
+<script data-goatcounter="https://ayudavzla.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<header class="manifest-header">
+  <div class="wrap">
+    <div class="lang-bar">
+      <button type="button" class="lang-btn is-active" data-lang="es">ES</button>
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <nav class="page-nav">
+      <a href="index.html" data-es="Centros de acopio" data-en="Donation centers">Centros de acopio</a>
+      <a href="refugios.html" class="is-current" data-es="Refugios" data-en="Shelters">Refugios</a>
+      <a href="hospitales.html" data-es="Hospitales" data-en="Hospitals">Hospitales</a>
+      <a href="guia.html" data-es="Guía de emergencia" data-en="Emergency guide">Guía de emergencia</a>
+      <a href="llamar.html" data-es="Comunicarte con tu familia" data-en="Call your family">Comunicarte con tu familia</a>
+    </nav>
+    <p class="eyebrow eyebrow--big" data-es="Terremotos en Venezuela · 24 junio 2026 · mapa colaborativo" data-en="Earthquakes in Venezuela · June 24, 2026 · collaborative map">Terremotos en Venezuela · 24 junio 2026 · mapa colaborativo</p>
+    <h1><span data-es="Refugios y" data-en="Shelters and">Refugios y</span><br /><span class="accent" data-es="albergues temporales" data-en="temporary housing">albergues temporales</span></h1>
+    <p class="lede" data-es="Lugares donde dormir o resguardarse si tu casa quedó dañada o tienes miedo de entrar tras las réplicas. Confirma horario y disponibilidad antes de ir, los datos cambian rápido." data-en="Places to sleep or take shelter if your home was damaged or you're afraid to go inside after the aftershocks. Confirm hours and availability before going, details change fast.">Lugares donde dormir o resguardarse si tu casa quedó dañada o tienes miedo de entrar tras las réplicas. Confirma horario y disponibilidad antes de ir, los datos cambian rápido.</p>
+    <p class="lede lede--light" data-es="📶 Página liviana: por defecto solo carga la lista. El mapa es opcional, para no gastar tus datos si tienes señal débil." data-en="📶 Lightweight page: by default it only loads the list. The map is optional, to save your data if you have a weak signal.">📶 Página liviana: por defecto solo carga la lista. El mapa es opcional, para no gastar tus datos si tienes señal débil.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="controls" aria-label="Filtros de búsqueda">
+    <div class="search-group">
+      <label for="search" class="sr-only">Buscar</label>
+      <input type="search" id="search" placeholder="Buscar refugio o ciudad…" data-ph-es="Buscar refugio o ciudad…" data-ph-en="Search shelter or city…" autocomplete="off" />
+    </div>
+    <button type="button" id="toggle-map" class="filter-btn" aria-pressed="false">
+      🗺️ <span data-es="Ver mapa" data-en="Show map">Ver mapa</span> <span class="btn-hint" data-es="(usa datos)" data-en="(uses data)">(usa datos)</span>
+    </button>
+    <button type="button" id="near-me" class="filter-btn" data-es="📍 Cerca de mí" data-en="📍 Near me">📍 Cerca de mí</button>
+  </section>
+
+  <section class="content" id="content">
+    <div id="map" class="map" role="application" aria-label="Mapa de refugios"></div>
+    <div class="list-wrap">
+      <div class="quick-nav" id="quick-nav"></div>
+      <div class="list" id="list" aria-label="Lista de refugios"></div>
+    </div>
+  </section>
+</main>
+
+<section class="callouts wrap">
+  <div class="callout callout--suggest">
+    <div class="callout-text">
+      <h2 data-es="🏠 ¿Conoces un refugio o albergue?" data-en="🏠 Know a shelter?">🏠 ¿Conoces un refugio o albergue?</h2>
+      <p data-es="Ayúdanos a que más gente sepa dónde resguardarse. Cuéntanos la ciudad, la institución, la dirección, el horario, el contacto, si reciben donaciones y qué necesitan ahora." data-en="Help more people know where to take shelter. Tell us the city, institution, address, hours, contact, whether they accept donations and what they need now.">Ayúdanos a que más gente sepa dónde resguardarse. Cuéntanos la ciudad, la institución, la dirección, el horario, el contacto, si reciben donaciones y qué necesitan ahora.</p>
+    </div>
+    <a id="form-link" class="btn-suggest btn-suggest--big" href="https://forms.gle/Hnh4Tn6RaCJ83z398" target="_blank" rel="noopener" data-es="+ Sugerir un refugio" data-en="+ Suggest a shelter">+ Sugerir un refugio</a>
+  </div>
+</section>
+
+<footer class="site-footer wrap">
+  <p data-es="Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Confirma horario y disponibilidad antes de ir." data-en="This information is community-maintained and may not always be up to date. Confirm hours and availability before going.">Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Confirma horario y disponibilidad antes de ir.</p>
+</footer>
+
+<script src="refugios-data.js"></script>
+<script src="refugios.js"></script>
+</body>
+</html>
