@@ -670,6 +670,12 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 .badge--recibe{ color: #0E7C6E; background: var(--green-soft); }
 .badge--norecibe{ color: var(--ink-soft); background: var(--paper-deep); }
+.badge--voluntarios{
+  display: inline-block;
+  color: #9A5B00;
+  background: #FFF1DC;
+  margin-top: 6px;
+}
 .card--refugio{ border-left-color: var(--green); }
 .badge--publico{ color: var(--blue); background: var(--blue-soft); }
 .badge--privado{ color: var(--green); background: var(--green-soft); }

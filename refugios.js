@@ -30,6 +30,8 @@
       contacto: r.contacto || "",
       recibeDonaciones: r.recibeDonaciones === true,
       necesita: r.necesita || "",
+      necesitaVoluntarios: r.necesitaVoluntarios === true,
+      tareasVoluntarios: r.tareasVoluntarios || "",
       lat: typeof r.lat === "number" ? r.lat : null,
       lng: typeof r.lng === "number" ? r.lng : null,
       esComunidad: false,
@@ -43,6 +45,8 @@
     recibe: { es: "✓ Recibe donaciones", en: "✓ Accepts donations" },
     noRecibe: { es: "Solo alberga personas", en: "Shelter only" },
     necesitaLbl: { es: "Necesita ahora:", en: "Needs now:" },
+    voluntarios: { es: "🙋 Necesita voluntarios", en: "🙋 Needs volunteers" },
+    tareasLbl: { es: "Voluntarios para:", en: "Volunteers for:" },
     comunidad: { es: "Agregado por la comunidad", en: "Added by the community" },
     vacio: { es: "Todavía no hay refugios en la lista. Si conoces uno, agrégalo con el botón de abajo.", en: "No shelters listed yet. If you know one, add it with the button below." },
     cercaDeMi: { es: "📍 Cerca de mí", en: "📍 Near me" },
@@ -112,9 +116,11 @@
         <h3 class="card-name">${sinNombre ? c.direccion || t("sinNombre") : c.nombre}</h3>
         <span class="badge ${c.recibeDonaciones ? "badge--recibe" : "badge--norecibe"}">${c.recibeDonaciones ? t("recibe") : t("noRecibe")}</span>
       </div>
+      ${c.necesitaVoluntarios ? `<span class="badge badge--voluntarios">${t("voluntarios")}</span>` : ""}
       ${c.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
       ${sinNombre ? "" : `<p class="card-meta">${c.direccion}</p>`}
       ${c.necesita ? `<p class="card-tags"><strong>${t("necesitaLbl")}</strong> ${c.necesita}</p>` : ""}
+      ${c.necesitaVoluntarios && c.tareasVoluntarios ? `<p class="card-tags"><strong>${t("tareasLbl")}</strong> ${c.tareasVoluntarios}</p>` : ""}
       ${(() => {
         const horario = (c.horario || "").trim();
         const contacto = (c.contacto || "").trim();
@@ -269,10 +275,13 @@
       const iContacto = col("contacto", "telefono", "whatsapp");
       const iRecibe = col("recib", "dona");
       const iNecesita = col("necesita", "requiere", "hace falta");
+      const iVoluntarios = col("voluntario", "voluntarios");
+      const iTareas = col("tarea", "tareas", "que tareas", "para que");
 
       const vistas = new Set(DATA.map((c) => norm(c.direccion)).filter(Boolean));
       COMMUNITY = rows.slice(1).map((r, i) => {
         const recibeRaw = norm(iRecibe >= 0 ? r[iRecibe] : "");
+        const volRaw = norm(iVoluntarios >= 0 ? r[iVoluntarios] : "");
         return {
           id: "ref-com-" + i,
           nombre: (iNombre >= 0 ? r[iNombre] || "" : "").trim() || "Refugio sin nombre",
@@ -282,6 +291,8 @@
           contacto: (iContacto >= 0 ? r[iContacto] || "" : "").trim(),
           recibeDonaciones: recibeRaw.startsWith("s") || recibeRaw.includes("yes") || recibeRaw.includes("true"),
           necesita: (iNecesita >= 0 ? r[iNecesita] || "" : "").trim(),
+          necesitaVoluntarios: volRaw.startsWith("s") || volRaw.includes("yes") || volRaw.includes("true"),
+          tareasVoluntarios: (iTareas >= 0 ? r[iTareas] || "" : "").trim(),
           lat: null, lng: null,
           esComunidad: true,
         };

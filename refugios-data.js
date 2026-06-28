@@ -15,6 +15,8 @@
  *     contacto: "0212-0000000",    // si no hay, deja ""
  *     recibeDonaciones: true,      // true (sí) o false (no)
  *     necesita: "Colchonetas, agua, comida", // qué necesita ahora
+ *     necesitaVoluntarios: true,   // true (sí) o false (no)
+ *     tareasVoluntarios: "Cocina, cargar cajas", // para qué, opcional
  *     lat: 10.50, lng: -66.91,     // opcional, para el mapa
  *   },
  *
