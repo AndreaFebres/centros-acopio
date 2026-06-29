@@ -1,10 +1,11 @@
 /**
- * HOSPITALES.JS — lógica de la página de hospitales/clínicas.
- * Liviano: solo lista + buscador + idioma. Sin mapa, sin público/privado.
+ * APOYO.JS — lógica de la página "Recursos de apoyo".
+ * Categoría amplia: psicológico, legal, económico, ONGs, orientación.
+ * Liviano: solo lista + buscador + idioma. Sin mapa.
  */
 (function () {
-  const listEl = document.getElementById("hosp-list");
-  const searchEl = document.getElementById("hosp-search");
+  const listEl = document.getElementById("apoyo-list");
+  const searchEl = document.getElementById("apoyo-search");
 
   let lang = "es";
   let currentQuery = "";
@@ -15,7 +16,7 @@
     vacio: { es: "No hay resultados para tu búsqueda.", en: "No results for your search." },
     llamar: { es: "📞 Llamar", en: "📞 Call" },
     wa: { es: "💬 WhatsApp", en: "💬 WhatsApp" },
-    waMsg: { es: "Hola, vi este centro en la página Ruta de Acopio. ¿Están atendiendo emergencias?", en: "Hello, I saw this center on the Ruta de Acopio page. Are you handling emergencies?" },
+    waMsg: { es: "Hola, vi este recurso de apoyo en la página Ruta de Acopio.", en: "Hello, I saw this support resource on the Ruta de Acopio page." },
   };
   function t(k) { return (T[k] && T[k][lang]) || (T[k] && T[k].es) || ""; }
 
@@ -43,18 +44,18 @@
   }
 
   function getAll() {
-    const base = (typeof HOSPITALES_DATA !== "undefined" ? HOSPITALES_DATA : []).concat(COMMUNITY);
-    return base.filter((h) => {
+    const base = (typeof APOYO_DATA !== "undefined" ? APOYO_DATA : []).concat(COMMUNITY);
+    return base.filter((p) => {
       if (!currentQuery) return true;
-      return `${h.nombre} ${h.ciudad} ${h.direccion}`.toLowerCase().includes(currentQuery);
+      return `${p.nombre} ${p.ciudad} ${p.pais} ${p.tipo} ${p.nota}`.toLowerCase().includes(currentQuery);
     });
   }
 
   function render() {
     const items = getAll();
-    const statEl = document.getElementById("stat-hosp");
+    const statEl = document.getElementById("stat-apoyo");
     if (statEl) {
-      const total = (typeof HOSPITALES_DATA !== "undefined" ? HOSPITALES_DATA.length : 0) + COMMUNITY.length;
+      const total = (typeof APOYO_DATA !== "undefined" ? APOYO_DATA.length : 0) + COMMUNITY.length;
       statEl.textContent = total;
     }
     listEl.innerHTML = "";
@@ -62,17 +63,20 @@
       listEl.innerHTML = `<p class="empty-state">${t("vacio")}</p>`;
       return;
     }
-    items.forEach((h) => {
-      const tel = normTel(h.telefono);
+    items.forEach((p) => {
+      const tel = normTel(p.contacto);
       const card = document.createElement("article");
-      card.className = "card" + (h.esComunidad ? " card--comunidad" : "");
+      card.className = "card card--apoyo" + (p.esComunidad ? " card--comunidad" : "");
       card.innerHTML = `
         <div class="card-top">
-          <h3 class="card-name">${h.nombre}</h3>
+          <h3 class="card-name">${p.nombre}</h3>
         </div>
-        ${h.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
-        ${h.ciudad || h.direccion ? `<p class="card-meta">${h.ciudad ? "<strong>" + h.ciudad + "</strong>" : ""}${h.ciudad && h.direccion ? "<br>" : ""}${h.direccion || ""}</p>` : ""}
-        ${h.nota ? `<p class="card-tags">${h.nota}</p>` : ""}
+        ${p.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
+        ${(p.ciudad || p.pais) ? `<p class="card-meta"><strong>${[p.ciudad, p.pais].filter(Boolean).join(", ")}</strong>${p.direccion ? "<br>" + p.direccion : ""}</p>` : (p.direccion ? `<p class="card-meta">${p.direccion}</p>` : "")}
+        ${!tel && p.contacto ? `<p class="card-meta">${p.contacto}</p>` : ""}
+        ${p.tipo ? `<p class="card-tags">${p.tipo}</p>` : ""}
+        ${p.horario ? `<p class="card-meta">🕒 ${p.horario}</p>` : ""}
+        ${p.nota ? `<p class="card-meta">${p.nota}</p>` : ""}
         ${tel ? `<div class="card-actions">
           <a href="tel:${tel}">${t("llamar")}</a>
           <a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>
@@ -104,37 +108,45 @@
   }
 
   async function loadCommunity() {
-    if (typeof HOSP_SHEET_CSV_URL === "undefined" || !HOSP_SHEET_CSV_URL || HOSP_SHEET_CSV_URL.includes("PEGA_AQUI")) return;
+    if (typeof APOYO_SHEET_CSV_URL === "undefined" || !APOYO_SHEET_CSV_URL || APOYO_SHEET_CSV_URL.includes("PEGA_AQUI")) return;
     try {
-      const res = await fetch(HOSP_SHEET_CSV_URL);
+      const res = await fetch(APOYO_SHEET_CSV_URL);
       if (!res.ok) throw new Error("HTTP " + res.status);
       const rows = parseCSV(await res.text());
       if (rows.length < 2) return;
       const head = rows[0].map(norm);
-      const iNombre = colEx(head, ["nombre", "hospital", "clinica", "instituc", "centro"]);
-      const iDir = colEx(head, ["direcc"], correoEx);
-      const iTel = colEx(head, ["contacto", "telefono", "whatsapp"], correoEx);
+      const iNombre = colEx(head, ["institucion", "persona", "local", "recepcion", "nombre", "servicio"]);
+      const iPais = colEx(head, ["pais"]);
+      const iCiudad = colEx(head, ["ciudad"]);
+      const iDireccion = colEx(head, ["direccion", "direcc"], correoEx);
+      const iContacto = colEx(head, ["contacto", "telefono", "whatsapp", "linea"], correoEx);
+      const iTipo = colEx(head, ["apoyo", "brinda", "tipo", "atencion"]);
+      const iHorario = colEx(head, ["horario"]);
+      const iNota = colEx(head, ["notas", "nota", "informacion", "adicional"]);
       COMMUNITY = rows.slice(1).map((r) => ({
         nombre: (iNombre >= 0 ? r[iNombre] || "" : "").trim() || "Sin nombre",
-        ciudad: "",
-        direccion: (iDir >= 0 ? r[iDir] || "" : "").trim(),
-        telefono: (iTel >= 0 ? r[iTel] || "" : "").trim(),
-        nota: "",
+        pais: (iPais >= 0 ? r[iPais] || "" : "").trim(),
+        ciudad: (iCiudad >= 0 ? r[iCiudad] || "" : "").trim(),
+        direccion: (iDireccion >= 0 ? r[iDireccion] || "" : "").trim(),
+        contacto: (iContacto >= 0 ? r[iContacto] || "" : "").trim(),
+        tipo: (iTipo >= 0 ? r[iTipo] || "" : "").trim(),
+        horario: (iHorario >= 0 ? r[iHorario] || "" : "").trim(),
+        nota: (iNota >= 0 ? r[iNota] || "" : "").trim(),
         esComunidad: true,
-      })).filter((h) => h.nombre && h.nombre !== "Sin nombre");
+      })).filter((p) => p.nombre && p.nombre !== "Sin nombre");
       render();
     } catch (e) {
-      console.warn("No se pudieron cargar sugerencias de hospitales:", e);
+      console.warn("No se pudieron cargar sugerencias de recursos de apoyo:", e);
     }
   }
 
   searchEl.addEventListener("input", (e) => { currentQuery = e.target.value.trim().toLowerCase(); render(); });
   document.querySelectorAll(".lang-btn").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
 
-  const formBtn = document.getElementById("hosp-form-link");
+  const formBtn = document.getElementById("apoyo-form-link");
   if (formBtn) {
-    if (typeof HOSP_FORM_URL !== "undefined" && HOSP_FORM_URL && !HOSP_FORM_URL.includes("PEGA_AQUI")) {
-      formBtn.href = HOSP_FORM_URL;
+    if (typeof APOYO_FORM_URL !== "undefined" && APOYO_FORM_URL && !APOYO_FORM_URL.includes("PEGA_AQUI")) {
+      formBtn.href = APOYO_FORM_URL;
     } else {
       formBtn.style.display = "none";
     }

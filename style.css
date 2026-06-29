@@ -859,6 +859,26 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 
 /* =========================================================
+   RECURSOS MÉDICOS — títulos de sección y tarjeta psicológica
+   ========================================================= */
+.seccion-titulo{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--ink);
+  margin: 28px 0 6px;
+}
+main > .seccion-titulo:first-child{ margin-top: 4px; }
+.seccion-intro{
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin: 0 0 14px;
+  max-width: 640px;
+}
+.card--apoyo{ border-left-color: #7C5CBF; }
+
+/* =========================================================
    CALLOUTS — sugerir centro / comentarios
    ========================================================= */
 .callouts{

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Recursos de apoyo — Venezuela</title>
+<meta name="description" content="Recursos de apoyo psicológico, legal, económico y de orientación para los afectados por los terremotos en Venezuela." />
+<link rel="stylesheet" href="style.css" />
+<script data-goatcounter="https://ayudavzla.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<header class="manifest-header">
+  <div class="wrap">
+    <div class="lang-bar">
+      <button type="button" class="lang-btn is-active" data-lang="es">ES</button>
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <nav class="page-nav">
+      <a href="index.html" data-es="Centros de acopio" data-en="Donation centers">Centros de acopio</a>
+      <a href="refugios.html" data-es="Refugios" data-en="Shelters">Refugios</a>
+      <a href="hospitales.html" data-es="Hospitales" data-en="Hospitals">Hospitales</a>
+      <a href="apoyo.html" class="is-current" data-es="Recursos de apoyo" data-en="Support resources">Recursos de apoyo</a>
+      <a href="guia.html" data-es="Guía de emergencia" data-en="Emergency guide">Guía de emergencia</a>
+      <a href="llamar.html" data-es="Comunicarte con tu familia" data-en="Call your family">Comunicarte con tu familia</a>
+    </nav>
+    <p class="eyebrow eyebrow--big" data-es="Terremotos en Venezuela · 24 junio 2026" data-en="Earthquakes in Venezuela · June 24, 2026">Terremotos en Venezuela · 24 junio 2026</p>
+    <h1><span data-es="Recursos de" data-en="Support">Recursos de</span><br /><span class="accent" data-es="apoyo" data-en="resources">apoyo</span></h1>
+    <p class="lede" data-es="Apoyo psicológico, legal, económico u otra orientación para quienes lo necesiten. Después de un terremoto, pedir ayuda es válido y necesario." data-en="Psychological, legal, financial or other support for those who need it. After an earthquake, asking for help is valid and necessary.">Apoyo psicológico, legal, económico u otra orientación para quienes lo necesiten. Después de un terremoto, pedir ayuda es válido y necesario.</p>
+    <dl class="stats">
+      <div><dt id="stat-apoyo">0</dt><dd data-es="recursos de apoyo" data-en="support resources">recursos de apoyo</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="controls" aria-label="Filtros">
+    <div class="search-group" style="flex:1 1 100%;">
+      <label for="apoyo-search" class="sr-only">Buscar</label>
+      <input type="search" id="apoyo-search" placeholder="Buscar recurso, ciudad o tipo de apoyo…" data-ph-es="Buscar recurso, ciudad o tipo de apoyo…" data-ph-en="Search resource, city or type of support…" autocomplete="off" />
+    </div>
+  </section>
+
+  <section class="content" id="content">
+    <div class="list-wrap">
+      <div class="list" id="apoyo-list" aria-label="Lista de recursos de apoyo"></div>
+    </div>
+  </section>
+</main>
+
+<section class="callouts wrap">
+  <div class="callout callout--suggest">
+    <div class="callout-text">
+      <h2 data-es="🤝 ¿Conoces otro recurso de apoyo?" data-en="🤝 Know another support resource?">🤝 ¿Conoces otro recurso de apoyo?</h2>
+      <p data-es="Psicológico, legal, económico o cualquier otro tipo de orientación. Cuéntanos el nombre, la ciudad si aplica, el contacto y qué apoyo brinda." data-en="Psychological, legal, financial or any other kind of guidance. Tell us the name, city if applicable, contact and what support it offers.">Psicológico, legal, económico o cualquier otro tipo de orientación. Cuéntanos el nombre, la ciudad si aplica, el contacto y qué apoyo brinda.</p>
+    </div>
+    <a id="apoyo-form-link" class="btn-suggest btn-suggest--big" href="#" target="_blank" rel="noopener" data-es="+ Sugerir un recurso de apoyo" data-en="+ Suggest a support resource">+ Sugerir un recurso de apoyo</a>
+  </div>
+</section>
+
+<footer class="site-footer wrap">
+  <p data-es="Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Si hay riesgo para tu vida o la de alguien más, llama al 911 o al 171." data-en="This information is community-maintained and may not always be up to date. If there is danger to life, call 911 or 171.">Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Si hay riesgo para tu vida o la de alguien más, llama al 911 o al 171.</p>
+</footer>
+
+<script src="apoyo-data.js"></script>
+<script src="apoyo.js"></script>
+</body>
+</html>
