@@ -34,7 +34,7 @@
 
 // CSV publicado de la hoja de respuestas (ver README). Mientras diga
 // PEGA_AQUI, simplemente no se activa esa función.
-const REF_SHEET_CSV_URL = "PEGA_AQUI_EL_LINK_CSV_DE_TU_GOOGLE_FORM_DE_REFUGIOS";
+const REF_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRfAF2RFmTOouE6cYMyWC2vnciPN6cHUN1bLr5IBYuoQl0gsDwQYsx0NJlI6BIAZVWCZZDaLPc0v45a/pub?output=csv";
 
 // Google Form para que la comunidad sugiera refugios.
 const REF_FORM_URL = "https://forms.gle/Hnh4Tn6RaCJ83z398";
