@@ -784,6 +784,24 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   margin: 0;
   line-height: 1.45;
 }
+.no-donar{
+  margin-top: 14px;
+  background: var(--red-soft);
+  border-left: 4px solid var(--red);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.no-donar-title{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14.5px;
+  color: var(--red);
+  margin: 0 0 8px;
+}
+.no-donar-intro{ font-size: 13px; color: var(--ink); margin: 0 0 8px; line-height: 1.5; }
+.no-donar-list{ margin: 0 0 8px; padding-left: 20px; }
+.no-donar-list li{ font-size: 13px; color: var(--ink); margin-bottom: 5px; line-height: 1.45; }
+.no-donar-resumen{ font-size: 13px; color: var(--ink); margin: 0; font-weight: 600; line-height: 1.5; }
 @media (max-width: 600px){
   .needs-cats{ columns: 1; }
 }
