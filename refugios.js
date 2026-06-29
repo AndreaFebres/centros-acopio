@@ -267,21 +267,25 @@
       const rows = parseCSV(await res.text());
       if (rows.length < 2) return;
       const head = rows[0].map(norm);
-      const col = (...keys) => head.findIndex((h) => keys.some((k) => h.includes(k)));
-      const iNombre = col("institucion", "nombre", "refugio", "albergue");
-      const iCiudad = col("ciudad");
-      const iDir = col("direcc");
-      const iHorario = col("horario");
-      // Para "contacto" tomamos teléfono/whatsapp, pero NUNCA la
-      // columna de correo (privacidad de quien llena el formulario).
-      const iContacto = head.findIndex((h) =>
-        (h.includes("contacto") || h.includes("telefono") || h.includes("whatsapp")) &&
-        !h.includes("correo") && !h.includes("email") && !h.includes("mail")
+      // Busca una columna que contenga TODAS las palabras clave dadas y
+      // NINGUNA de las excluidas. Así "Dirección de correo electrónico"
+      // no se confunde con "Direccion" del refugio.
+      const colEx = (keys, excl) => head.findIndex((h) =>
+        keys.some((k) => h.includes(k)) && !(excl || []).some((e) => h.includes(e))
       );
-      const iRecibe = col("recib", "dona");
-      const iNecesita = col("necesita", "requiere", "hace falta");
-      const iVoluntarios = col("voluntario", "voluntarios");
-      const iTareas = col("tarea", "tareas", "que tareas", "para que");
+      const correoEx = ["correo", "email", "mail", "electronic"];
+
+      const iNombre = colEx(["institucion", "local", "refugio", "albergue", "nombre"]);
+      const iCiudad = colEx(["ciudad"]);
+      // dirección del refugio, pero NO la de correo electrónico
+      const iDir = colEx(["direccion", "direcc"], correoEx);
+      const iHorario = colEx(["horario"]);
+      const iContacto = colEx(["contacto", "telefono", "whatsapp"], correoEx);
+      const iRecibe = colEx(["recib", "dona"]);
+      const iNecesita = colEx(["necesita", "requiere", "hace falta"]);
+      const iVoluntarios = colEx(["voluntario"]);
+      const iTareas = colEx(["tarea", "para que"]);
+      const iInfo = colEx(["informacion importante", "informacion", "nota", "observ"]);
 
       // Quita cualquier texto con forma de correo (algo@algo.algo).
       const EMAIL_RE = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
@@ -291,6 +295,8 @@
       COMMUNITY = rows.slice(1).map((r, i) => {
         const recibeRaw = norm(iRecibe >= 0 ? r[iRecibe] : "");
         const volRaw = norm(iVoluntarios >= 0 ? r[iVoluntarios] : "");
+        const infoExtra = (iInfo >= 0 ? r[iInfo] || "" : "").trim();
+        const necesitaBase = (iNecesita >= 0 ? r[iNecesita] || "" : "").trim();
         return {
           id: "ref-com-" + i,
           nombre: (iNombre >= 0 ? r[iNombre] || "" : "").trim() || "Refugio sin nombre",
@@ -299,15 +305,17 @@
           horario: (iHorario >= 0 ? r[iHorario] || "" : "").trim(),
           contacto: limpiaContacto(iContacto >= 0 ? r[iContacto] || "" : ""),
           recibeDonaciones: recibeRaw.startsWith("s") || recibeRaw.includes("yes") || recibeRaw.includes("true"),
-          necesita: (iNecesita >= 0 ? r[iNecesita] || "" : "").trim(),
+          necesita: [necesitaBase, infoExtra].filter(Boolean).join(" · "),
           necesitaVoluntarios: volRaw.startsWith("s") || volRaw.includes("yes") || volRaw.includes("true"),
           tareasVoluntarios: (iTareas >= 0 ? r[iTareas] || "" : "").trim(),
           lat: null, lng: null,
           esComunidad: true,
         };
       }).filter((c) => {
-        if (!c.direccion) return false;
-        const key = norm(c.direccion);
+        // Mostrar si tiene al menos ciudad o dirección (ya no exige
+        // dirección obligatoria, porque algunos solo ponen la ciudad).
+        if (!c.direccion && (!c.ciudad || c.ciudad === "Sin especificar")) return false;
+        const key = norm(c.direccion || c.nombre + c.ciudad);
         if (vistas.has(key)) return false;
         vistas.add(key);
         return true;
