@@ -272,11 +272,20 @@
       const iCiudad = col("ciudad");
       const iDir = col("direcc");
       const iHorario = col("horario");
-      const iContacto = col("contacto", "telefono", "whatsapp");
+      // Para "contacto" tomamos teléfono/whatsapp, pero NUNCA la
+      // columna de correo (privacidad de quien llena el formulario).
+      const iContacto = head.findIndex((h) =>
+        (h.includes("contacto") || h.includes("telefono") || h.includes("whatsapp")) &&
+        !h.includes("correo") && !h.includes("email") && !h.includes("mail")
+      );
       const iRecibe = col("recib", "dona");
       const iNecesita = col("necesita", "requiere", "hace falta");
       const iVoluntarios = col("voluntario", "voluntarios");
       const iTareas = col("tarea", "tareas", "que tareas", "para que");
+
+      // Quita cualquier texto con forma de correo (algo@algo.algo).
+      const EMAIL_RE = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
+      const limpiaContacto = (s) => (s || "").replace(EMAIL_RE, "").replace(/\s{2,}/g, " ").trim();
 
       const vistas = new Set(DATA.map((c) => norm(c.direccion)).filter(Boolean));
       COMMUNITY = rows.slice(1).map((r, i) => {
@@ -288,7 +297,7 @@
           ciudad: (iCiudad >= 0 ? r[iCiudad] || "" : "").trim() || "Sin especificar",
           direccion: (iDir >= 0 ? r[iDir] || "" : "").trim(),
           horario: (iHorario >= 0 ? r[iHorario] || "" : "").trim(),
-          contacto: (iContacto >= 0 ? r[iContacto] || "" : "").trim(),
+          contacto: limpiaContacto(iContacto >= 0 ? r[iContacto] || "" : ""),
           recibeDonaciones: recibeRaw.startsWith("s") || recibeRaw.includes("yes") || recibeRaw.includes("true"),
           necesita: (iNecesita >= 0 ? r[iNecesita] || "" : "").trim(),
           necesitaVoluntarios: volRaw.startsWith("s") || volRaw.includes("yes") || volRaw.includes("true"),
