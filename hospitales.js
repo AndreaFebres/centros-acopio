@@ -52,6 +52,11 @@
 
   function render() {
     const items = getAll();
+    const statEl = document.getElementById("stat-hosp");
+    if (statEl) {
+      const total = (typeof HOSPITALES_DATA !== "undefined" ? HOSPITALES_DATA.length : 0) + COMMUNITY.length;
+      statEl.textContent = total;
+    }
     listEl.innerHTML = "";
     if (items.length === 0) {
       listEl.innerHTML = `<p class="empty-state">${t("vacio")}</p>`;

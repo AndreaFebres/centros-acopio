@@ -30,6 +30,7 @@
       contacto: r.contacto || "",
       recibeDonaciones: r.recibeDonaciones === true,
       necesita: r.necesita || "",
+      urgente: r.urgente || "",
       necesitaVoluntarios: r.necesitaVoluntarios === true,
       tareasVoluntarios: r.tareasVoluntarios || "",
       lat: typeof r.lat === "number" ? r.lat : null,
@@ -45,6 +46,8 @@
     recibe: { es: "✓ Recibe donaciones", en: "✓ Accepts donations" },
     noRecibe: { es: "Solo alberga personas", en: "Shelter only" },
     necesitaLbl: { es: "Necesita ahora:", en: "Needs now:" },
+    urgenteLbl: { es: "Urgente ahora:", en: "Urgent now:" },
+    paraLbl: { es: "Para:", en: "For:" },
     voluntarios: { es: "🙋 Necesita voluntarios", en: "🙋 Needs volunteers" },
     tareasLbl: { es: "Voluntarios para:", en: "Volunteers for:" },
     comunidad: { es: "Agregado por la comunidad", en: "Added by the community" },
@@ -119,6 +122,7 @@
       ${c.necesitaVoluntarios ? `<span class="badge badge--voluntarios">${t("voluntarios")}</span>` : ""}
       ${c.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
       ${sinNombre ? "" : `<p class="card-meta">${c.direccion}</p>`}
+      ${c.urgente ? `<p class="card-urgente"><strong>⚠ ${t("urgenteLbl")}</strong> ${c.urgente}</p>` : ""}
       ${c.necesita ? `<p class="card-tags"><strong>${t("necesitaLbl")}</strong> ${c.necesita}</p>` : ""}
       ${c.necesitaVoluntarios && c.tareasVoluntarios ? `<p class="card-tags"><strong>${t("tareasLbl")}</strong> ${c.tareasVoluntarios}</p>` : ""}
       ${(() => {
@@ -157,6 +161,26 @@
     return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
   }
 
+  function renderVoluntarios() {
+    const section = document.getElementById("voluntarios-section");
+    const listV = document.getElementById("voluntarios-list");
+    if (!section || !listV) return;
+    const conVol = DATA.concat(COMMUNITY).filter((c) => c.necesitaVoluntarios);
+    if (conVol.length === 0) { section.style.display = "none"; return; }
+    section.style.display = "block";
+    listV.innerHTML = "";
+    conVol.forEach((c) => {
+      const item = document.createElement("div");
+      item.className = "voluntarios-item";
+      item.innerHTML = `
+        <p class="vol-nombre">${c.nombre === "Refugio sin nombre" ? c.direccion : c.nombre}</p>
+        <p class="vol-lugar">📍 ${c.ciudad}</p>
+        ${c.tareasVoluntarios ? `<p class="vol-tareas"><strong>${t("paraLbl")}</strong> ${c.tareasVoluntarios}</p>` : ""}
+      `;
+      listV.appendChild(item);
+    });
+  }
+
   function render() {
     if (userLocation) return renderCercania();
     listEl.innerHTML = "";
@@ -182,6 +206,7 @@
       listEl.appendChild(det);
     });
     renderMarkers(refs);
+    renderVoluntarios();
   }
 
   function renderCercania() {
@@ -283,6 +308,7 @@
       const iContacto = colEx(["contacto", "telefono", "whatsapp"], correoEx);
       const iRecibe = colEx(["recib", "dona"]);
       const iNecesita = colEx(["necesita", "requiere", "hace falta"]);
+      const iUrgente = colEx(["urgente", "urgencia", "mas necesita"]);
       const iVoluntarios = colEx(["voluntario"]);
       const iTareas = colEx(["tarea", "para que"]);
       const iInfo = colEx(["informacion importante", "informacion", "nota", "observ"]);
@@ -306,6 +332,7 @@
           contacto: limpiaContacto(iContacto >= 0 ? r[iContacto] || "" : ""),
           recibeDonaciones: recibeRaw.startsWith("s") || recibeRaw.includes("yes") || recibeRaw.includes("true"),
           necesita: [necesitaBase, infoExtra].filter(Boolean).join(" · "),
+          urgente: (iUrgente >= 0 ? r[iUrgente] || "" : "").trim(),
           necesitaVoluntarios: volRaw.startsWith("s") || volRaw.includes("yes") || volRaw.includes("true"),
           tareasVoluntarios: (iTareas >= 0 ? r[iTareas] || "" : "").trim(),
           lat: null, lng: null,

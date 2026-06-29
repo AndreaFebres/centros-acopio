@@ -32,8 +32,19 @@ const HOSP_SHEET_CSV_URL = "PEGA_AQUI_EL_LINK_CSV_DE_TU_GOOGLE_FORM_DE_HOSPITALE
 const HOSP_FORM_URL = "https://forms.gle/M3cCtdQ127D8ZhjR7";
 
 const HOSPITALES_DATA = [
-  // Recopilados de prensa (Univisión, CNN, El Colombiano) el 25/06/2026.
-  // Verifica disponibilidad antes de acudir, la situación cambia rápido.
+  // Red oficial activada por el Ministerio de Salud: 8 hospitales
+  // públicos + 12 clínicas privadas en la Gran Caracas. Recopilados de
+  // prensa (CNN, AVN, La Nación, LatinUS) el 25-27/06/2026.
+  // Verifica disponibilidad antes de acudir, muchos están saturados.
+
+  // ===== CARACAS (hospitales públicos de la red activada) =====
+  {
+    nombre: "Hospital Vargas de Caracas",
+    ciudad: "Caracas",
+    direccion: "San José, Caracas",
+    telefono: "",
+    nota: "Hospital de la red oficial. Recibe muchos pacientes de la región costera.",
+  },
   {
     nombre: "Hospital Dr. Domingo Luciani",
     ciudad: "Caracas (El Llanito)",
@@ -42,19 +53,42 @@ const HOSPITALES_DATA = [
     nota: "Centro importante de recepción de heridos de Caracas y La Guaira.",
   },
   {
-    nombre: "Hospital Periférico de Catia",
+    nombre: "Hospital Periférico de Catia (Dr. José Gregorio Hernández)",
     ciudad: "Caracas (Catia)",
     direccion: "Catia, Caracas",
     telefono: "",
     nota: "Recibiendo heridos trasladados desde La Guaira.",
   },
   {
-    nombre: "Hospital General Regional Dr. José María Vargas",
-    ciudad: "La Guaira",
-    direccion: "La Guaira",
+    nombre: "Hospital Los Magallanes de Catia",
+    ciudad: "Caracas (Catia)",
+    direccion: "Los Magallanes de Catia, Caracas",
     telefono: "",
-    nota: "Principal hospital de La Guaira. Muy saturado: confirma antes de acudir.",
+    nota: "Hospital de la red oficial activada.",
   },
+  {
+    nombre: "Hospital El Algodonal",
+    ciudad: "Caracas (Antímano)",
+    direccion: "Antímano, Caracas",
+    telefono: "",
+    nota: "Hospital de la red oficial activada.",
+  },
+  {
+    nombre: "Hospital de Lídice (Dr. Jesús Yerena)",
+    ciudad: "Caracas (Lídice)",
+    direccion: "Lídice, Caracas",
+    telefono: "",
+    nota: "Hospital de la red oficial activada.",
+  },
+  {
+    nombre: "Hospital Militar Dr. Carlos Arvelo",
+    ciudad: "Caracas (San Martín)",
+    direccion: "Av. José Ángel Lamas, San Martín, Caracas",
+    telefono: "",
+    nota: "Hospital militar de la red oficial activada.",
+  },
+
+  // ===== CLÍNICAS PRIVADAS =====
   {
     nombre: "Clínica El Ávila",
     ciudad: "Caracas (Altamira)",
@@ -62,17 +96,42 @@ const HOSPITALES_DATA = [
     telefono: "0212-2761111",
     nota: "Atención priorizada a embarazadas y recién nacidos.",
   },
+
+  // ===== LA GUAIRA (la zona más afectada) =====
   {
-    nombre: "Hospital de campaña — Catia La Mar",
-    ciudad: "Catia La Mar, La Guaira",
-    direccion: "Catia La Mar",
+    nombre: "Hospital General Dr. José María Vargas (La Guaira)",
+    ciudad: "La Guaira",
+    direccion: "La Guaira",
     telefono: "",
-    nota: "Hospital de campaña instalado por la emergencia.",
+    nota: "Principal hospital de La Guaira. Muy saturado: confirma antes de acudir.",
   },
+  {
+    nombre: "Clínica Comunitaria Alfredo Machado",
+    ciudad: "Catia La Mar, La Guaira",
+    direccion: "Catia La Mar, La Guaira",
+    telefono: "",
+    nota: "Convertida en centro de triaje para la emergencia.",
+  },
+  {
+    nombre: "Hospitales de campaña de la ONU (3)",
+    ciudad: "La Guaira",
+    direccion: "Estado La Guaira",
+    telefono: "",
+    nota: "Tres hospitales de campaña instalados por Naciones Unidas para atender en la zona sin trasladar a todos a Caracas.",
+  },
+  {
+    nombre: "Hospitales Quirúrgicos Móviles (FANB)",
+    ciudad: "La Guaira",
+    direccion: "Estado La Guaira (unidades móviles)",
+    telefono: "",
+    nota: "Unidades militares de campaña con capacidad para cirugías de emergencia.",
+  },
+
+  // ===== OTROS ESTADOS =====
   {
     nombre: "Hospital de Morón",
     ciudad: "Morón, Carabobo",
-    direccion: "Morón",
+    direccion: "Morón, Carabobo",
     telefono: "",
     nota: "Cercano al epicentro, atendiendo heridos.",
   },

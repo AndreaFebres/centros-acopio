@@ -19,6 +19,9 @@
  *     horario: "Lun a Vie 9am-4pm",   // si no sabes, deja ""
  *     contacto: "0412-1234567",        // si no hay, deja ""
  *     insumos: "Agua, alimentos, ropa",// separa con comas
+ *     urgente: "Agua, medicinas",      // lo MÁS urgente ahora (opcional)
+ *     necesitaVoluntarios: true,       // true (sí) o false, opcional
+ *     tareasVoluntarios: "Empacar cajas", // para qué, opcional
  *   },
  *
  * Para agregar VARIOS, repite el bloque, uno debajo del otro.

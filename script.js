@@ -31,6 +31,9 @@
         insumos: typeof c.insumos === "string"
           ? c.insumos.split(",").map((s) => s.trim()).filter(Boolean)
           : Array.isArray(c.insumos) ? c.insumos : [],
+        urgente: c.urgente || "",
+        necesitaVoluntarios: c.necesitaVoluntarios === true,
+        tareasVoluntarios: c.tareasVoluntarios || "",
         notas: c.notas || "",
         // tipo se calcula solo (Venezuela -> nacional); no es comunidad.
       });
@@ -65,6 +68,9 @@
     sinEspecificar: { es: "Sin especificar", en: "Not specified" },
     vacio: { es: "No hay centros que coincidan con tu búsqueda.<br>Intenta otro término o cambia el filtro.", en: "No centers match your search.<br>Try another term or change the filter." },
     sinNombreCentro: { es: "Centro sin nombre", en: "Unnamed center" },
+    urgenteLbl: { es: "Urgente ahora:", en: "Urgent now:" },
+    voluntarios: { es: "🙋 Necesita voluntarios", en: "🙋 Needs volunteers" },
+    paraLbl: { es: "Para:", en: "For:" },
     whatsapp: { es: "WhatsApp", en: "WhatsApp" },
     compartir: { es: "Compartir", en: "Share" },
     cercaDeMi: { es: "📍 Cerca de mí", en: "📍 Near me" },
@@ -407,6 +413,8 @@
       </div>
       ${c.esComunidad ? `<span class="badge badge--comunidad">${t("sinVerificar")}</span>` : ""}
       ${c.sinNombre ? "" : `<p class="card-meta">${c.direccion}</p>`}
+      ${c.urgente ? `<p class="card-urgente"><strong>⚠ ${t("urgenteLbl")}</strong> ${c.urgente}</p>` : ""}
+      ${c.necesitaVoluntarios ? `<span class="badge badge--voluntarios">${t("voluntarios")}${c.tareasVoluntarios ? ": " + c.tareasVoluntarios : ""}</span>` : ""}
       <p class="card-tags">${t("recibe")} ${c.insumos.join(", ") || t("sinEspecificar")}</p>
       ${(() => {
         const horario = (c.horario || "").trim();
@@ -578,7 +586,10 @@
       // proteger la privacidad de quien llena el formulario. Solo
       // teléfono, WhatsApp y redes públicas del centro.
       else if (n.includes("contacto") || n.includes("telefono") || n.includes("whatsapp") || n.includes("instagram") || n.includes("telegram")) contactoIdx.push(idx);
-      else if (map.insumos === undefined && (n.includes("cosas") || n.includes("insumo") || n.includes("recib") || n.includes("necesita") || n.includes("dona"))) map.insumos = idx;
+      else if (map.insumos === undefined && (n.includes("cosas") || n.includes("insumo") || n.includes("recib") || n.includes("dona"))) map.insumos = idx;
+      else if (map.urgente === undefined && (n.includes("urgente") || n.includes("urgencia") || n.includes("mas necesita"))) map.urgente = idx;
+      else if (map.voluntarios === undefined && n.includes("voluntario")) map.voluntarios = idx;
+      else if (map.tareas === undefined && (n.includes("tarea") || n.includes("para que"))) map.tareas = idx;
     });
     // Puede haber varios campos de contacto separados (teléfono, correo,
     // redes...). Los guardamos todos para unirlos después.
@@ -624,6 +635,12 @@
               .split(",")
               .map((s) => s.trim())
               .filter(Boolean),
+            urgente: (map.urgente !== undefined ? r[map.urgente] : "" || "").trim(),
+            necesitaVoluntarios: (() => {
+              const v = (map.voluntarios !== undefined ? r[map.voluntarios] : "" || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+              return v.startsWith("s") || v.includes("yes") || v.includes("true");
+            })(),
+            tareasVoluntarios: (map.tareas !== undefined ? r[map.tareas] : "" || "").trim(),
             notas: "",
             esComunidad: true,
             lat: null,
@@ -673,6 +690,27 @@
     }
   }
 
+  function renderVoluntarios() {
+    const section = document.getElementById("voluntarios-section");
+    const listEl2 = document.getElementById("voluntarios-list");
+    if (!section || !listEl2) return;
+    const todos = (includeCommunity ? CENTROS_DATA.concat(COMMUNITY_DATA) : CENTROS_DATA)
+      .filter((c) => c.necesitaVoluntarios);
+    if (todos.length === 0) { section.style.display = "none"; return; }
+    section.style.display = "block";
+    listEl2.innerHTML = "";
+    todos.forEach((c) => {
+      const item = document.createElement("div");
+      item.className = "voluntarios-item";
+      item.innerHTML = `
+        <p class="vol-nombre">${c.sinNombre ? c.direccion : c.nombre}</p>
+        <p class="vol-lugar">📍 ${[c.ciudad, canonicalPais(c.pais)].filter(Boolean).join(", ")}</p>
+        ${c.tareasVoluntarios ? `<p class="vol-tareas"><strong>${t("paraLbl")}</strong> ${c.tareasVoluntarios}</p>` : ""}
+      `;
+      listEl2.appendChild(item);
+    });
+  }
+
   function applyFilters() {
     const filtered = getFiltered();
     if (userLocation) {
@@ -681,6 +719,7 @@
       renderList(filtered);
     }
     renderMarkers(filtered); // no hace nada si el mapa no está cargado
+    renderVoluntarios();
   }
 
   function updateStats() {

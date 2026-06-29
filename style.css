@@ -430,6 +430,58 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   color: var(--green);
   margin: 0 0 6px;
 }
+.card-urgente{
+  background: var(--red-soft);
+  border-left: 3px solid var(--red);
+  border-radius: 0 6px 6px 0;
+  padding: 6px 10px;
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: #791F1F;
+}
+.card-urgente strong{ color: var(--red); }
+.badge--voluntarios{
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: #9A5B00;
+  background: #FFF1DC;
+  border-radius: 999px;
+  padding: 3px 9px;
+  margin: 8px 0 0;
+}
+
+/* Sección de voluntarios */
+.voluntarios-bar{ margin-bottom: 18px; }
+.voluntarios-box{
+  background: #FAEEDA;
+  border-left: 4px solid var(--gold, #BA7517);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 18px 20px;
+}
+.voluntarios-title{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 18px;
+  color: #633806;
+  margin: 0 0 6px;
+}
+.voluntarios-intro{ font-size: 13.5px; color: #854F0B; margin: 0 0 14px; line-height: 1.5; }
+.voluntarios-list{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+.voluntarios-item{
+  background: #fff;
+  border-radius: 8px;
+  padding: 11px 13px;
+}
+.vol-nombre{ font-weight: 700; font-size: 14px; color: var(--ink); margin: 0; }
+.vol-lugar{ font-size: 12.5px; color: var(--ink-soft); margin: 3px 0 0; }
+.vol-tareas{ font-size: 12.5px; color: #633806; margin: 5px 0 0; }
+.vol-tareas strong{ font-weight: 700; }
 
 .empty-state{
   font-size: 13px;
@@ -898,6 +950,25 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   font-weight: 700;
   font-size: 13px;
   color: var(--ink);
+}
+
+/* =========================================================
+   FRASE DESTACADA
+   ========================================================= */
+.frase-vzla{
+  max-width: 1120px;
+  margin: 8px auto 22px;
+  padding: 22px 24px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 3vw, 24px);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1.35;
+  color: var(--blue);
+  border: none;
+  border-top: 2px solid var(--green);
+  border-bottom: 2px solid var(--green);
 }
 
 /* =========================================================
