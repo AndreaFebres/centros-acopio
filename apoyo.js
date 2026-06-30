@@ -79,7 +79,7 @@
       </div>
       ${p.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
       ${p.necesitaVoluntarios ? `<span class="badge badge--voluntarios">${t("voluntarios")}${p.tipoVoluntarios ? ": " + p.tipoVoluntarios : ""}</span>` : ""}
-      ${subtipo ? `<p class="card-tags">${subtipo}</p>` : ""}
+      ${subtipo ? `<p class="card-tags"><span class="card-tag-pill card-tag-pill--ancho">${subtipo}</span></p>` : ""}
       ${(p.ciudad || p.pais) ? `<p class="card-meta"><strong>${[p.ciudad, p.pais].filter(Boolean).join(", ")}</strong>${p.direccion ? "<br>" + p.direccion : ""}</p>` : (p.direccion ? `<p class="card-meta">${p.direccion}</p>` : "")}
       ${!tel && p.contacto ? `<p class="card-meta">${lnk(p.contacto)}</p>` : ""}
       ${p.horario ? `<p class="card-meta">🕒 ${p.horario}</p>` : ""}
@@ -236,28 +236,6 @@
 
   searchEl.addEventListener("input", (e) => { currentQuery = e.target.value.trim().toLowerCase(); render(); renderVoluntariosApoyo(); });
   document.querySelectorAll(".lang-btn").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
-
-  function embedToggleFormLocal(toggleId, boxId, iframeId, formUrl) {
-    const toggle = document.getElementById(toggleId);
-    const box = document.getElementById(boxId);
-    const iframe = document.getElementById(iframeId);
-    if (!toggle || !box || !iframe) return;
-    const src = formUrl.includes("?") ? formUrl + "&embedded=true" : formUrl + "?embedded=true";
-    toggle.addEventListener("click", () => {
-      const abierto = !box.hidden;
-      if (abierto) {
-        box.hidden = true;
-        toggle.setAttribute("aria-expanded", "false");
-      } else {
-        if (!iframe.src) iframe.src = src;
-        box.hidden = false;
-        toggle.setAttribute("aria-expanded", "true");
-        box.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    });
-  }
-  embedToggleFormLocal("apoyo-form-toggle", "apoyo-form-box", "apoyo-form-iframe",
-    "https://docs.google.com/forms/d/e/1FAIpQLScK2mBzD5n1C8ylv_rmaXunUdGpYvrcleq1ZwOfX2uDFV9vPg/viewform");
 
   render();
   renderVoluntariosApoyo();

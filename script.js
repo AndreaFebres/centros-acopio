@@ -418,7 +418,7 @@
       ${c.sinNombre ? "" : `<p class="card-meta">${c.direccion}</p>`}
       ${c.urgente ? `<p class="card-urgente"><strong>⚠ ${t("urgenteLbl")}</strong> ${c.urgente}</p>` : ""}
       ${c.necesitaVoluntarios ? `<span class="badge badge--voluntarios">${t("voluntarios")}${c.tareasVoluntarios ? ": " + c.tareasVoluntarios : ""}</span>` : ""}
-      <p class="card-tags"><span class="card-tags-label">${t("recibe")}</span> ${c.insumos.length ? c.insumos.map(i => `<span class="card-tag-pill">${i}</span>`).join("") : `<span class="card-tags-label">${t("sinEspecificar")}</span>`}</p>
+      <p class="card-tags"><span class="card-tags-label">${t("recibe")}</span> ${c.insumos.length ? c.insumos.map(i => `<span class="card-tag-pill">${i.replace(/\s*\([^)]*\)/g, "").trim()}</span>`).join("") : `<span class="card-tags-label">${t("sinEspecificar")}</span>`}</p>
       ${(() => {
         const horario = (c.horario || "").trim();
         const contacto = c.contacto && c.contacto !== "—" ? c.contacto.trim() : "";
@@ -963,30 +963,4 @@
   // Espera a que los datos se rendericen antes de scrollear
   window.addEventListener("load", scrollToCardHash);
   window.addEventListener("hashchange", scrollToCardHash);
-
-  function embedToggleFormLocal(toggleId, boxId, iframeId, formUrl) {
-    const toggle = document.getElementById(toggleId);
-    const box = document.getElementById(boxId);
-    const iframe = document.getElementById(iframeId);
-    if (!toggle || !box || !iframe) return;
-    const src = formUrl.includes("?") ? formUrl + "&embedded=true" : formUrl + "?embedded=true";
-    toggle.addEventListener("click", () => {
-      const abierto = !box.hidden;
-      if (abierto) {
-        box.hidden = true;
-        toggle.setAttribute("aria-expanded", "false");
-      } else {
-        if (!iframe.src) iframe.src = src;
-        box.hidden = false;
-        toggle.setAttribute("aria-expanded", "true");
-        box.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    });
-  }
-
-  // ===== Formularios incrustados (carga diferida) =====
-  embedToggleFormLocal("comments-toggle", "comments-box", "comments-iframe",
-    "https://docs.google.com/forms/d/e/1FAIpQLSf7ZRDttThbIuz0whSE1OcL2Tv3Mg_xNTJmZNkjfKXZ1siokA/viewform");
-  embedToggleFormLocal("form-toggle", "form-box", "form-iframe",
-    "https://docs.google.com/forms/d/e/1FAIpQLSc6tMMDb3qRwKKgLBDQmvnCx_Oh3EgVb6UER4RASWDkrZB6QQ/viewform");
 })();

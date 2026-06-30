@@ -515,30 +515,6 @@
     });
   }
 
-  function embedToggleFormLocal(toggleId, boxId, iframeId, formUrl) {
-    const toggle = document.getElementById(toggleId);
-    const box = document.getElementById(boxId);
-    const iframe = document.getElementById(iframeId);
-    if (!toggle || !box || !iframe) return;
-    const src = formUrl.includes("?") ? formUrl + "&embedded=true" : formUrl + "?embedded=true";
-    toggle.addEventListener("click", () => {
-      const abierto = !box.hidden;
-      if (abierto) {
-        box.hidden = true;
-        toggle.setAttribute("aria-expanded", "false");
-      } else {
-        if (!iframe.src) iframe.src = src;
-        box.hidden = false;
-        toggle.setAttribute("aria-expanded", "true");
-        box.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    });
-  }
-  embedToggleFormLocal("form-toggle", "form-box", "form-iframe",
-    "https://docs.google.com/forms/d/e/1FAIpQLSeu3YMx_m2ZSthUzc1N819cfL8VoGm63lNjQC9XScd6bZu7Ww/viewform");
-  embedToggleFormLocal("masc-form-toggle", "masc-form-box", "masc-form-iframe",
-    "https://docs.google.com/forms/d/e/1FAIpQLScsSqRFRZx-Y3dURU-XMa3elow4HBfD92R7VxXMu1FgOecsaQ/viewform");
-
   normalizeBase();
   render();
   renderMascotas();
