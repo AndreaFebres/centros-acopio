@@ -860,6 +860,73 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .promo-ad-hint .chev{ font-size: 15px; }
 
 /* =========================================================
+   DASHBOARD DE NECESIDADES URGENTES (página principal)
+   ========================================================= */
+.urgencias-dash{
+  margin: 0 0 18px;
+  background: var(--red-soft);
+  border-left: 4px solid var(--red);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 18px;
+}
+.urgencias-dash-title{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 17px;
+  color: #501313;
+  margin: 0 0 4px;
+}
+.urgencias-dash-intro{ font-size: 13px; color: #791F1F; margin: 0 0 12px; }
+.urgencias-dash-list{
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+.urgencias-dash-item{
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+  background: #fff;
+}
+.urgencias-dash-btn{
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 12px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--red);
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 16px;
+  text-decoration: none;
+}
+.urgencias-dash-btn:hover{ background: #8a261e; }
+
+/* Tarjeta de urgencia (compartida entre dashboard y página completa) */
+.card--urgencia{ border-left-color: var(--red); }
+.urg-cat-badge{
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-bottom: 8px;
+}
+.cat-medico .urg-cat-badge{ color: #993C1D; background: #FAECE7; }
+.cat-alimento .urg-cat-badge{ color: #0E7468; background: var(--green-soft); }
+.cat-transporte .urg-cat-badge{ color: #3C3489; background: #EEEDFE; }
+.cat-refugio .urg-cat-badge{ color: #854F0B; background: #FAEEDA; }
+.cat-otro .urg-cat-badge{ color: var(--ink-soft); background: var(--paper-deep); }
+
+.callout--urgencia{ border-left-color: var(--red); }
+.btn-suggest--urgencia{ background: var(--red); }
+.btn-suggest--urgencia:hover{ background: #8a261e; }
+
+/* =========================================================
    NAVEGACIÓN ENTRE PÁGINAS
    ========================================================= */
 .page-nav{

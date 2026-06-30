@@ -930,6 +930,23 @@
   loadCommunitySuggestions();
   loadApoyoCommunityVoluntarios();
 
+  // ===== Dashboard de necesidades urgentes (últimos 20, carrusel) =====
+  async function loadUrgenciasDashboard() {
+    const section = document.getElementById("urgencias-dash");
+    const listEl3 = document.getElementById("urgencias-dash-list");
+    if (!section || !listEl3 || !window.loadUrgencias) return;
+    const todas = await window.loadUrgencias();
+    if (todas.length === 0) { section.style.display = "none"; return; }
+    section.style.display = "block";
+    listEl3.innerHTML = "";
+    todas.slice(0, 20).forEach((u) => {
+      const card = window.buildUrgenciaCard(u);
+      card.classList.add("urgencias-dash-item");
+      listEl3.appendChild(card);
+    });
+  }
+  loadUrgenciasDashboard();
+
   // ===== Botón "Buscar voluntarios" =====
   const buscarVolBtn = document.getElementById("buscar-vol-btn");
   const buscarVolPanel = document.getElementById("buscar-vol-panel");

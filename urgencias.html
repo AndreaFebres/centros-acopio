@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Necesidades urgentes — Venezuela</title>
+<meta name="description" content="Listado de necesidades urgentes reportadas por personas afectadas por los terremotos en Venezuela." />
+<link rel="stylesheet" href="style.css" />
+<script data-goatcounter="https://ayudavzla.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<header class="manifest-header">
+  <div class="wrap">
+    <div class="lang-bar">
+      <button type="button" class="lang-btn is-active" data-lang="es">ES</button>
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <nav class="page-nav">
+      <a href="index.html" data-es="Centros de acopio" data-en="Donation centers">Centros de acopio</a>
+      <a href="refugios.html" data-es="Refugios" data-en="Shelters">Refugios</a>
+      <a href="hospitales.html" data-es="Hospitales" data-en="Hospitals">Hospitales</a>
+      <a href="apoyo.html" data-es="Recursos de apoyo" data-en="Support resources">Recursos de apoyo</a>
+      <a href="urgencias.html" class="is-current" data-es="Necesidades urgentes" data-en="Urgent needs">Necesidades urgentes</a>
+      <a href="guia.html" data-es="Guía de emergencia" data-en="Emergency guide">Guía de emergencia</a>
+      <a href="llamar.html" data-es="Comunicarte con tu familia" data-en="Call your family">Comunicarte con tu familia</a>
+    </nav>
+    <p class="eyebrow eyebrow--big" data-es="Terremotos en Venezuela · 24 junio 2026" data-en="Earthquakes in Venezuela · June 24, 2026">Terremotos en Venezuela · 24 junio 2026</p>
+    <h1><span data-es="Necesidades" data-en="Urgent">Necesidades</span><br /><span class="accent" data-es="urgentes" data-en="needs">urgentes</span></h1>
+    <p class="lede" data-es="Esto es lo que personas y familias están pidiendo ahora mismo. Si puedes ayudar con alguna, contáctalos directamente." data-en="This is what people and families are asking for right now. If you can help with one, contact them directly.">Esto es lo que personas y familias están pidiendo ahora mismo. Si puedes ayudar con alguna, contáctalos directamente.</p>
+    <dl class="stats">
+      <div><dt id="stat-urg">0</dt><dd data-es="necesidades reportadas" data-en="needs reported">necesidades reportadas</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="controls" aria-label="Filtros">
+    <div class="filter-group" role="group" aria-label="Filtrar por categoría" id="urg-filters">
+      <button class="filter-btn is-active" data-cat="todas" aria-pressed="true" data-es="Todas" data-en="All">Todas</button>
+    </div>
+    <div class="search-group">
+      <label for="urg-search" class="sr-only">Buscar</label>
+      <input type="search" id="urg-search" class="search-input" placeholder="Buscar ciudad o qué se necesita…" data-ph-es="Buscar ciudad o qué se necesita…" data-ph-en="Search city or what's needed…" autocomplete="off" />
+    </div>
+  </section>
+
+  <div class="list" id="urg-list" aria-label="Lista de necesidades urgentes"></div>
+</main>
+
+<section class="callouts wrap">
+  <div class="callout callout--suggest callout--urgencia">
+    <div class="callout-text">
+      <h2 data-es="🆘 ¿Tienes una necesidad urgente?" data-en="🆘 Do you have an urgent need?">🆘 ¿Tienes una necesidad urgente?</h2>
+      <p data-es="Cuéntanos qué necesitas, tu contacto, la ciudad y de qué tipo es. Aparecerá aquí y en la página principal para que la comunidad pueda ayudarte." data-en="Tell us what you need, your contact, the city and what type it is. It will show up here and on the homepage so the community can help.">Cuéntanos qué necesitas, tu contacto, la ciudad y de qué tipo es. Aparecerá aquí y en la página principal para que la comunidad pueda ayudarte.</p>
+    </div>
+    <a id="urg-form-link" class="btn-suggest btn-suggest--big btn-suggest--urgencia" href="https://docs.google.com/forms/d/e/1FAIpQLSdKXkexe-Skoh1hV_MY-j0E5m4WEoJ3isd1McIsr2dbfFqq6A/viewform" target="_blank" rel="noopener"><span class="btn-add-icon">+</span><span data-es="Reportar una necesidad urgente" data-en="Report an urgent need">Reportar una necesidad urgente</span></a>
+  </div>
+</section>
+
+<footer class="site-footer wrap">
+  <p data-es="Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Si hay riesgo para tu vida o la de alguien más, llama al 911 o al 171." data-en="This information is community-maintained and may not always be up to date. If there is danger to life, call 911 or 171.">Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Si hay riesgo para tu vida o la de alguien más, llama al 911 o al 171.</p>
+</footer>
+
+<script src="lang.js"></script>
+<script src="helpers.js"></script>
+<script src="urgencias-data.js"></script>
+<script src="urgencias.js"></script>
+</body>
+</html>
