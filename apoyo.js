@@ -133,7 +133,6 @@
       const det = document.createElement("details");
       det.className = "group-pais cat-det";
       det.id = "group-" + slugify(cat);
-      if (cat === "Otro tipo de apoyo") det.open = true;
       const sum = document.createElement("summary");
       sum.innerHTML = `${CAT_ICONOS[cat] || "🤝"} ${cat} <span class="group-count">${grupos[cat].length}</span>`;
       det.appendChild(sum);
@@ -189,7 +188,6 @@
       const iNota = colEx(head, ["notas", "nota", "informacion", "adicional"]);
       const iVoluntario = colEx(head, ["necesita voluntario", "voluntario"]);
       const iTipoVol = colEx(head, ["tipo de voluntario", "tipo voluntario", "que tipo"]);
-      const vistos = new Set((typeof APOYO_DATA !== "undefined" ? APOYO_DATA : []).map(p => (p.nombre || "").toLowerCase().trim()));
       COMMUNITY = rows.slice(1).map((r) => {
         const volRaw = norm(iVoluntario >= 0 ? r[iVoluntario] || "" : "");
         return {
@@ -206,13 +204,7 @@
           tipoVoluntarios: (iTipoVol >= 0 ? r[iTipoVol] || "" : "").trim(),
           esComunidad: true,
         };
-      }).filter((p) => {
-        if (!p.nombre || p.nombre === "Sin nombre") return false;
-        const key = p.nombre.toLowerCase().trim();
-        if (vistos.has(key)) return false;
-        vistos.add(key);
-        return true;
-      });
+      }).filter((p) => p.nombre && p.nombre !== "Sin nombre");
       render();
       renderVoluntariosApoyo();
     } catch (e) {

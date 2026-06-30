@@ -338,12 +338,6 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   }
   .list--ciudades-2col > .group-pais{ margin: 0; }
   .list--ciudades-2col > .group-pais[open]{ grid-column: 1 / -1; }
-  .list--ciudades-2col .group-pais-body{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    align-items: start;
-  }
 }
 .group-count{
   font-family: var(--font-mono);
@@ -830,14 +824,15 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   display: flex;
   align-items: center;
   gap: 14px;
-  margin: 16px 0 0;
-  padding: 14px 16px;
-  background: rgba(0,0,0,0.25);
+  max-width: 1120px;
+  margin: 0 auto 18px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--green) 100%);
   border-radius: var(--radius);
   text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: var(--shadow-md);
 }
-.promo-ad:hover{ background: rgba(0,0,0,0.35); }
+.promo-ad:hover{ filter: brightness(1.06); }
 .promo-ad-icon{ font-size: 32px; flex-shrink: 0; }
 .promo-ad-text{ display: flex; flex-direction: column; gap: 3px; }
 .promo-ad-text strong{
@@ -911,22 +906,6 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 .urgencias-dash-btn:hover{ background: #8a261e; }
 
-/* Layout 2 columnas: urgencias (izq) + voluntarios (der) */
-.dash-2col{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 18px;
-  align-items: start;
-}
-@media (max-width: 720px){
-  .dash-2col{ grid-template-columns: 1fr; }
-}
-.dash-2col .urgencias-dash,
-.dash-2col .voluntarios-bar{
-  margin: 0;
-}
-
 /* Tarjeta de urgencia (compartida entre dashboard y página completa) */
 .card--urgencia{ border-left-color: var(--red); }
 .urg-cat-badge{
@@ -972,10 +951,6 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .page-nav a.is-current{
   background: var(--green);
   box-shadow: 0 0 0 2px rgba(31,168,113,0.25);
-}
-.page-nav a.is-current--red{
-  background: var(--red);
-  box-shadow: 0 0 0 2px rgba(192,71,59,0.25);
 }
 .eyebrow--big{
   font-size: 14px !important;
@@ -1113,27 +1088,6 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   font-size: 12px;
   color: var(--ink-soft);
   margin: 0;
-  line-height: 1.45;
-}
-.insumo-aviso{
-  font-size: 12px;
-  font-weight: 700;
-  color: #791F1F;
-  background: var(--red-soft);
-  border-left: 3px solid var(--red);
-  border-radius: 0 6px 6px 0;
-  padding: 6px 10px;
-  margin: 6px 0 8px;
-  line-height: 1.45;
-}
-.insumo-nota{
-  font-size: 12px;
-  color: #633806;
-  background: #FAEEDA;
-  border-left: 3px solid var(--gold);
-  border-radius: 0 6px 6px 0;
-  padding: 6px 10px;
-  margin: 6px 0 8px;
   line-height: 1.45;
 }
 .no-donar{

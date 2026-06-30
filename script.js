@@ -117,27 +117,11 @@
     INSUMOS.forEach((cat) => {
       const det = document.createElement("details");
       det.className = "need-cat";
-      det.open = true;
+      det.open = true; // todas abiertas por defecto, pero colapsables
       const titulo = lang === "en" && cat.titulo_en ? cat.titulo_en : cat.titulo;
       const sum = document.createElement("summary");
       sum.textContent = titulo;
       det.appendChild(sum);
-      // Aviso (agua, ropa)
-      const avisoTxt = lang === "en" && cat.aviso_en ? cat.aviso_en : cat.aviso;
-      if (avisoTxt) {
-        const av = document.createElement("p");
-        av.className = "insumo-aviso";
-        av.textContent = avisoTxt;
-        det.appendChild(av);
-      }
-      // Nota (herramientas)
-      const notaTxt = lang === "en" && cat.nota_en ? cat.nota_en : cat.nota;
-      if (notaTxt) {
-        const nota = document.createElement("p");
-        nota.className = "insumo-nota";
-        nota.textContent = notaTxt;
-        det.appendChild(nota);
-      }
       const ul = document.createElement("ul");
       (cat.items || []).forEach((item) => {
         const li = document.createElement("li");
