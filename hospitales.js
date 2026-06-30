@@ -145,12 +145,13 @@
       if (rows.length < 2) return;
       const head = rows[0].map(norm);
       const iNombre = colEx(head, ["nombre", "hospital", "clinica", "instituc", "centro"]);
+      const iCiudad = colEx(head, ["ciudad"]);
       const iDir = colEx(head, ["direcc"], correoEx);
       const iTel = colEx(head, ["contacto", "telefono", "whatsapp"], correoEx);
       const iInfo = colEx(head, ["informacion importante", "informacion", "nota", "observ"]);
       COMMUNITY = rows.slice(1).map((r) => ({
         nombre: (iNombre >= 0 ? r[iNombre] || "" : "").trim() || "Sin nombre",
-        ciudad: "",
+        ciudad: (iCiudad >= 0 ? r[iCiudad] || "" : "").trim(),
         direccion: (iDir >= 0 ? r[iDir] || "" : "").trim(),
         telefono: (iTel >= 0 ? r[iTel] || "" : "").trim(),
         nota: (iInfo >= 0 ? r[iInfo] || "" : "").trim(),
