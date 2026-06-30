@@ -65,6 +65,8 @@
     return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   }
 
+  function lnk(s) { return (window.linkify && s) ? window.linkify(s) : (s || ""); }
+
   function buildApoyoCard(p) {
     const tel = normTel(p.contacto);
     const titulo = p.nombre && p.nombre !== "Sin nombre" ? p.nombre : p.tipo;
@@ -79,14 +81,21 @@
       ${p.necesitaVoluntarios ? `<span class="badge badge--voluntarios">${t("voluntarios")}${p.tipoVoluntarios ? ": " + p.tipoVoluntarios : ""}</span>` : ""}
       ${subtipo ? `<p class="card-tags">${subtipo}</p>` : ""}
       ${(p.ciudad || p.pais) ? `<p class="card-meta"><strong>${[p.ciudad, p.pais].filter(Boolean).join(", ")}</strong>${p.direccion ? "<br>" + p.direccion : ""}</p>` : (p.direccion ? `<p class="card-meta">${p.direccion}</p>` : "")}
-      ${!tel && p.contacto ? `<p class="card-meta">${p.contacto}</p>` : ""}
+      ${!tel && p.contacto ? `<p class="card-meta">${lnk(p.contacto)}</p>` : ""}
       ${p.horario ? `<p class="card-meta">🕒 ${p.horario}</p>` : ""}
-      ${p.nota ? `<p class="card-meta">${p.nota}</p>` : ""}
-      ${tel ? `<div class="card-actions">
-        <a href="tel:${tel}">${t("llamar")}</a>
-        <a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>
-      </div>` : ""}
+      ${p.nota ? `<p class="card-meta">${lnk(p.nota)}</p>` : ""}
+      <div class="card-actions">
+        ${tel ? `<a href="tel:${tel}">${t("llamar")}</a>
+        <a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>` : ""}
+        <a href="#" class="card-share-link" role="button">↗ Compartir</a>
+      </div>
     `;
+    const share = card.querySelector(".card-share-link");
+    if (share) share.addEventListener("click", (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const detalles = [p.ciudad, p.contacto, p.horario].filter(Boolean).join(" · ");
+      window.shareCard ? window.shareCard(titulo, detalles, share) : null;
+    });
     return card;
   }
 

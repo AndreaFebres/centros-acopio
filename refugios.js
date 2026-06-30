@@ -416,8 +416,8 @@
           ${c.urgente ? `<p class="card-urgente"><strong>⚠ ${t("urgenteLbl")}</strong> ${c.urgente}</p>` : ""}
           ${c.direccion ? `<p class="card-meta">${c.direccion}</p>` : ""}
           ${c.horario ? `<p class="card-meta">🕒 ${c.horario}</p>` : ""}
-          ${!tel && c.contacto ? `<p class="card-meta">${c.contacto}</p>` : ""}
-          ${c.nota ? `<p class="card-meta">${c.nota}</p>` : ""}
+          ${!tel && c.contacto ? `<p class="card-meta">${window.linkify ? window.linkify(c.contacto) : c.contacto}</p>` : ""}
+          ${c.nota ? `<p class="card-meta">${window.linkify ? window.linkify(c.nota) : c.nota}</p>` : ""}
           ${tel && tel.length >= 7 ? `<div class="card-actions">
             <a href="tel:${tel}">📞 ${t("llamar")}</a>
             <a class="card-wa" href="https://wa.me/${tel}" target="_blank" rel="noopener">💬 ${t("wa")}</a>

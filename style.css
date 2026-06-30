@@ -498,7 +498,15 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   padding: 11px 13px;
   flex: 0 0 240px;
   scroll-snap-align: start;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+  border: 1px solid #E2E9E7;
 }
+.voluntarios-item:hover{ border-color: var(--gold); }
+.vol-dir{ font-size: 11.5px; color: var(--ink-soft); margin: 2px 0 0; }
+.vol-contacto{ font-size: 11.5px; color: var(--blue); margin: 4px 0 0; word-break: break-all; }
+.vol-ver{ display: inline-block; font-size: 11px; font-weight: 700; color: var(--blue); margin-top: 8px; }
 .vol-fecha{ font-size: 11px; color: var(--ink-soft); margin: 6px 0 0; }
 .vol-seccion{ font-size: 10.5px; font-weight: 700; color: var(--blue); margin: 5px 0 0; text-transform: uppercase; letter-spacing: 0.04em; }
 
@@ -962,6 +970,15 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 /* =========================================================
    RECURSOS MÉDICOS — títulos de sección y tarjeta psicológica
    ========================================================= */
+.seccion-pagina{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--ink);
+  margin: 18px 0 10px;
+  padding-top: 14px;
+  border-top: 2px solid var(--green);
+}
 .seccion-titulo{
   font-family: var(--font-display);
   font-weight: 800;
@@ -979,7 +996,7 @@ main > .seccion-titulo:first-child{ margin-top: 4px; }
 }
 .card--apoyo{ border-left-color: #7C5CBF; }
 .card--mascotas{ border-left-color: #D97706; }
-.masc-section{ padding-top: 10px; }
+.masc-section{ padding-top: 0; margin-top: -4px; }
 .callout--mascotas{ border-left-color: #D97706; }
 .btn-suggest--masc{ background: #D97706; }
 .btn-suggest--masc:hover{ background: #b45309; }

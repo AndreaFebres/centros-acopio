@@ -699,23 +699,45 @@
     if (!section || !listEl2) return;
     const deCentros = (includeCommunity ? CENTROS_DATA.concat(COMMUNITY_DATA) : CENTROS_DATA)
       .filter((c) => c.necesitaVoluntarios)
-      .map((c) => ({ nombre: c.sinNombre ? c.direccion : c.nombre, lugar: [c.ciudad, canonicalPais(c.pais)].filter(Boolean).join(", "), tareas: c.tareasVoluntarios, fecha: c.fechaVoluntarios, seccion: "centros" }));
+      .map((c) => ({
+        nombre: c.sinNombre ? c.direccion : c.nombre,
+        lugar: [c.ciudad, canonicalPais(c.pais)].filter(Boolean).join(", "),
+        contacto: c.contacto && c.contacto !== "—" ? c.contacto : "",
+        direccion: c.direccion || "",
+        tareas: c.tareasVoluntarios,
+        fecha: c.fechaVoluntarios,
+        seccion: "centros",
+        href: "index.html",
+      }));
     const deApoyo = (typeof APOYO_DATA !== "undefined" ? APOYO_DATA : []).concat(APOYO_COMMUNITY || [])
       .filter((p) => p.necesitaVoluntarios)
-      .map((p) => ({ nombre: p.nombre, lugar: [p.ciudad, p.pais].filter(Boolean).join(", "), tareas: p.tipoVoluntarios, fecha: "", seccion: "apoyo" }));
+      .map((p) => ({
+        nombre: p.nombre,
+        lugar: [p.ciudad, p.pais].filter(Boolean).join(", "),
+        contacto: p.contacto || "",
+        direccion: p.direccion || "",
+        tareas: p.tipoVoluntarios,
+        fecha: "",
+        seccion: "apoyo",
+        href: "apoyo.html#apoyo-voluntarios",
+      }));
     const todos = deCentros.concat(deApoyo);
     if (todos.length === 0) { section.style.display = "none"; return; }
     section.style.display = "block";
     listEl2.innerHTML = "";
-    todos.forEach(({ nombre, lugar, tareas, fecha, seccion }) => {
-      const item = document.createElement("div");
+    todos.forEach(({ nombre, lugar, contacto, direccion, tareas, fecha, seccion, href }) => {
+      const item = document.createElement("a");
       item.className = "voluntarios-item";
+      item.href = href;
       item.innerHTML = `
         <p class="vol-nombre">${nombre}</p>
         ${lugar ? `<p class="vol-lugar">📍 ${lugar}</p>` : ""}
+        ${direccion && direccion !== nombre ? `<p class="vol-dir">${direccion}</p>` : ""}
         ${tareas ? `<p class="vol-tareas"><strong>${t("paraLbl")}</strong> ${tareas}</p>` : ""}
+        ${contacto && contacto !== "—" ? `<p class="vol-contacto">${contacto}</p>` : ""}
         ${fecha ? `<p class="vol-fecha">📅 ${fecha}</p>` : ""}
         <p class="vol-seccion">${seccion === "apoyo" ? "Recursos de apoyo" : "Centro de acopio"}</p>
+        <span class="vol-ver">Ver ficha completa →</span>
       `;
       listEl2.appendChild(item);
     });

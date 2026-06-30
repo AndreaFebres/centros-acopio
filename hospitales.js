@@ -16,6 +16,7 @@
     llamar: { es: "📞 Llamar", en: "📞 Call" },
     wa: { es: "💬 WhatsApp", en: "💬 WhatsApp" },
     waMsg: { es: "Hola, vi este centro en la página Ruta de Acopio. ¿Están atendiendo emergencias?", en: "Hello, I saw this center on the Ruta de Acopio page. Are you handling emergencies?" },
+    compartir: { es: "↗ Compartir", en: "↗ Share" },
     sinCiudad: { es: "Otras ubicaciones", en: "Other locations" },
   };
   function t(k) { return (T[k] && T[k][lang]) || (T[k] && T[k].es) || ""; }
@@ -62,11 +63,18 @@
       ${h.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
       ${h.direccion ? `<p class="card-meta">${h.direccion}</p>` : ""}
       ${h.nota ? `<p class="card-tags">${h.nota}</p>` : ""}
-      ${tel ? `<div class="card-actions">
-        <a href="tel:${tel}">${t("llamar")}</a>
-        <a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>
-      </div>` : ""}
+      <div class="card-actions">
+        ${tel ? `<a href="tel:${tel}">${t("llamar")}</a>
+        <a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>` : ""}
+        <a href="#" class="card-share-link" role="button">↗ Compartir</a>
+      </div>
     `;
+    const share = card.querySelector(".card-share-link");
+    if (share) share.addEventListener("click", (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const detalles = [h.ciudad, h.direccion, h.telefono].filter(Boolean).join(" · ");
+      window.shareCard ? window.shareCard(h.nombre, detalles, share) : null;
+    });
     return card;
   }
 
