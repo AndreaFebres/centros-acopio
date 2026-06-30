@@ -99,6 +99,14 @@
     return card;
   }
 
+  const CAT_ICONOS = {
+    "Psicológico": "🧠",
+    "Legal": "⚖️",
+    "Económico": "💰",
+    "Otro tipo de apoyo": "🤝",
+  };
+  let catActiva = null;
+
   function render() {
     const items = getAll();
     listEl.innerHTML = "";
@@ -119,19 +127,44 @@
       if (ib === -1) return -1;
       return ia - ib;
     });
+
+    // Si la categoría activa ya no existe (por una búsqueda), resetea
+    if (catActiva && !categorias.includes(catActiva)) catActiva = null;
+
+    // Cuadrícula de cubos de categoría
+    const cubos = document.createElement("div");
+    cubos.className = "cat-cubos";
     categorias.forEach((cat) => {
-      const det = document.createElement("details");
-      det.className = "group-ciudad-det";
-      det.id = "group-" + slugify(cat);
-      const sum = document.createElement("summary");
-      sum.className = "group-ciudad";
-      sum.innerHTML = `${cat} <span class="group-count">${grupos[cat].length}</span>`;
-      det.appendChild(sum);
-      const body = document.createElement("div");
-      body.className = "group-ciudad-body";
-      grupos[cat].forEach((p) => body.appendChild(buildApoyoCard(p)));
-      det.appendChild(body);
-      listEl.appendChild(det);
+      const cubo = document.createElement("button");
+      cubo.type = "button";
+      cubo.className = "cat-cubo" + (catActiva === cat ? " is-active" : "");
+      cubo.innerHTML = `
+        <span class="cat-cubo-icono">${CAT_ICONOS[cat] || "🤝"}</span>
+        <span class="cat-cubo-nombre">${cat}</span>
+        <span class="cat-cubo-count">${grupos[cat].length}</span>
+      `;
+      cubo.addEventListener("click", () => {
+        catActiva = catActiva === cat ? null : cat;
+        render();
+      });
+      cubos.appendChild(cubo);
+    });
+    listEl.appendChild(cubos);
+
+    // Lista de la categoría seleccionada (o todas si no hay ninguna)
+    const aMostrar = catActiva ? [catActiva] : categorias;
+    aMostrar.forEach((cat) => {
+      const bloque = document.createElement("div");
+      bloque.className = "cat-bloque";
+      bloque.id = "group-" + slugify(cat);
+      if (!catActiva) {
+        const titulo = document.createElement("p");
+        titulo.className = "cat-bloque-titulo";
+        titulo.textContent = `${CAT_ICONOS[cat] || ""} ${cat}`;
+        bloque.appendChild(titulo);
+      }
+      grupos[cat].forEach((p) => bloque.appendChild(buildApoyoCard(p)));
+      listEl.appendChild(bloque);
     });
   }
 
@@ -223,13 +256,9 @@
   searchEl.addEventListener("input", (e) => { currentQuery = e.target.value.trim().toLowerCase(); render(); renderVoluntariosApoyo(); });
   document.querySelectorAll(".lang-btn").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
 
-  const formBtn = document.getElementById("apoyo-form-link");
-  if (formBtn) {
-    if (typeof APOYO_FORM_URL !== "undefined" && APOYO_FORM_URL && !APOYO_FORM_URL.includes("PEGA_AQUI")) {
-      formBtn.href = APOYO_FORM_URL;
-    } else {
-      formBtn.style.display = "none";
-    }
+  if (window.embedToggleForm) {
+    window.embedToggleForm("apoyo-form-toggle", "apoyo-form-box", "apoyo-form-iframe",
+      "https://docs.google.com/forms/d/e/1FAIpQLScK2mBzD5n1C8ylv_rmaXunUdGpYvrcleq1ZwOfX2uDFV9vPg/viewform");
   }
 
   render();

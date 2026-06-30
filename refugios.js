@@ -515,8 +515,12 @@
     });
   }
 
-  const formBtn = document.getElementById("form-link");
-  if (formBtn && typeof REF_FORM_URL !== "undefined" && REF_FORM_URL) formBtn.href = REF_FORM_URL;
+  if (window.embedToggleForm) {
+    window.embedToggleForm("form-toggle", "form-box", "form-iframe",
+      "https://docs.google.com/forms/d/e/1FAIpQLSeu3YMx_m2ZSthUzc1N819cfL8VoGm63lNjQC9XScd6bZu7Ww/viewform");
+    window.embedToggleForm("masc-form-toggle", "masc-form-box", "masc-form-iframe",
+      "https://docs.google.com/forms/d/e/1FAIpQLScsSqRFRZx-Y3dURU-XMa3elow4HBfD92R7VxXMu1FgOecsaQ/viewform");
+  }
 
   normalizeBase();
   render();

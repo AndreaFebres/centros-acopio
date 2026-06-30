@@ -165,13 +165,9 @@
   searchEl.addEventListener("input", (e) => { currentQuery = e.target.value.trim().toLowerCase(); render(); });
   document.querySelectorAll(".lang-btn").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
 
-  const formBtn = document.getElementById("hosp-form-link");
-  if (formBtn) {
-    if (typeof HOSP_FORM_URL !== "undefined" && HOSP_FORM_URL && !HOSP_FORM_URL.includes("PEGA_AQUI")) {
-      formBtn.href = HOSP_FORM_URL;
-    } else {
-      formBtn.style.display = "none";
-    }
+  if (window.embedToggleForm) {
+    window.embedToggleForm("hosp-form-toggle", "hosp-form-box", "hosp-form-iframe",
+      "https://docs.google.com/forms/d/e/1FAIpQLSf-tecJ0rpndObWh_pUNSIT7owydzIrZ3v5Tjl7P4jpOgS-OA/viewform");
   }
 
   render();

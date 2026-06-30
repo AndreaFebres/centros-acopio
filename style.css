@@ -407,8 +407,28 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 
 .card-tags{
   margin: 8px 0 0;
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--ink-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+}
+.card-tags-label{
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+.card-tag-pill{
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  background: transparent;
 }
 
 .card-actions{
@@ -641,6 +661,31 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 .guia-sec[open] > summary::after{ content: "–"; }
 .guia-body{ padding: 0 18px 18px; }
+
+.app-sum-nombre{ flex: 1 1 auto; }
+.app-sum-stores{
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-left: auto;
+  margin-right: 4px;
+}
+.store-mini{
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 5px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.store-mini--play{ background: var(--green); color: #fff; }
+.store-mini--apple{ background: var(--ink); color: #fff; }
+@media (max-width: 420px){
+  .guia-sec > summary{ flex-wrap: wrap; }
+  .app-sum-stores{ margin-left: 0; order: 3; flex-basis: 100%; }
+  .guia-sec > summary::after{ order: 2; }
+}
 @media (max-width: 720px){
   .guia-main{ grid-template-columns: 1fr; }
 }
@@ -995,6 +1040,46 @@ main > .seccion-titulo:first-child{ margin-top: 4px; }
   max-width: 640px;
 }
 .card--apoyo{ border-left-color: #7C5CBF; }
+
+.cat-cubos{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.cat-cubo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 10px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  box-shadow: var(--shadow-sm);
+}
+.cat-cubo:hover{ border-color: #7C5CBF; }
+.cat-cubo.is-active{ border-color: #7C5CBF; background: #F4F0FB; }
+.cat-cubo-icono{ font-size: 26px; }
+.cat-cubo-nombre{ font-size: 13px; font-weight: 700; color: var(--ink); text-align: center; }
+.cat-cubo-count{
+  font-size: 11px;
+  font-weight: 700;
+  color: #7C5CBF;
+  background: #EFE9F9;
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+.cat-bloque{ margin-bottom: 18px; }
+.cat-bloque-titulo{
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
 .card--mascotas{ border-left-color: #D97706; }
 .masc-section{ padding-top: 0; margin-top: -4px; }
 .callout--mascotas{ border-left-color: #D97706; }

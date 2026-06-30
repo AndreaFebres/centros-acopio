@@ -106,7 +106,6 @@
 </section>
 
 <main class="wrap">
-  <h2 class="seccion-titulo" data-es="📦 Centros de acopio" data-en="📦 Donation centers">📦 Centros de acopio</h2>
   <h2 class="seccion-pagina" data-es="📦 Centros de acopio" data-en="📦 Donation centers">📦 Centros de acopio</h2>
   <section class="controls" aria-label="Filtros de búsqueda">
     <div class="filter-group" role="group" aria-label="Filtrar por tipo">
@@ -145,7 +144,10 @@
       <h2 data-es="📝 ¿Conoces un centro que no está aquí?" data-en="📝 Know a center that's not listed?">📝 ¿Conoces un centro que no está aquí?</h2>
       <p data-es="El botón de abajo es para eso: cuéntanos la dirección, el horario y qué están recibiendo. Cada dato que agregues hace que esta lista sirva para más gente." data-en="That's what the button below is for: tell us the address, hours and what they're receiving. Every detail you add helps more people.">El botón de abajo es para eso: cuéntanos la dirección, el horario y qué están recibiendo. Cada dato que agregues hace que esta lista sirva para más gente.</p>
     </div>
-    <a id="form-link" class="btn-suggest btn-suggest--big" href="https://forms.gle/jXUmggJMLqtojTeK9" target="_blank" rel="noopener"><span class="btn-add-icon">+</span><span data-es="Agregar un centro nuevo" data-en="Add a new center">Agregar un centro nuevo</span></a>
+    <button type="button" id="form-toggle" class="btn-suggest btn-suggest--big" aria-expanded="false"><span class="btn-add-icon">+</span><span data-es="Agregar un centro nuevo" data-en="Add a new center">Agregar un centro nuevo</span></button>
+  </div>
+  <div id="form-box" class="comments-box" hidden>
+    <iframe id="form-iframe" class="comments-iframe" loading="lazy" src="" title="Formulario para agregar centro"></iframe>
   </div>
 </section>
 
@@ -224,6 +226,7 @@
 <script src="centros-data.js"></script>
 <script src="mis-centros.js"></script>
 <script src="apoyo-data.js"></script>
+<script src="helpers.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

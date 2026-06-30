@@ -26,7 +26,7 @@
       <a href="llamar.html" data-es="Comunicarte con tu familia" data-en="Call your family">Comunicarte con tu familia</a>
     </nav>
     <p class="eyebrow eyebrow--big" data-es="Terremotos en Venezuela · 24 junio 2026" data-en="Earthquakes in Venezuela · June 24, 2026">Terremotos en Venezuela · 24 junio 2026</p>
-    <h1><span data-es="Hospitales y clínicas" data-en="Hospitals & clinics">Hospitales y clínicas</span><br /><span class="accent" data-es="que están atendiendo" data-en="currently treating patients">que están atendiendo</span></h1>
+    <h1><span data-es="Hospitales y clínicas" data-en="Hospitals & clinics">Hospitales y clínicas</span><br /><span class="accent" data-es="reportados atendiendo" data-en="reported currently treating patients">reportados atendiendo</span></h1>
     <p class="lede" data-es="Centros de salud públicos y privados que están recibiendo y atendiendo heridos. Muchos están saturados; si puedes, llama antes de acudir para confirmar disponibilidad." data-en="Public and private health centers receiving and treating the injured. Many are overwhelmed; if you can, call before going to confirm availability.">Centros de salud públicos y privados que están recibiendo y atendiendo heridos. Muchos están saturados; si puedes, llama antes de acudir para confirmar disponibilidad.</p>
     <dl class="stats">
       <div><dt id="stat-hosp">0</dt><dd data-es="hospitales atendiendo" data-en="hospitals treating patients">hospitales atendiendo</dd></div>
@@ -55,7 +55,10 @@
       <h2 data-es="🏥 ¿Conoces un hospital o clínica atendiendo?" data-en="🏥 Know a hospital or clinic that's treating people?">🏥 ¿Conoces un hospital o clínica atendiendo?</h2>
       <p data-es="Ayúdanos a mantener esta lista al día. Cuéntanos el nombre, la ciudad y el teléfono si lo tienes." data-en="Help us keep this list current. Tell us the name, city and phone if you have it.">Ayúdanos a mantener esta lista al día. Cuéntanos el nombre, la ciudad y el teléfono si lo tienes.</p>
     </div>
-    <a id="hosp-form-link" class="btn-suggest btn-suggest--big" href="#" target="_blank" rel="noopener"><span class="btn-add-icon">+</span><span data-es="Agregar un hospital nuevo" data-en="Add a new hospital">Agregar un hospital nuevo</span></a>
+    <button type="button" id="hosp-form-toggle" class="btn-suggest btn-suggest--big" aria-expanded="false"><span class="btn-add-icon">+</span><span data-es="Agregar un hospital nuevo" data-en="Add a new hospital">Agregar un hospital nuevo</span></button>
+  </div>
+  <div id="hosp-form-box" class="comments-box" hidden>
+    <iframe id="hosp-form-iframe" class="comments-iframe" loading="lazy" src="" title="Formulario para agregar hospital"></iframe>
   </div>
 </section>
 
@@ -63,7 +66,7 @@
   <p data-es="Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Muchos centros están saturados: confirma por teléfono antes de acudir." data-en="This information is community-maintained and may not always be up to date. Many centers are overwhelmed: confirm by phone before going.">Esta información es mantenida por la comunidad y puede no estar siempre actualizada. Muchos centros están saturados: confirma por teléfono antes de acudir.</p>
 </footer>
 
-<script src="lang.js"></script>
+<script src="helpers.js"></script>
 <script src="hospitales-data.js"></script>
 <script src="hospitales.js"></script>
 </body>

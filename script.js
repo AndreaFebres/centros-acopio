@@ -403,6 +403,7 @@
   function buildCard(c) {
     const tipo = resolveTipo(c);
     const card = document.createElement("article");
+    card.id = "card-" + c.id;
     card.className = "card" + (c.esComunidad ? " card--comunidad" : "");
     card.dataset.tipo = tipo;
     card.dataset.id = c.id;
@@ -416,7 +417,7 @@
       ${c.sinNombre ? "" : `<p class="card-meta">${c.direccion}</p>`}
       ${c.urgente ? `<p class="card-urgente"><strong>⚠ ${t("urgenteLbl")}</strong> ${c.urgente}</p>` : ""}
       ${c.necesitaVoluntarios ? `<span class="badge badge--voluntarios">${t("voluntarios")}${c.tareasVoluntarios ? ": " + c.tareasVoluntarios : ""}</span>` : ""}
-      <p class="card-tags">${t("recibe")} ${c.insumos.join(", ") || t("sinEspecificar")}</p>
+      <p class="card-tags"><span class="card-tags-label">${t("recibe")}</span> ${c.insumos.length ? c.insumos.map(i => `<span class="card-tag-pill">${i}</span>`).join("") : `<span class="card-tags-label">${t("sinEspecificar")}</span>`}</p>
       ${(() => {
         const horario = (c.horario || "").trim();
         const contacto = c.contacto && c.contacto !== "—" ? c.contacto.trim() : "";
@@ -707,7 +708,7 @@
         tareas: c.tareasVoluntarios,
         fecha: c.fechaVoluntarios,
         seccion: "centros",
-        href: "index.html",
+        href: "index.html#card-" + c.id,
       }));
     const deApoyo = (typeof APOYO_DATA !== "undefined" ? APOYO_DATA : []).concat(APOYO_COMMUNITY || [])
       .filter((p) => p.necesitaVoluntarios)
@@ -941,23 +942,34 @@
     });
   }
 
-  // ===== Cuadro de comentario incrustado (carga diferida) =====
-  const COMMENTS_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSf7ZRDttThbIuz0whSE1OcL2Tv3Mg_xNTJmZNkjfKXZ1siokA/viewform?embedded=true";
-  const commentsToggle = document.getElementById("comments-toggle");
-  const commentsBox = document.getElementById("comments-box");
-  const commentsIframe = document.getElementById("comments-iframe");
-  if (commentsToggle && commentsBox && commentsIframe) {
-    commentsToggle.addEventListener("click", () => {
-      const abierto = !commentsBox.hidden;
-      if (abierto) {
-        commentsBox.hidden = true;
-        commentsToggle.setAttribute("aria-expanded", "false");
-      } else {
-        if (!commentsIframe.src) commentsIframe.src = COMMENTS_FORM_URL;
-        commentsBox.hidden = false;
-        commentsToggle.setAttribute("aria-expanded", "true");
-        commentsBox.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    });
+  // ===== Scroll a tarjeta específica por hash (#card-X) =====
+  function scrollToCardHash() {
+    const hash = window.location.hash;
+    if (!hash || !hash.startsWith("#card-")) return;
+    const target = document.querySelector(hash);
+    if (!target) return;
+    // Abrir el <details> padre si está cerrado
+    let parent = target.parentElement;
+    while (parent) {
+      if (parent.tagName === "DETAILS" && !parent.open) parent.open = true;
+      parent = parent.parentElement;
+    }
+    setTimeout(() => {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      target.style.outline = "3px solid var(--gold)";
+      target.style.borderRadius = "var(--radius-sm)";
+      setTimeout(() => { target.style.outline = ""; target.style.borderRadius = ""; }, 2000);
+    }, 300);
+  }
+  // Espera a que los datos se rendericen antes de scrollear
+  window.addEventListener("load", scrollToCardHash);
+  window.addEventListener("hashchange", scrollToCardHash);
+
+  // ===== Formularios incrustados (carga diferida) =====
+  if (window.embedToggleForm) {
+    window.embedToggleForm("comments-toggle", "comments-box", "comments-iframe",
+      "https://docs.google.com/forms/d/e/1FAIpQLSf7ZRDttThbIuz0whSE1OcL2Tv3Mg_xNTJmZNkjfKXZ1siokA/viewform");
+    window.embedToggleForm("form-toggle", "form-box", "form-iframe",
+      "https://docs.google.com/forms/d/e/1FAIpQLSc6tMMDb3qRwKKgLBDQmvnCx_Oh3EgVb6UER4RASWDkrZB6QQ/viewform");
   }
 })();
