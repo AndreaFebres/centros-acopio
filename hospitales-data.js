@@ -25,7 +25,7 @@
  * ================================================================
  */
 
-const HOSP_SHEET_CSV_URL = "PEGA_AQUI_EL_LINK_CSV_DE_TU_GOOGLE_FORM_DE_HOSPITALES";
+const HOSP_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTZrHgu9r-DeaVhnAW6RSYityh7BzWwAD62vgzBw0wFCiFwYJkSAfzcnwRMMaKQ_CM0e310xLQEoH4Q/pub?output=csv";
 
 // Link de tu Google Form para que la comunidad sugiera hospitales.
 // (Crea un formulario nuevo y pega aquí su link forms.gle/...)

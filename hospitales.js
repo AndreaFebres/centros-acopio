@@ -147,12 +147,13 @@
       const iNombre = colEx(head, ["nombre", "hospital", "clinica", "instituc", "centro"]);
       const iDir = colEx(head, ["direcc"], correoEx);
       const iTel = colEx(head, ["contacto", "telefono", "whatsapp"], correoEx);
+      const iInfo = colEx(head, ["informacion importante", "informacion", "nota", "observ"]);
       COMMUNITY = rows.slice(1).map((r) => ({
         nombre: (iNombre >= 0 ? r[iNombre] || "" : "").trim() || "Sin nombre",
         ciudad: "",
         direccion: (iDir >= 0 ? r[iDir] || "" : "").trim(),
         telefono: (iTel >= 0 ? r[iTel] || "" : "").trim(),
-        nota: "",
+        nota: (iInfo >= 0 ? r[iInfo] || "" : "").trim(),
         esComunidad: true,
       })).filter((h) => h.nombre && h.nombre !== "Sin nombre");
       render();
