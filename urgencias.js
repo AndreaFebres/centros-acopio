@@ -58,6 +58,8 @@
       const iContacto = colEx(head, ["contacto", "centro de acopio", "quien"], correoEx);
       const iCiudad = colEx(head, ["ciudad"]);
       const iCategoria = colEx(head, ["categoria"]);
+      const iNotas = colEx(head, ["notas", "nota", "informacion", "adicional"]);
+      const vistos = new Set();
       const items = rows.slice(1).map((r, i) => ({
         idx: i,
         marca: (iMarca >= 0 ? r[iMarca] || "" : "").trim(),
@@ -65,9 +67,15 @@
         contacto: (iContacto >= 0 ? r[iContacto] || "" : "").trim(),
         ciudad: (iCiudad >= 0 ? r[iCiudad] || "" : "").trim(),
         categoria: (iCategoria >= 0 ? r[iCategoria] || "" : "").trim() || "Otro",
-      })).filter((u) => u.necesita);
-      // Más reciente primero. La marca temporal de Google Forms se
-      // puede ordenar como texto porque usa formato año-mes-día.
+        notas: (iNotas >= 0 ? r[iNotas] || "" : "").trim(),
+      })).filter((u) => {
+        if (!u.necesita) return false;
+        // Deduplicar: misma necesidad + contacto = duplicado
+        const key = (u.necesita + "|" + u.contacto).toLowerCase().trim();
+        if (vistos.has(key)) return false;
+        vistos.add(key);
+        return true;
+      });
       items.reverse();
       return items;
     } catch (e) {
@@ -79,13 +87,18 @@
   window.buildUrgenciaCard = function (u) {
     const info = catInfo(u.categoria);
     const tel = normTel(u.contacto);
+    // Respetar saltos de línea del formulario
+    const necesitaHTML = u.necesita
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/\r\n|\r|\n/g, "<br>");
     const card = document.createElement("article");
     card.className = "card card--urgencia " + info.clase;
     card.innerHTML = `
       <span class="urg-cat-badge">${info.icono} ${u.categoria}</span>
-      <p class="card-name">${u.necesita}</p>
+      <p class="card-name">${necesitaHTML}</p>
       ${u.ciudad ? `<p class="card-meta">📍 ${u.ciudad}</p>` : ""}
-      ${u.contacto ? `<p class="card-meta">${window.linkify ? window.linkify(u.contacto) : u.contacto}</p>` : ""}
+      ${u.contacto ? `<p class="card-meta"><strong>Contacto:</strong> ${window.linkify ? window.linkify(u.contacto) : u.contacto}</p>` : ""}
+      ${u.notas ? `<p class="card-tags">${u.notas}</p>` : ""}
       ${tel ? `<div class="card-actions">
         <a href="tel:${tel}">📞 Llamar</a>
         <a class="card-wa" href="https://wa.me/${tel}" target="_blank" rel="noopener">💬 WhatsApp</a>

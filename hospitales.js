@@ -149,6 +149,7 @@
       const iDir = colEx(head, ["direcc"], correoEx);
       const iTel = colEx(head, ["contacto", "telefono", "whatsapp"], correoEx);
       const iInfo = colEx(head, ["informacion importante", "informacion", "nota", "observ"]);
+      const vistos = new Set((typeof HOSPITALES_DATA !== "undefined" ? HOSPITALES_DATA : []).map(h => (h.nombre || "").toLowerCase().trim()));
       COMMUNITY = rows.slice(1).map((r) => ({
         nombre: (iNombre >= 0 ? r[iNombre] || "" : "").trim() || "Sin nombre",
         ciudad: (iCiudad >= 0 ? r[iCiudad] || "" : "").trim(),
@@ -156,7 +157,13 @@
         telefono: (iTel >= 0 ? r[iTel] || "" : "").trim(),
         nota: (iInfo >= 0 ? r[iInfo] || "" : "").trim(),
         esComunidad: true,
-      })).filter((h) => h.nombre && h.nombre !== "Sin nombre");
+      })).filter((h) => {
+        if (!h.nombre || h.nombre === "Sin nombre") return false;
+        const key = h.nombre.toLowerCase().trim();
+        if (vistos.has(key)) return false;
+        vistos.add(key);
+        return true;
+      });
       render();
     } catch (e) {
       console.warn("No se pudieron cargar sugerencias de hospitales:", e);

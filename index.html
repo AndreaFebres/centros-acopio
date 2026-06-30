@@ -20,6 +20,7 @@
     <nav class="page-nav">
       <a href="index.html" class="is-current" data-es="Centros de acopio" data-en="Donation centers">Centros de acopio</a>
       <a href="refugios.html" data-es="Refugios" data-en="Shelters">Refugios</a>
+      <a href="urgencias.html" data-es="Necesidades urgentes" data-en="Urgent needs">Necesidades urgentes</a>
       <a href="hospitales.html" data-es="Hospitales" data-en="Hospitals">Hospitales</a>
       <a href="apoyo.html" data-es="Recursos de apoyo" data-en="Support resources">Recursos de apoyo</a>
       <a href="guia.html" data-es="Guía de emergencia" data-en="Emergency guide">Guía de emergencia</a>
@@ -44,7 +45,7 @@
 <section class="needs-bar wrap">
   <details class="needs" id="needs">
     <summary>
-      <span class="needs-title" data-es="🔴 ¿No sabes qué donar? Esto es lo más necesitado ahora" data-en="🔴 Not sure what to donate? These are the most needed items right now">🔴 ¿No sabes qué donar? Esto es lo más necesitado ahora</span>
+      <span class="needs-title" data-es="🔴 ¿No sabes qué insumos donar? Esto es lo más necesitado ahora" data-en="🔴 Not sure what supplies to donate? These are the most needed items right now">🔴 ¿No sabes qué insumos donar? Esto es lo más necesitado ahora</span>
       <span class="needs-expand-hint">
         <span class="txt-ver" data-es="Toca para ver" data-en="Tap to see">Toca para ver</span>
         <span class="txt-cerrar" data-es="Toca para cerrar" data-en="Tap to close">Toca para cerrar</span>
@@ -58,11 +59,13 @@
       <div class="no-donar">
         <h4 class="no-donar-title" data-es="🚫 Qué NO donar (por favor)" data-en="🚫 What NOT to donate (please)">🚫 Qué NO donar (por favor)</h4>
         <p class="no-donar-intro" data-es="Con buena intención a veces se donan cosas que, en lugar de ayudar, estorban y le quitan tiempo a los voluntarios. Por favor evita:" data-en="With good intentions, people sometimes donate things that get in the way and take up volunteers' time instead of helping. Please avoid:">Con buena intención a veces se donan cosas que, en lugar de ayudar, estorban y le quitan tiempo a los voluntarios. Por favor evita:</p>
+        <p class="insumo-aviso" data-es="⚠️ POR AHORA NO DONAR ROPA (EXCEPTO SÁBANAS Y TOALLAS)" data-en="⚠️ DO NOT DONATE CLOTHING FOR NOW (EXCEPT SHEETS AND TOWELS)">⚠️ POR AHORA NO DONAR ROPA (EXCEPTO SÁBANAS Y TOALLAS)</p>
+        <p class="insumo-aviso" data-es="⚠️ NO DONAR AGUA (por ahora) NI JUGOS TETRAPACK CON PITILLOS SI ESTÁS FUERA DEL PAÍS" data-en="⚠️ DO NOT DONATE WATER (for now) OR TETRAPACK JUICES WITH STRAWS IF YOU ARE OUTSIDE THE COUNTRY">⚠️ NO DONAR AGUA (por ahora) NI JUGOS TETRAPACK CON PITILLOS SI ESTÁS FUERA DEL PAÍS</p>
         <ul class="no-donar-list">
           <li data-es="Ropa sucia, rota o muy usada. Solo ropa limpia y en buen estado." data-en="Dirty, torn or worn-out clothing. Only clean clothing in good condition.">Ropa sucia, rota o muy usada. Solo ropa limpia y en buen estado.</li>
           <li data-es="Medicinas vencidas o ya abiertas. Solo medicinas selladas y con fecha vigente." data-en="Expired or opened medicine. Only sealed medicine within its expiry date.">Medicinas vencidas o ya abiertas. Solo medicinas selladas y con fecha vigente.</li>
           <li data-es="Comida abierta, vencida o que se dañe rápido. Nada preparado en casa. Solo enlatados y empaquetados sellados." data-en="Opened, expired or perishable food. Nothing homemade. Only sealed canned and packaged goods.">Comida abierta, vencida o que se dañe rápido. Nada preparado en casa. Solo enlatados y empaquetados sellados.</li>
-          <li data-es="Colchones, muebles o electrodomésticos grandes. No hay cómo transportarlos ni dónde guardarlos." data-en="Mattresses, furniture or large appliances. There's no way to transport or store them.">Colchones, muebles o electrodomésticos grandes. No hay cómo transportarlos ni dónde guardarlos.</li>
+          <li data-es="Muebles o electrodomésticos grandes. No hay cómo transportarlos ni dónde guardarlos." data-en="Furniture or large appliances. There's no way to transport or store them.">Muebles o electrodomésticos grandes. No hay cómo transportarlos ni dónde guardarlos.</li>
           <li data-es="Juguetes rotos, electrónicos dañados o 'lo que ibas a botar'. El centro no es un lugar para deshacerte de cosas." data-en="Broken toys, damaged electronics or 'stuff you were going to throw away'. The center is not a place to get rid of things.">Juguetes rotos, electrónicos dañados o 'lo que ibas a botar'. El centro no es un lugar para deshacerte de cosas.</li>
           <li data-es="Vidrio o cosas frágiles sin protección, que se rompan en el camino." data-en="Glass or fragile items without protection that may break in transit.">Vidrio o cosas frágiles sin protección, que se rompan en el camino.</li>
         </ul>
@@ -72,14 +75,15 @@
   </details>
 </section>
 
-<section class="urgencias-dash wrap" id="urgencias-dash" style="display:none;">
+<div class="dash-2col wrap">
+<section class="urgencias-dash" id="urgencias-dash" style="display:none;">
   <p class="urgencias-dash-title" data-es="🆘 Necesidades urgentes ahora" data-en="🆘 Urgent needs right now">🆘 Necesidades urgentes ahora</p>
   <p class="urgencias-dash-intro" data-es="Esto es lo que la gente está pidiendo en este momento." data-en="This is what people are asking for right now.">Esto es lo que la gente está pidiendo en este momento.</p>
   <div class="urgencias-dash-list" id="urgencias-dash-list"></div>
   <a class="urgencias-dash-btn" href="urgencias.html" data-es="Ver todas las necesidades urgentes →" data-en="See all urgent needs →">Ver todas las necesidades urgentes →</a>
 </section>
 
-<a class="promo-ad wrap" href="llamar.html">
+<section class="voluntarios-bar" id="voluntarios-section" style="display:none;">
   <span class="promo-ad-icon">📲</span>
   <span class="promo-ad-text">
     <strong data-es="¿No logras comunicarte con tu familia en Venezuela?" data-en="Can't reach your family in Venezuela?">¿No logras comunicarte con tu familia en Venezuela?</strong>
@@ -111,6 +115,19 @@
     </div>
   </div>
 </section>
+</div>
+
+<a class="promo-ad wrap" href="llamar.html">
+  <span class="promo-ad-icon">📲</span>
+  <span class="promo-ad-text">
+    <strong data-es="¿No logras comunicarte con tu familia en Venezuela?" data-en="Can't reach your family in Venezuela?">¿No logras comunicarte con tu familia en Venezuela?</strong>
+    <span data-es="6 apps gratis para llamar y enviar mensajes, aunque las líneas estén caídas" data-en="6 free apps to call and message, even when phone lines are down">6 apps gratis para llamar y enviar mensajes, aunque las líneas estén caídas</span>
+  </span>
+  <span class="promo-ad-hint">
+    <span data-es="Ver apps" data-en="See apps">Ver apps</span>
+    <span class="chev">›</span>
+  </span>
+</a>
 
 <main class="wrap">
   <h2 class="seccion-pagina" data-es="📦 Centros de acopio" data-en="📦 Donation centers">📦 Centros de acopio</h2>
