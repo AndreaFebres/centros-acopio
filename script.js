@@ -240,6 +240,7 @@
 
   let includeCommunity = true;
   let COMMUNITY_DATA = [];
+  let APOYO_COMMUNITY = [];
 
   let userLocation = null; // {lat, lng} cuando se activa "Cerca de mí"
 
@@ -878,8 +879,6 @@
     });
   }
 
-  let APOYO_COMMUNITY = [];
-
   async function loadApoyoCommunityVoluntarios() {
     if (typeof APOYO_SHEET_CSV_URL === "undefined" || !APOYO_SHEET_CSV_URL || APOYO_SHEET_CSV_URL.includes("PEGA_AQUI")) return;
     try {
@@ -965,11 +964,29 @@
   window.addEventListener("load", scrollToCardHash);
   window.addEventListener("hashchange", scrollToCardHash);
 
-  // ===== Formularios incrustados (carga diferida) =====
-  if (window.embedToggleForm) {
-    window.embedToggleForm("comments-toggle", "comments-box", "comments-iframe",
-      "https://docs.google.com/forms/d/e/1FAIpQLSf7ZRDttThbIuz0whSE1OcL2Tv3Mg_xNTJmZNkjfKXZ1siokA/viewform");
-    window.embedToggleForm("form-toggle", "form-box", "form-iframe",
-      "https://docs.google.com/forms/d/e/1FAIpQLSc6tMMDb3qRwKKgLBDQmvnCx_Oh3EgVb6UER4RASWDkrZB6QQ/viewform");
+  function embedToggleFormLocal(toggleId, boxId, iframeId, formUrl) {
+    const toggle = document.getElementById(toggleId);
+    const box = document.getElementById(boxId);
+    const iframe = document.getElementById(iframeId);
+    if (!toggle || !box || !iframe) return;
+    const src = formUrl.includes("?") ? formUrl + "&embedded=true" : formUrl + "?embedded=true";
+    toggle.addEventListener("click", () => {
+      const abierto = !box.hidden;
+      if (abierto) {
+        box.hidden = true;
+        toggle.setAttribute("aria-expanded", "false");
+      } else {
+        if (!iframe.src) iframe.src = src;
+        box.hidden = false;
+        toggle.setAttribute("aria-expanded", "true");
+        box.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
   }
+
+  // ===== Formularios incrustados (carga diferida) =====
+  embedToggleFormLocal("comments-toggle", "comments-box", "comments-iframe",
+    "https://docs.google.com/forms/d/e/1FAIpQLSf7ZRDttThbIuz0whSE1OcL2Tv3Mg_xNTJmZNkjfKXZ1siokA/viewform");
+  embedToggleFormLocal("form-toggle", "form-box", "form-iframe",
+    "https://docs.google.com/forms/d/e/1FAIpQLSc6tMMDb3qRwKKgLBDQmvnCx_Oh3EgVb6UER4RASWDkrZB6QQ/viewform");
 })();

@@ -105,7 +105,6 @@
     "Económico": "💰",
     "Otro tipo de apoyo": "🤝",
   };
-  let catActiva = null;
 
   function render() {
     const items = getAll();
@@ -128,44 +127,26 @@
       return ia - ib;
     });
 
-    // Si la categoría activa ya no existe (por una búsqueda), resetea
-    if (catActiva && !categorias.includes(catActiva)) catActiva = null;
-
-    // Cuadrícula de cubos de categoría
-    const cubos = document.createElement("div");
-    cubos.className = "cat-cubos";
+    const grid = document.createElement("div");
+    grid.className = "cat-grid";
     categorias.forEach((cat) => {
-      const cubo = document.createElement("button");
-      cubo.type = "button";
-      cubo.className = "cat-cubo" + (catActiva === cat ? " is-active" : "");
-      cubo.innerHTML = `
-        <span class="cat-cubo-icono">${CAT_ICONOS[cat] || "🤝"}</span>
-        <span class="cat-cubo-nombre">${cat}</span>
-        <span class="cat-cubo-count">${grupos[cat].length}</span>
-      `;
-      cubo.addEventListener("click", () => {
-        catActiva = catActiva === cat ? null : cat;
-        render();
+      const det = document.createElement("details");
+      det.className = "group-ciudad-det cat-det";
+      det.id = "group-" + slugify(cat);
+      const sum = document.createElement("summary");
+      sum.className = "group-ciudad";
+      sum.innerHTML = `${CAT_ICONOS[cat] || "🤝"} ${cat} <span class="group-count">${grupos[cat].length}</span>`;
+      det.appendChild(sum);
+      const body = document.createElement("div");
+      body.className = "group-ciudad-body";
+      grupos[cat].forEach((p) => body.appendChild(buildApoyoCard(p)));
+      det.appendChild(body);
+      det.addEventListener("toggle", () => {
+        det.classList.toggle("cat-det--open", det.open);
       });
-      cubos.appendChild(cubo);
+      grid.appendChild(det);
     });
-    listEl.appendChild(cubos);
-
-    // Lista de la categoría seleccionada (o todas si no hay ninguna)
-    const aMostrar = catActiva ? [catActiva] : categorias;
-    aMostrar.forEach((cat) => {
-      const bloque = document.createElement("div");
-      bloque.className = "cat-bloque";
-      bloque.id = "group-" + slugify(cat);
-      if (!catActiva) {
-        const titulo = document.createElement("p");
-        titulo.className = "cat-bloque-titulo";
-        titulo.textContent = `${CAT_ICONOS[cat] || ""} ${cat}`;
-        bloque.appendChild(titulo);
-      }
-      grupos[cat].forEach((p) => bloque.appendChild(buildApoyoCard(p)));
-      listEl.appendChild(bloque);
-    });
+    listEl.appendChild(grid);
   }
 
   // ===== Sugerencias de la comunidad (CSV del Google Form) =====
@@ -256,10 +237,27 @@
   searchEl.addEventListener("input", (e) => { currentQuery = e.target.value.trim().toLowerCase(); render(); renderVoluntariosApoyo(); });
   document.querySelectorAll(".lang-btn").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
 
-  if (window.embedToggleForm) {
-    window.embedToggleForm("apoyo-form-toggle", "apoyo-form-box", "apoyo-form-iframe",
-      "https://docs.google.com/forms/d/e/1FAIpQLScK2mBzD5n1C8ylv_rmaXunUdGpYvrcleq1ZwOfX2uDFV9vPg/viewform");
+  function embedToggleFormLocal(toggleId, boxId, iframeId, formUrl) {
+    const toggle = document.getElementById(toggleId);
+    const box = document.getElementById(boxId);
+    const iframe = document.getElementById(iframeId);
+    if (!toggle || !box || !iframe) return;
+    const src = formUrl.includes("?") ? formUrl + "&embedded=true" : formUrl + "?embedded=true";
+    toggle.addEventListener("click", () => {
+      const abierto = !box.hidden;
+      if (abierto) {
+        box.hidden = true;
+        toggle.setAttribute("aria-expanded", "false");
+      } else {
+        if (!iframe.src) iframe.src = src;
+        box.hidden = false;
+        toggle.setAttribute("aria-expanded", "true");
+        box.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
   }
+  embedToggleFormLocal("apoyo-form-toggle", "apoyo-form-box", "apoyo-form-iframe",
+    "https://docs.google.com/forms/d/e/1FAIpQLScK2mBzD5n1C8ylv_rmaXunUdGpYvrcleq1ZwOfX2uDFV9vPg/viewform");
 
   render();
   renderVoluntariosApoyo();

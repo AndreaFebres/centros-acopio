@@ -130,7 +130,7 @@
       ${c.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
       ${sinNombre ? "" : `<p class="card-meta">${c.direccion}</p>`}
       ${c.urgente ? `<p class="card-urgente"><strong>⚠ ${t("urgenteLbl")}</strong> ${c.urgente}</p>` : ""}
-      ${c.necesita ? `<p class="card-tags"><strong>${t("necesitaLbl")}</strong> ${c.necesita}</p>` : ""}
+      ${c.necesita ? `<p class="card-tags">${window.pillList ? window.pillList(c.necesita, t("necesitaLbl")) : t("necesitaLbl") + " " + c.necesita}</p>` : ""}
       ${c.necesitaVoluntarios && c.tareasVoluntarios ? `<p class="card-tags"><strong>${t("tareasLbl")}</strong> ${c.tareasVoluntarios}</p>` : ""}
       ${(() => {
         const horario = (c.horario || "").trim();
@@ -411,8 +411,8 @@
             ${c.recibeDonaciones !== undefined ? `<span class="badge ${c.recibeDonaciones ? "badge--recibe" : "badge--norecibe"}">${c.recibeDonaciones ? t("recibe") : t("noRecibe")}</span>` : ""}
           </div>
           ${c.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
-          ${c.mascotas ? `<p class="card-tags"><strong>${t("mascotasLbl")}</strong> ${c.mascotas}</p>` : ""}
-          ${c.necesita ? `<p class="card-tags"><strong>${t("necesitaLbl")}</strong> ${c.necesita}</p>` : ""}
+          ${c.mascotas ? `<p class="card-tags">${window.pillList ? window.pillList(c.mascotas, t("mascotasLbl")) : t("mascotasLbl") + " " + c.mascotas}</p>` : ""}
+          ${c.necesita ? `<p class="card-tags">${window.pillList ? window.pillList(c.necesita, t("necesitaLbl")) : t("necesitaLbl") + " " + c.necesita}</p>` : ""}
           ${c.urgente ? `<p class="card-urgente"><strong>⚠ ${t("urgenteLbl")}</strong> ${c.urgente}</p>` : ""}
           ${c.direccion ? `<p class="card-meta">${c.direccion}</p>` : ""}
           ${c.horario ? `<p class="card-meta">🕒 ${c.horario}</p>` : ""}
@@ -515,12 +515,29 @@
     });
   }
 
-  if (window.embedToggleForm) {
-    window.embedToggleForm("form-toggle", "form-box", "form-iframe",
-      "https://docs.google.com/forms/d/e/1FAIpQLSeu3YMx_m2ZSthUzc1N819cfL8VoGm63lNjQC9XScd6bZu7Ww/viewform");
-    window.embedToggleForm("masc-form-toggle", "masc-form-box", "masc-form-iframe",
-      "https://docs.google.com/forms/d/e/1FAIpQLScsSqRFRZx-Y3dURU-XMa3elow4HBfD92R7VxXMu1FgOecsaQ/viewform");
+  function embedToggleFormLocal(toggleId, boxId, iframeId, formUrl) {
+    const toggle = document.getElementById(toggleId);
+    const box = document.getElementById(boxId);
+    const iframe = document.getElementById(iframeId);
+    if (!toggle || !box || !iframe) return;
+    const src = formUrl.includes("?") ? formUrl + "&embedded=true" : formUrl + "?embedded=true";
+    toggle.addEventListener("click", () => {
+      const abierto = !box.hidden;
+      if (abierto) {
+        box.hidden = true;
+        toggle.setAttribute("aria-expanded", "false");
+      } else {
+        if (!iframe.src) iframe.src = src;
+        box.hidden = false;
+        toggle.setAttribute("aria-expanded", "true");
+        box.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
   }
+  embedToggleFormLocal("form-toggle", "form-box", "form-iframe",
+    "https://docs.google.com/forms/d/e/1FAIpQLSeu3YMx_m2ZSthUzc1N819cfL8VoGm63lNjQC9XScd6bZu7Ww/viewform");
+  embedToggleFormLocal("masc-form-toggle", "masc-form-box", "masc-form-iframe",
+    "https://docs.google.com/forms/d/e/1FAIpQLScsSqRFRZx-Y3dURU-XMa3elow4HBfD92R7VxXMu1FgOecsaQ/viewform");
 
   normalizeBase();
   render();

@@ -681,6 +681,21 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 .store-mini--play{ background: var(--green); color: #fff; }
 .store-mini--apple{ background: var(--ink); color: #fff; }
+.app-sum-vermas{
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  background: var(--red-soft);
+  border-radius: 999px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+.app-sum-vermas .chev{ font-size: 12px; transition: transform 0.2s ease; }
+.guia-sec[open] .app-sum-vermas .chev{ transform: rotate(180deg); }
 @media (max-width: 420px){
   .guia-sec > summary{ flex-wrap: wrap; }
   .app-sum-stores{ margin-left: 0; order: 3; flex-basis: 100%; }
@@ -1041,44 +1056,16 @@ main > .seccion-titulo:first-child{ margin-top: 4px; }
 }
 .card--apoyo{ border-left-color: #7C5CBF; }
 
-.cat-cubos{
+.cat-grid{
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  margin-bottom: 18px;
+  align-items: start;
 }
-.cat-cubo{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  background: #fff;
-  border: 1.5px solid var(--line);
-  border-radius: var(--radius);
-  padding: 16px 10px;
-  cursor: pointer;
-  font-family: var(--font-body);
-  box-shadow: var(--shadow-sm);
-}
-.cat-cubo:hover{ border-color: #7C5CBF; }
-.cat-cubo.is-active{ border-color: #7C5CBF; background: #F4F0FB; }
-.cat-cubo-icono{ font-size: 26px; }
-.cat-cubo-nombre{ font-size: 13px; font-weight: 700; color: var(--ink); text-align: center; }
-.cat-cubo-count{
-  font-size: 11px;
-  font-weight: 700;
-  color: #7C5CBF;
-  background: #EFE9F9;
-  border-radius: 999px;
-  padding: 2px 9px;
-}
-.cat-bloque{ margin-bottom: 18px; }
-.cat-bloque-titulo{
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 15px;
-  color: var(--ink);
-  margin: 0 0 10px;
+.cat-det{ margin: 0; }
+.cat-det.cat-det--open{ grid-column: 1 / -1; }
+@media (max-width: 480px){
+  .cat-grid{ grid-template-columns: 1fr; }
 }
 .card--mascotas{ border-left-color: #D97706; }
 .masc-section{ padding-top: 0; margin-top: -4px; }

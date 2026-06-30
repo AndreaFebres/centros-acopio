@@ -15,6 +15,15 @@
     });
   };
 
+  // Convierte "agua, comida, ropa" en etiquetas tipo pill separadas.
+  window.pillList = function (texto, label) {
+    if (!texto) return "";
+    const items = String(texto).split(/[,·]/).map((s) => s.trim()).filter(Boolean);
+    if (items.length === 0) return "";
+    const pills = items.map((i) => `<span class="card-tag-pill">${i}</span>`).join("");
+    return `<span class="card-tags-label">${label || ""}</span> ${pills}`;
+  };
+
   // Comparte una tarjeta con la Web Share API o copia al portapapeles.
   window.shareCard = async function (nombre, detalles, btn) {
     const url = window.location.href.split("?")[0];

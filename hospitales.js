@@ -165,10 +165,27 @@
   searchEl.addEventListener("input", (e) => { currentQuery = e.target.value.trim().toLowerCase(); render(); });
   document.querySelectorAll(".lang-btn").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
 
-  if (window.embedToggleForm) {
-    window.embedToggleForm("hosp-form-toggle", "hosp-form-box", "hosp-form-iframe",
-      "https://docs.google.com/forms/d/e/1FAIpQLSf-tecJ0rpndObWh_pUNSIT7owydzIrZ3v5Tjl7P4jpOgS-OA/viewform");
+  function embedToggleFormLocal(toggleId, boxId, iframeId, formUrl) {
+    const toggle = document.getElementById(toggleId);
+    const box = document.getElementById(boxId);
+    const iframe = document.getElementById(iframeId);
+    if (!toggle || !box || !iframe) return;
+    const src = formUrl.includes("?") ? formUrl + "&embedded=true" : formUrl + "?embedded=true";
+    toggle.addEventListener("click", () => {
+      const abierto = !box.hidden;
+      if (abierto) {
+        box.hidden = true;
+        toggle.setAttribute("aria-expanded", "false");
+      } else {
+        if (!iframe.src) iframe.src = src;
+        box.hidden = false;
+        toggle.setAttribute("aria-expanded", "true");
+        box.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
   }
+  embedToggleFormLocal("hosp-form-toggle", "hosp-form-box", "hosp-form-iframe",
+    "https://docs.google.com/forms/d/e/1FAIpQLSf-tecJ0rpndObWh_pUNSIT7owydzIrZ3v5Tjl7P4jpOgS-OA/viewform");
 
   render();
   loadCommunity();
