@@ -45,6 +45,11 @@
   <details class="needs" id="needs">
     <summary>
       <span class="needs-title" data-es="🔴 ¿No sabes qué donar? Esto es lo más necesitado ahora" data-en="🔴 Not sure what to donate? These are the most needed items right now">🔴 ¿No sabes qué donar? Esto es lo más necesitado ahora</span>
+      <span class="needs-expand-hint">
+        <span class="txt-ver" data-es="Toca para ver" data-en="Tap to see">Toca para ver</span>
+        <span class="txt-cerrar" data-es="Toca para cerrar" data-en="Tap to close">Toca para cerrar</span>
+        <span class="chev">▾</span>
+      </span>
     </summary>
     <div class="needs-body">
       <div class="needs-cats" id="needs-cats"></div>
@@ -71,7 +76,11 @@
   <span class="promo-ad-icon">📲</span>
   <span class="promo-ad-text">
     <strong data-es="¿No logras comunicarte con tu familia en Venezuela?" data-en="Can't reach your family in Venezuela?">¿No logras comunicarte con tu familia en Venezuela?</strong>
-    <span data-es="6 apps gratis para llamar y enviar mensajes, aunque las líneas estén caídas →" data-en="6 free apps to call and message, even when phone lines are down →">6 apps gratis para llamar y enviar mensajes, aunque las líneas estén caídas →</span>
+    <span data-es="6 apps gratis para llamar y enviar mensajes, aunque las líneas estén caídas" data-en="6 free apps to call and message, even when phone lines are down">6 apps gratis para llamar y enviar mensajes, aunque las líneas estén caídas</span>
+  </span>
+  <span class="promo-ad-hint">
+    <span data-es="Ver apps" data-en="See apps">Ver apps</span>
+    <span class="chev">›</span>
   </span>
 </a>
 
@@ -86,6 +95,9 @@
 <main class="wrap">
   <section class="controls" aria-label="Filtros de búsqueda">
     <div class="filter-group" role="group" aria-label="Filtrar por tipo">
+      <button type="button" id="toggle-map" class="filter-btn filter-btn--map" aria-pressed="false" title="Usa datos móviles">
+        🗺️ <span data-es="Ver mapa" data-en="Show map">Ver mapa</span>
+      </button>
       <button class="filter-btn is-active" data-filter="todos" aria-pressed="true" data-es="Todos" data-en="All">Todos</button>
       <button class="filter-btn" data-filter="internacional" aria-pressed="false">
         <span class="dot dot--internacional"></span><span data-es="Internacional" data-en="International">Internacional</span>
@@ -97,12 +109,8 @@
 
     <div class="search-group">
       <label for="search" class="sr-only">Buscar</label>
-      <input type="search" id="search" placeholder="Buscar ciudad, país o nombre…" data-ph-es="Buscar ciudad, país o nombre…" data-ph-en="Search city, country or name…" autocomplete="off" />
+      <input type="search" id="search" class="search-input" placeholder="Buscar ciudad, país o nombre…" data-ph-es="Buscar ciudad, país o nombre…" data-ph-en="Search city, country or name…" autocomplete="off" />
     </div>
-
-    <button type="button" id="toggle-map" class="filter-btn" aria-pressed="false">
-      🗺️ <span data-es="Ver mapa" data-en="Show map">Ver mapa</span> <span class="btn-hint" data-es="(usa datos)" data-en="(uses data)">(usa datos)</span>
-    </button>
 
     <button type="button" id="near-me" class="filter-btn" data-es="📍 Cerca de mí" data-en="📍 Near me">📍 Cerca de mí</button>
   </section>
@@ -122,7 +130,7 @@
       <h2 data-es="📝 ¿Conoces un centro que no está aquí?" data-en="📝 Know a center that's not listed?">📝 ¿Conoces un centro que no está aquí?</h2>
       <p data-es="El botón de abajo es para eso: cuéntanos la dirección, el horario y qué están recibiendo. Cada dato que agregues hace que esta lista sirva para más gente." data-en="That's what the button below is for: tell us the address, hours and what they're receiving. Every detail you add helps more people.">El botón de abajo es para eso: cuéntanos la dirección, el horario y qué están recibiendo. Cada dato que agregues hace que esta lista sirva para más gente.</p>
     </div>
-    <a id="form-link" class="btn-suggest btn-suggest--big" href="https://forms.gle/jXUmggJMLqtojTeK9" target="_blank" rel="noopener" data-es="+ Sugerir un centro" data-en="+ Suggest a center">+ Sugerir un centro</a>
+    <a id="form-link" class="btn-suggest btn-suggest--big" href="https://forms.gle/jXUmggJMLqtojTeK9" target="_blank" rel="noopener"><span class="btn-add-icon">+</span><span data-es="Agregar un centro nuevo" data-en="Add a new center">Agregar un centro nuevo</span></a>
   </div>
 </section>
 
@@ -132,27 +140,39 @@
   <ul class="resources-list">
     <li>
       <a href="https://terremotovenezuela.app/" target="_blank" rel="noopener">
+      <span class="res-body">
         <strong data-es="Mapa de rescate y daños" data-en="Rescue and damage map">Mapa de rescate y daños</strong>
         <span data-es="terremotovenezuela.app, reportes de estructuras colapsadas y rescate" data-en="terremotovenezuela.app, reports of collapsed structures and rescue">terremotovenezuela.app, reportes de estructuras colapsadas y rescate</span>
-      </a>
+      </span>
+      <span class="res-go" data-es="Ir al sitio ↗" data-en="Go to site ↗">Ir al sitio ↗</span>
+          </a>
     </li>
     <li>
       <a href="https://venezuelatebusca.com/" target="_blank" rel="noopener">
+      <span class="res-body">
         <strong data-es="Buscar / reportar a un familiar" data-en="Find / report a relative">Buscar / reportar a un familiar</strong>
         <span data-es="venezuelatebusca.com, registro de personas desaparecidas" data-en="venezuelatebusca.com, missing persons registry">venezuelatebusca.com, registro de personas desaparecidas</span>
-      </a>
+      </span>
+      <span class="res-go" data-es="Ir al sitio ↗" data-en="Go to site ↗">Ir al sitio ↗</span>
+          </a>
     </li>
     <li>
       <a href="https://desaparecidosterremotovenezuela.com/" target="_blank" rel="noopener">
+      <span class="res-body">
         <strong data-es="Otro registro de desaparecidos" data-en="Another missing persons registry">Otro registro de desaparecidos</strong>
         <span data-es="desaparecidosterremotovenezuela.com, iniciativa independiente" data-en="desaparecidosterremotovenezuela.com, independent initiative">desaparecidosterremotovenezuela.com, iniciativa independiente</span>
-      </a>
+      </span>
+      <span class="res-go" data-es="Ir al sitio ↗" data-en="Go to site ↗">Ir al sitio ↗</span>
+          </a>
     </li>
     <li>
       <a href="https://pacientesterremotovzla.lovable.app/" target="_blank" rel="noopener">
+      <span class="res-body">
         <strong data-es="Buscar pacientes atendidos en hospitales" data-en="Search patients treated in hospitals">Buscar pacientes atendidos en hospitales</strong>
         <span data-es="pacientesterremotovzla.lovable.app, lista comunitaria de personas atendidas en centros de salud, para reunificación familiar" data-en="pacientesterremotovzla.lovable.app, community list of people treated at health centers, for family reunification">pacientesterremotovzla.lovable.app, lista comunitaria de personas atendidas en centros de salud, para reunificación familiar</span>
-      </a>
+      </span>
+      <span class="res-go" data-es="Ir al sitio ↗" data-en="Go to site ↗">Ir al sitio ↗</span>
+          </a>
     </li>
   </ul>
 </section>
@@ -163,7 +183,13 @@
       <h2 data-es="💬 ¿Te falta algo o hay un dato incorrecto?" data-en="💬 Missing something or found an error?">💬 ¿Te falta algo o hay un dato incorrecto?</h2>
       <p data-es="Escríbenos qué necesitas, qué información no encuentras o se debe corregir, o algo que te gustaría ver aquí." data-en="Tell us what you need, what information is missing or should be corrected, or anything you'd like to see here.">Escríbenos qué necesitas, qué información no encuentras o se debe corregir, o algo que te gustaría ver aquí.</p>
     </div>
-    <a id="comments-link" class="btn-suggest btn-suggest--big btn-suggest--alt" href="https://forms.gle/p365MYFTvPXbgvqu6" target="_blank" rel="noopener" data-es="💬 Dejar un comentario" data-en="💬 Leave a comment">💬 Dejar un comentario</a>
+    <button type="button" id="comments-toggle" class="btn-suggest btn-suggest--big btn-suggest--alt" aria-expanded="false">
+      <span data-es="💬 Dejar un comentario" data-en="💬 Leave a comment">💬 Dejar un comentario</span>
+    </button>
+  </div>
+  <div id="comments-box" class="comments-box" hidden>
+    <iframe id="comments-iframe" class="comments-iframe" loading="lazy"
+      src="" title="Formulario de comentarios"></iframe>
   </div>
 </section>
 

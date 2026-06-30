@@ -17,6 +17,7 @@
  *     necesita: "Colchonetas, agua, comida", // qué necesita ahora
  *     necesitaVoluntarios: true,   // true (sí) o false (no)
  *     tareasVoluntarios: "Cocina, cargar cajas", // para qué, opcional
+ *     fecha: "28/06",                   // fecha del pedido, opcional
  *     lat: 10.50, lng: -66.91,     // opcional, para el mapa
  *   },
  *
@@ -38,6 +39,32 @@ const REF_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRfAF
 
 // Google Form para que la comunidad sugiera refugios.
 const REF_FORM_URL = "https://forms.gle/Hnh4Tn6RaCJ83z398";
+
+// ================================================================
+// REFUGIOS DE MASCOTAS
+// ================================================================
+// CSV del formulario de mascotas
+const MASC_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1DNN3d4arUnB6lc-8Rw1FxWs5zoLHkY5XVG1lEsdErjPa5OetTGONtxxmylMGLFsztZI3pOUrsjHy/pub?output=csv";
+
+// Formulario para sugerir refugios de mascotas
+const MASC_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScsSqRFRZx-Y3dURU-XMa3elow4HBfD92R7VxXMu1FgOecsaQ/viewform";
+
+// Refugios de mascotas precargados (agrega aquí los verificados de prensa)
+// Formato:
+//   {
+//     nombre: "Laika Arkadia",
+//     ciudad: "Medellín",
+//     direccion: "Cra. 70 #1-141 local 9822",
+//     mascotas: "Perros y gatos",
+//     horario: "8am-5pm",
+//     contacto: "0412-0000000",
+//     recibeDonaciones: true,
+//     necesita: "Comida para perros, jaulas",
+//     nota: "",
+//   },
+const MASCOTAS_DATA = [
+
+];
 
 // Empieza vacía: se llena con el formulario y con los que agregues aquí.
 const REFUGIOS_DATA = [

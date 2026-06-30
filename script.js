@@ -34,6 +34,7 @@
         urgente: c.urgente || "",
         necesitaVoluntarios: c.necesitaVoluntarios === true,
         tareasVoluntarios: c.tareasVoluntarios || "",
+        fechaVoluntarios: c.fecha || "",
         notas: c.notas || "",
         // tipo se calcula solo (Venezuela -> nacional); no es comunidad.
       });
@@ -590,6 +591,7 @@
       else if (map.urgente === undefined && (n.includes("urgente") || n.includes("urgencia") || n.includes("mas necesita"))) map.urgente = idx;
       else if (map.voluntarios === undefined && n.includes("voluntario")) map.voluntarios = idx;
       else if (map.tareas === undefined && (n.includes("tarea") || n.includes("para que"))) map.tareas = idx;
+      else if (map.marca === undefined && n.includes("marca")) map.marca = idx;
     });
     // Puede haber varios campos de contacto separados (teléfono, correo,
     // redes...). Los guardamos todos para unirlos después.
@@ -641,6 +643,7 @@
               return v.startsWith("s") || v.includes("yes") || v.includes("true");
             })(),
             tareasVoluntarios: (map.tareas !== undefined ? r[map.tareas] : "" || "").trim(),
+            fechaVoluntarios: (map.marca !== undefined ? r[map.marca] : "" || "").trim().split(" ")[0],
             notas: "",
             esComunidad: true,
             lat: null,
@@ -706,6 +709,7 @@
         <p class="vol-nombre">${c.sinNombre ? c.direccion : c.nombre}</p>
         <p class="vol-lugar">📍 ${[c.ciudad, canonicalPais(c.pais)].filter(Boolean).join(", ")}</p>
         ${c.tareasVoluntarios ? `<p class="vol-tareas"><strong>${t("paraLbl")}</strong> ${c.tareasVoluntarios}</p>` : ""}
+        ${c.fechaVoluntarios ? `<p class="vol-fecha">📅 ${c.fechaVoluntarios}</p>` : ""}
       `;
       listEl2.appendChild(item);
     });
@@ -849,4 +853,24 @@
   updateStats();
   applyFilters();
   loadCommunitySuggestions();
+
+  // ===== Cuadro de comentario incrustado (carga diferida) =====
+  const COMMENTS_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSf7ZRDttThbIuz0whSE1OcL2Tv3Mg_xNTJmZNkjfKXZ1siokA/viewform?embedded=true";
+  const commentsToggle = document.getElementById("comments-toggle");
+  const commentsBox = document.getElementById("comments-box");
+  const commentsIframe = document.getElementById("comments-iframe");
+  if (commentsToggle && commentsBox && commentsIframe) {
+    commentsToggle.addEventListener("click", () => {
+      const abierto = !commentsBox.hidden;
+      if (abierto) {
+        commentsBox.hidden = true;
+        commentsToggle.setAttribute("aria-expanded", "false");
+      } else {
+        if (!commentsIframe.src) commentsIframe.src = COMMENTS_FORM_URL;
+        commentsBox.hidden = false;
+        commentsToggle.setAttribute("aria-expanded", "true");
+        commentsBox.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+  }
 })();

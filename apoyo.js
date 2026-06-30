@@ -51,38 +51,75 @@
     });
   }
 
+  function detectarCategoria(textoTipo) {
+    const n = norm(textoTipo || "");
+    if (n.includes("legal") || n.includes("juridic") || n.includes("abogad")) return "Legal";
+    if (n.includes("economic") || n.includes("dinero") || n.includes("financ") || n.includes("subsidio")) return "Económico";
+    if (n.includes("psicolog") || n.includes("emocional") || n.includes("ansiedad") || n.includes("trauma") || n.includes("salud mental")) return "Psicológico";
+    return "Otro tipo de apoyo";
+  }
+
+  function slugify(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+
+  function buildApoyoCard(p) {
+    const tel = normTel(p.contacto);
+    const titulo = p.nombre && p.nombre !== "Sin nombre" ? p.nombre : p.tipo;
+    const subtipo = p.nombre && p.nombre !== "Sin nombre" ? p.tipo : "";
+    const card = document.createElement("article");
+    card.className = "card card--apoyo" + (p.esComunidad ? " card--comunidad" : "");
+    card.innerHTML = `
+      <div class="card-top">
+        <h3 class="card-name">${titulo}</h3>
+      </div>
+      ${p.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
+      ${subtipo ? `<p class="card-tags">${subtipo}</p>` : ""}
+      ${(p.ciudad || p.pais) ? `<p class="card-meta"><strong>${[p.ciudad, p.pais].filter(Boolean).join(", ")}</strong>${p.direccion ? "<br>" + p.direccion : ""}</p>` : (p.direccion ? `<p class="card-meta">${p.direccion}</p>` : "")}
+      ${!tel && p.contacto ? `<p class="card-meta">${p.contacto}</p>` : ""}
+      ${p.horario ? `<p class="card-meta">🕒 ${p.horario}</p>` : ""}
+      ${p.nota ? `<p class="card-meta">${p.nota}</p>` : ""}
+      ${tel ? `<div class="card-actions">
+        <a href="tel:${tel}">${t("llamar")}</a>
+        <a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>
+      </div>` : ""}
+    `;
+    return card;
+  }
+
   function render() {
     const items = getAll();
-    const statEl = document.getElementById("stat-apoyo");
-    if (statEl) {
-      const total = (typeof APOYO_DATA !== "undefined" ? APOYO_DATA.length : 0) + COMMUNITY.length;
-      statEl.textContent = total;
-    }
     listEl.innerHTML = "";
     if (items.length === 0) {
       listEl.innerHTML = `<p class="empty-state">${t("vacio")}</p>`;
       return;
     }
+    const grupos = {};
     items.forEach((p) => {
-      const tel = normTel(p.contacto);
-      const card = document.createElement("article");
-      card.className = "card card--apoyo" + (p.esComunidad ? " card--comunidad" : "");
-      card.innerHTML = `
-        <div class="card-top">
-          <h3 class="card-name">${p.nombre}</h3>
-        </div>
-        ${p.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
-        ${(p.ciudad || p.pais) ? `<p class="card-meta"><strong>${[p.ciudad, p.pais].filter(Boolean).join(", ")}</strong>${p.direccion ? "<br>" + p.direccion : ""}</p>` : (p.direccion ? `<p class="card-meta">${p.direccion}</p>` : "")}
-        ${!tel && p.contacto ? `<p class="card-meta">${p.contacto}</p>` : ""}
-        ${p.tipo ? `<p class="card-tags">${p.tipo}</p>` : ""}
-        ${p.horario ? `<p class="card-meta">🕒 ${p.horario}</p>` : ""}
-        ${p.nota ? `<p class="card-meta">${p.nota}</p>` : ""}
-        ${tel ? `<div class="card-actions">
-          <a href="tel:${tel}">${t("llamar")}</a>
-          <a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>
-        </div>` : ""}
-      `;
-      listEl.appendChild(card);
+      const cat = p.categoria || detectarCategoria(p.tipo);
+      (grupos[cat] = grupos[cat] || []).push(p);
+    });
+    const orden = ["Psicológico", "Legal", "Económico", "Otro tipo de apoyo"];
+    const categorias = Object.keys(grupos).sort((a, b) => {
+      const ia = orden.indexOf(a), ib = orden.indexOf(b);
+      if (ia === -1 && ib === -1) return a.localeCompare(b, "es");
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
+    categorias.forEach((cat) => {
+      const det = document.createElement("details");
+      det.className = "group-ciudad-det";
+      det.id = "group-" + slugify(cat);
+      const sum = document.createElement("summary");
+      sum.className = "group-ciudad";
+      sum.innerHTML = `${cat} <span class="group-count">${grupos[cat].length}</span>`;
+      det.appendChild(sum);
+      const body = document.createElement("div");
+      body.className = "group-ciudad-body";
+      grupos[cat].forEach((p) => body.appendChild(buildApoyoCard(p)));
+      det.appendChild(body);
+      listEl.appendChild(det);
     });
   }
 
@@ -130,6 +167,7 @@
         direccion: (iDireccion >= 0 ? r[iDireccion] || "" : "").trim(),
         contacto: (iContacto >= 0 ? r[iContacto] || "" : "").trim(),
         tipo: (iTipo >= 0 ? r[iTipo] || "" : "").trim(),
+        categoria: detectarCategoria(iTipo >= 0 ? r[iTipo] || "" : ""),
         horario: (iHorario >= 0 ? r[iHorario] || "" : "").trim(),
         nota: (iNota >= 0 ? r[iNota] || "" : "").trim(),
         esComunidad: true,

@@ -9,6 +9,7 @@
  *
  *   {
  *     nombre: "Nombre del servicio o institución",
+ *     categoria: "Psicológico",     // Psicológico, Legal, Económico, Otro
  *     pais: "Venezuela",            // opcional
  *     ciudad: "Caracas",             // opcional
  *     direccion: "",                 // opcional, si es presencial
@@ -34,6 +35,7 @@ const APOYO_DATA = [
   // Recopilados de prensa y fuentes oficiales (FPV, UCAB, RNV) 25-28/06/2026.
   {
     nombre: "LAPSI — Línea de Ayuda Psicológica (FPV)",
+    categoria: "Psicológico",
     pais: "Venezuela",
     ciudad: "",
     direccion: "",
@@ -44,6 +46,7 @@ const APOYO_DATA = [
   },
   {
     nombre: "PsicoLínea UCAB",
+    categoria: "Psicológico",
     pais: "Venezuela",
     ciudad: "",
     direccion: "",
@@ -54,6 +57,7 @@ const APOYO_DATA = [
   },
   {
     nombre: "Línea Nacional 0800-AYUDA-01",
+    categoria: "Psicológico",
     pais: "Venezuela",
     ciudad: "",
     direccion: "",
@@ -64,6 +68,7 @@ const APOYO_DATA = [
   },
   {
     nombre: "SEAPSI — Atención Psicológica Integral (FPV)",
+    categoria: "Psicológico",
     pais: "Venezuela",
     ciudad: "",
     direccion: "",
@@ -74,6 +79,7 @@ const APOYO_DATA = [
   },
   {
     nombre: "PPV — Programa de Psicólogos Voluntarios (FPV)",
+    categoria: "Psicológico",
     pais: "Venezuela",
     ciudad: "",
     direccion: "",
@@ -84,6 +90,7 @@ const APOYO_DATA = [
   },
   {
     nombre: "Comunidad Calmadamente (FPV)",
+    categoria: "Psicológico",
     pais: "Venezuela",
     ciudad: "",
     direccion: "",
@@ -94,6 +101,7 @@ const APOYO_DATA = [
   },
   {
     nombre: "FIPE-IFEP — Psicología de la Emergencia",
+    categoria: "Psicológico",
     pais: "Venezuela",
     ciudad: "",
     direccion: "",
@@ -104,6 +112,7 @@ const APOYO_DATA = [
   },
   {
     nombre: "Save the Children — Apoyo psicosocial",
+    categoria: "Psicológico",
     pais: "Venezuela",
     ciudad: "",
     direccion: "",

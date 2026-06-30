@@ -16,6 +16,7 @@
     llamar: { es: "📞 Llamar", en: "📞 Call" },
     wa: { es: "💬 WhatsApp", en: "💬 WhatsApp" },
     waMsg: { es: "Hola, vi este centro en la página Ruta de Acopio. ¿Están atendiendo emergencias?", en: "Hello, I saw this center on the Ruta de Acopio page. Are you handling emergencies?" },
+    sinCiudad: { es: "Otras ubicaciones", en: "Other locations" },
   };
   function t(k) { return (T[k] && T[k][lang]) || (T[k] && T[k].es) || ""; }
 
@@ -50,6 +51,29 @@
     });
   }
 
+  function buildHospCard(h) {
+    const tel = normTel(h.telefono);
+    const card = document.createElement("article");
+    card.className = "card" + (h.esComunidad ? " card--comunidad" : "");
+    card.innerHTML = `
+      <div class="card-top">
+        <h3 class="card-name">${h.nombre}</h3>
+      </div>
+      ${h.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
+      ${h.direccion ? `<p class="card-meta">${h.direccion}</p>` : ""}
+      ${h.nota ? `<p class="card-tags">${h.nota}</p>` : ""}
+      ${tel ? `<div class="card-actions">
+        <a href="tel:${tel}">${t("llamar")}</a>
+        <a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>
+      </div>` : ""}
+    `;
+    return card;
+  }
+
+  function slugify(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+
   function render() {
     const items = getAll();
     const statEl = document.getElementById("stat-hosp");
@@ -62,23 +86,25 @@
       listEl.innerHTML = `<p class="empty-state">${t("vacio")}</p>`;
       return;
     }
+    const grupos = {};
     items.forEach((h) => {
-      const tel = normTel(h.telefono);
-      const card = document.createElement("article");
-      card.className = "card" + (h.esComunidad ? " card--comunidad" : "");
-      card.innerHTML = `
-        <div class="card-top">
-          <h3 class="card-name">${h.nombre}</h3>
-        </div>
-        ${h.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
-        ${h.ciudad || h.direccion ? `<p class="card-meta">${h.ciudad ? "<strong>" + h.ciudad + "</strong>" : ""}${h.ciudad && h.direccion ? "<br>" : ""}${h.direccion || ""}</p>` : ""}
-        ${h.nota ? `<p class="card-tags">${h.nota}</p>` : ""}
-        ${tel ? `<div class="card-actions">
-          <a href="tel:${tel}">${t("llamar")}</a>
-          <a class="card-wa" href="https://wa.me/${tel}?text=${encodeURIComponent(t("waMsg"))}" target="_blank" rel="noopener">${t("wa")}</a>
-        </div>` : ""}
-      `;
-      listEl.appendChild(card);
+      const ciudad = (h.ciudad || t("sinCiudad")).trim() || t("sinCiudad");
+      (grupos[ciudad] = grupos[ciudad] || []).push(h);
+    });
+    const ciudades = Object.keys(grupos).sort((a, b) => a.localeCompare(b, "es"));
+    ciudades.forEach((ciudad) => {
+      const det = document.createElement("details");
+      det.className = "group-ciudad-det";
+      det.id = "group-" + slugify(ciudad);
+      const sum = document.createElement("summary");
+      sum.className = "group-ciudad";
+      sum.innerHTML = `${ciudad} <span class="group-count">${grupos[ciudad].length}</span>`;
+      det.appendChild(sum);
+      const body = document.createElement("div");
+      body.className = "group-ciudad-body";
+      grupos[ciudad].forEach((h) => body.appendChild(buildHospCard(h)));
+      det.appendChild(body);
+      listEl.appendChild(det);
     });
   }
 

@@ -10,14 +10,18 @@
   const searchEl = document.getElementById("search");
   const contentEl = document.getElementById("content");
   const toggleMapBtn = document.getElementById("toggle-map");
+  const mascListEl = document.getElementById("masc-list");
+  const mascSearchEl = document.getElementById("masc-search");
 
   let lang = "es";
   let currentQuery = "";
+  let mascQuery = "";
   let map = null;
   const markersById = {};
   let userLocation = null;
   let DATA = [];
   let COMMUNITY = [];
+  let MASC_COMMUNITY = [];
 
   // ---- Normalizar y fusionar los datos base ----
   function normalizeBase() {
@@ -33,6 +37,7 @@
       urgente: r.urgente || "",
       necesitaVoluntarios: r.necesitaVoluntarios === true,
       tareasVoluntarios: r.tareasVoluntarios || "",
+      fechaVoluntarios: r.fecha || "",
       lat: typeof r.lat === "number" ? r.lat : null,
       lng: typeof r.lng === "number" ? r.lng : null,
       esComunidad: false,
@@ -50,6 +55,8 @@
     paraLbl: { es: "Para:", en: "For:" },
     voluntarios: { es: "🙋 Necesita voluntarios", en: "🙋 Needs volunteers" },
     tareasLbl: { es: "Voluntarios para:", en: "Volunteers for:" },
+    mascotasLbl: { es: "Recibe:", en: "Takes in:" },
+    mascVacio: { es: "No hay refugios de mascotas en la lista todavía. Si conoces uno, agrégalo con el botón de abajo.", en: "No pet shelters listed yet. If you know one, add it with the button below." },
     comunidad: { es: "Agregado por la comunidad", en: "Added by the community" },
     vacio: { es: "Todavía no hay refugios en la lista. Si conoces uno, agrégalo con el botón de abajo.", en: "No shelters listed yet. If you know one, add it with the button below." },
     cercaDeMi: { es: "📍 Cerca de mí", en: "📍 Near me" },
@@ -176,6 +183,7 @@
         <p class="vol-nombre">${c.nombre === "Refugio sin nombre" ? c.direccion : c.nombre}</p>
         <p class="vol-lugar">📍 ${c.ciudad}</p>
         ${c.tareasVoluntarios ? `<p class="vol-tareas"><strong>${t("paraLbl")}</strong> ${c.tareasVoluntarios}</p>` : ""}
+        ${c.fechaVoluntarios ? `<p class="vol-fecha">📅 ${c.fechaVoluntarios}</p>` : ""}
       `;
       listV.appendChild(item);
     });
@@ -194,7 +202,7 @@
       const det = document.createElement("details");
       det.className = "group-ciudad-det";
       det.id = "group-" + slugify(ciudad);
-      det.open = ciudades.length === 1;
+      det.open = false;
       const sum = document.createElement("summary");
       sum.className = "group-ciudad";
       sum.innerHTML = `${ciudad} <span class="group-count">${groups[ciudad].length}</span>`;
@@ -283,6 +291,9 @@
     return rows.filter((r) => r.some((c) => c.trim() !== ""));
   }
   function norm(s) { return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim(); }
+  function colEx(head, keys, excl) {
+    return head.findIndex((h) => keys.some((k) => h.includes(k)) && !(excl || []).some((e) => h.includes(e)));
+  }
 
   async function loadCommunity() {
     if (typeof REF_SHEET_CSV_URL === "undefined" || !REF_SHEET_CSV_URL || REF_SHEET_CSV_URL.includes("PEGA_AQUI")) return;
@@ -312,6 +323,7 @@
       const iVoluntarios = colEx(["voluntario"]);
       const iTareas = colEx(["tarea", "para que"]);
       const iInfo = colEx(["informacion importante", "informacion", "nota", "observ"]);
+      const iMarca = colEx(["marca temporal", "marca"]);
 
       // Quita cualquier texto con forma de correo (algo@algo.algo).
       const EMAIL_RE = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
@@ -335,6 +347,7 @@
           urgente: (iUrgente >= 0 ? r[iUrgente] || "" : "").trim(),
           necesitaVoluntarios: volRaw.startsWith("s") || volRaw.includes("yes") || volRaw.includes("true"),
           tareasVoluntarios: (iTareas >= 0 ? r[iTareas] || "" : "").trim(),
+          fechaVoluntarios: (iMarca >= 0 ? r[iMarca] || "" : "").trim().split(" ")[0],
           lat: null, lng: null,
           esComunidad: true,
         };
@@ -353,8 +366,119 @@
     }
   }
 
+  // ---- Render mascotas ----
+  function getMascAll() {
+    const base = (typeof MASCOTAS_DATA !== "undefined" ? MASCOTAS_DATA : []).concat(MASC_COMMUNITY);
+    return base.filter((c) => {
+      if (!mascQuery) return true;
+      return `${c.nombre} ${c.ciudad} ${c.mascotas} ${c.necesita}`.toLowerCase().includes(mascQuery);
+    });
+  }
+
+  function renderMascotas() {
+    if (!mascListEl) return;
+    const items = getMascAll();
+    mascListEl.innerHTML = "";
+    if (items.length === 0) {
+      mascListEl.innerHTML = `<p class="empty-state">${t("mascVacio")}</p>`;
+      return;
+    }
+    // Agrupar por ciudad
+    const grupos = {};
+    items.forEach((c) => {
+      const ciudad = (c.ciudad || "Sin especificar").trim();
+      (grupos[ciudad] = grupos[ciudad] || []).push(c);
+    });
+    const ciudades = Object.keys(grupos).sort((a, b) => a.localeCompare(b, "es"));
+    ciudades.forEach((ciudad) => {
+      const det = document.createElement("details");
+      det.className = "group-ciudad-det";
+      det.open = false;
+      const sum = document.createElement("summary");
+      sum.className = "group-ciudad";
+      sum.innerHTML = `${ciudad} <span class="group-count">${grupos[ciudad].length}</span>`;
+      det.appendChild(sum);
+      const body = document.createElement("div");
+      body.className = "group-ciudad-body";
+      grupos[ciudad].forEach((c) => {
+        const wa = c.contacto ? c.contacto.match(/\+?[\d][\d\s().-]{6,}/) : null;
+        const tel = wa ? wa[0].replace(/[^\d]/g, "") : null;
+        const card = document.createElement("article");
+        card.className = "card card--mascotas" + (c.esComunidad ? " card--comunidad" : "");
+        card.innerHTML = `
+          <div class="card-top">
+            <h3 class="card-name">${c.nombre || c.direccion || "Refugio de mascotas"}</h3>
+            ${c.recibeDonaciones !== undefined ? `<span class="badge ${c.recibeDonaciones ? "badge--recibe" : "badge--norecibe"}">${c.recibeDonaciones ? t("recibe") : t("noRecibe")}</span>` : ""}
+          </div>
+          ${c.esComunidad ? `<span class="badge badge--comunidad">${t("comunidad")}</span>` : ""}
+          ${c.mascotas ? `<p class="card-tags"><strong>${t("mascotasLbl")}</strong> ${c.mascotas}</p>` : ""}
+          ${c.necesita ? `<p class="card-tags"><strong>${t("necesitaLbl")}</strong> ${c.necesita}</p>` : ""}
+          ${c.urgente ? `<p class="card-urgente"><strong>⚠ ${t("urgenteLbl")}</strong> ${c.urgente}</p>` : ""}
+          ${c.direccion ? `<p class="card-meta">${c.direccion}</p>` : ""}
+          ${c.horario ? `<p class="card-meta">🕒 ${c.horario}</p>` : ""}
+          ${!tel && c.contacto ? `<p class="card-meta">${c.contacto}</p>` : ""}
+          ${c.nota ? `<p class="card-meta">${c.nota}</p>` : ""}
+          ${tel && tel.length >= 7 ? `<div class="card-actions">
+            <a href="tel:${tel}">📞 ${t("llamar")}</a>
+            <a class="card-wa" href="https://wa.me/${tel}" target="_blank" rel="noopener">💬 ${t("wa")}</a>
+          </div>` : ""}
+        `;
+        body.appendChild(card);
+      });
+      det.appendChild(body);
+      mascListEl.appendChild(det);
+    });
+  }
+
+  async function loadMascCommunity() {
+    if (typeof MASC_SHEET_CSV_URL === "undefined" || !MASC_SHEET_CSV_URL || MASC_SHEET_CSV_URL.includes("PEGA_AQUI")) return;
+    try {
+      const res = await fetch(MASC_SHEET_CSV_URL);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const rows = parseCSV(await res.text());
+      if (rows.length < 2) return;
+      const head = rows[0].map(norm);
+      const correoEx = ["correo", "email", "mail", "electronic"];
+      // "Que mascotas recibe?" excluye "dona" para no confundirse con "Reciben donaciones?"
+      // "Reciben donaciones?" excluye "mascota" para no confundirse con la anterior
+      const iCiudad    = colEx(head, ["ciudad"]);
+      const iMascotas  = colEx(head, ["mascota"], ["dona"]);
+      const iNota      = colEx(head, ["notas", "nota"], correoEx);
+      const iNombre    = colEx(head, ["institucion", "local", "nombre", "refugio"]);
+      const iDir       = colEx(head, ["direcc"], correoEx);
+      const iHorario   = colEx(head, ["horario"]);
+      const iContacto  = colEx(head, ["contacto", "telefono", "whatsapp"], correoEx);
+      const iRecibe    = colEx(head, ["recib", "dona"], ["mascota"]);
+      const iNecesita  = colEx(head, ["necesita", "requiere"]);
+      const iInfo      = colEx(head, ["informacion", "adicional"]);
+      const EMAIL_RE   = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
+      const limpiaContacto = (s) => (s || "").replace(EMAIL_RE, "").replace(/\s{2,}/g, " ").trim();
+      MASC_COMMUNITY = rows.slice(1).map((r, i) => {
+        const recibeRaw = norm(iRecibe >= 0 ? r[iRecibe] : "");
+        const notaBase  = (iNota >= 0 ? r[iNota] || "" : "").trim();
+        const infoExtra = (iInfo >= 0 ? r[iInfo] || "" : "").trim();
+        return {
+          nombre: (iNombre >= 0 ? r[iNombre] || "" : "").trim(),
+          ciudad: (iCiudad >= 0 ? r[iCiudad] || "" : "").trim() || "Sin especificar",
+          mascotas: (iMascotas >= 0 ? r[iMascotas] || "" : "").trim(),
+          direccion: (iDir >= 0 ? r[iDir] || "" : "").trim(),
+          horario: (iHorario >= 0 ? r[iHorario] || "" : "").trim(),
+          contacto: limpiaContacto(iContacto >= 0 ? r[iContacto] || "" : ""),
+          recibeDonaciones: recibeRaw.startsWith("s") || recibeRaw.includes("yes"),
+          necesita: (iNecesita >= 0 ? r[iNecesita] || "" : "").trim(),
+          nota: [notaBase, infoExtra].filter(Boolean).join(" · "),
+          esComunidad: true,
+        };
+      }).filter((c) => c.ciudad && c.ciudad !== "Sin especificar" || c.nombre || c.mascotas);
+      renderMascotas();
+    } catch (e) {
+      console.warn("No se pudieron cargar sugerencias de mascotas:", e);
+    }
+  }
+
   // ---- Wire up ----
   if (searchEl) searchEl.addEventListener("input", (e) => { currentQuery = e.target.value.trim().toLowerCase(); render(); });
+  if (mascSearchEl) mascSearchEl.addEventListener("input", (e) => { mascQuery = e.target.value.trim().toLowerCase(); renderMascotas(); });
   document.querySelectorAll(".lang-btn").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
 
   if (toggleMapBtn) {
@@ -396,5 +520,7 @@
 
   normalizeBase();
   render();
+  renderMascotas();
   loadCommunity();
+  loadMascCommunity();
 })();

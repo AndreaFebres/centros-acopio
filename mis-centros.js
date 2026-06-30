@@ -22,6 +22,7 @@
  *     urgente: "Agua, medicinas",      // lo MÁS urgente ahora (opcional)
  *     necesitaVoluntarios: true,       // true (sí) o false, opcional
  *     tareasVoluntarios: "Empacar cajas", // para qué, opcional
+ *     fecha: "28/06",                   // fecha del pedido, opcional
  *   },
  *
  * Para agregar VARIOS, repite el bloque, uno debajo del otro.
