@@ -500,6 +500,54 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   scroll-snap-align: start;
 }
 .vol-fecha{ font-size: 11px; color: var(--ink-soft); margin: 6px 0 0; }
+.vol-seccion{ font-size: 10.5px; font-weight: 700; color: var(--blue); margin: 5px 0 0; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* Panel buscar voluntarios */
+.buscar-vol-wrap{ margin-top: 16px; }
+.buscar-vol-btn{
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  background: #fff;
+  color: #633806;
+  border: 2px solid #BA7517;
+  border-radius: 999px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+.buscar-vol-btn:hover{ background: #FFF1DC; }
+.buscar-vol-panel{
+  margin-top: 10px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.buscar-vol-label{
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin: 0 0 10px;
+}
+.buscar-vol-opciones{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.buscar-vol-op{
+  display: block;
+  padding: 10px 14px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+.buscar-vol-op:hover{ background: var(--blue); color: #fff; }
 .vol-nombre{ font-weight: 700; font-size: 14px; color: var(--ink); margin: 0; }
 .vol-lugar{ font-size: 12.5px; color: var(--ink-soft); margin: 3px 0 0; }
 .vol-tareas{ font-size: 12.5px; color: #633806; margin: 5px 0 0; }

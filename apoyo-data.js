@@ -43,6 +43,8 @@ const APOYO_DATA = [
     tipo: "Apoyo psicológico telefónico, gratuito (solo pagas la llamada). Primeros auxilios psicológicos e intervención en crisis.",
     horario: "Viernes a domingo, 8:00am a 8:00pm",
     nota: "Federación de Psicólogos de Venezuela.",
+    necesitaVoluntarios: false,
+    tipoVoluntarios: "",
   },
   {
     nombre: "PsicoLínea UCAB",
@@ -54,6 +56,8 @@ const APOYO_DATA = [
     tipo: "Apoyo psicológico telefónico, gratuito, anónimo y confidencial. Primeros auxilios psicológicos e intervención en crisis.",
     horario: "",
     nota: "Escuela de Psicología de la UCAB (PsicoData).",
+    necesitaVoluntarios: false,
+    tipoVoluntarios: "",
   },
   {
     nombre: "Línea Nacional 0800-AYUDA-01",
@@ -65,6 +69,8 @@ const APOYO_DATA = [
     tipo: "Apoyo psicológico telefónico, gratuito, nivel nacional. Psicólogos y psiquiatras.",
     horario: "",
     nota: "Línea oficial de atención en salud mental.",
+    necesitaVoluntarios: false,
+    tipoVoluntarios: "",
   },
   {
     nombre: "SEAPSI — Atención Psicológica Integral (FPV)",
@@ -76,6 +82,8 @@ const APOYO_DATA = [
     tipo: "Terapia psicológica presencial o a distancia, a tarifas solidarias. Niños, adolescentes, adultos, parejas y familias.",
     horario: "Lunes a viernes, 8:00am a 6:00pm",
     nota: "Federación de Psicólogos de Venezuela. Correo: seapsi@fpv.org.ve",
+    necesitaVoluntarios: false,
+    tipoVoluntarios: "",
   },
   {
     nombre: "PPV — Programa de Psicólogos Voluntarios (FPV)",
@@ -87,6 +95,8 @@ const APOYO_DATA = [
     tipo: "Apoyo psicoemocional y atención en emergencia, con psicólogos certificados.",
     horario: "",
     nota: "Llenas un formulario y te contactan según disponibilidad.",
+    necesitaVoluntarios: false,
+    tipoVoluntarios: "",
   },
   {
     nombre: "Comunidad Calmadamente (FPV)",
@@ -98,6 +108,8 @@ const APOYO_DATA = [
     tipo: "Comunidad virtual para aprender a gestionar la ansiedad, enfoque cognitivo conductual.",
     horario: "",
     nota: "Espacio de acompañamiento grupal, no es atención individual.",
+    necesitaVoluntarios: false,
+    tipoVoluntarios: "",
   },
   {
     nombre: "FIPE-IFEP — Psicología de la Emergencia",
@@ -109,6 +121,8 @@ const APOYO_DATA = [
     tipo: "Contención emocional y orientación psicológica inicial, gratuita.",
     horario: "",
     nota: "Federación Internacional de Psicología de la Emergencia.",
+    necesitaVoluntarios: false,
+    tipoVoluntarios: "",
   },
   {
     nombre: "Save the Children — Apoyo psicosocial",
@@ -120,5 +134,7 @@ const APOYO_DATA = [
     tipo: "Apoyo psicosocial enfocado en niños y familias afectadas.",
     horario: "",
     nota: "Organización internacional presente en Venezuela.",
+    necesitaVoluntarios: false,
+    tipoVoluntarios: "",
   },
 ];

@@ -697,19 +697,25 @@
     const section = document.getElementById("voluntarios-section");
     const listEl2 = document.getElementById("voluntarios-list");
     if (!section || !listEl2) return;
-    const todos = (includeCommunity ? CENTROS_DATA.concat(COMMUNITY_DATA) : CENTROS_DATA)
-      .filter((c) => c.necesitaVoluntarios);
+    const deCentros = (includeCommunity ? CENTROS_DATA.concat(COMMUNITY_DATA) : CENTROS_DATA)
+      .filter((c) => c.necesitaVoluntarios)
+      .map((c) => ({ nombre: c.sinNombre ? c.direccion : c.nombre, lugar: [c.ciudad, canonicalPais(c.pais)].filter(Boolean).join(", "), tareas: c.tareasVoluntarios, fecha: c.fechaVoluntarios, seccion: "centros" }));
+    const deApoyo = (typeof APOYO_DATA !== "undefined" ? APOYO_DATA : []).concat(APOYO_COMMUNITY || [])
+      .filter((p) => p.necesitaVoluntarios)
+      .map((p) => ({ nombre: p.nombre, lugar: [p.ciudad, p.pais].filter(Boolean).join(", "), tareas: p.tipoVoluntarios, fecha: "", seccion: "apoyo" }));
+    const todos = deCentros.concat(deApoyo);
     if (todos.length === 0) { section.style.display = "none"; return; }
     section.style.display = "block";
     listEl2.innerHTML = "";
-    todos.forEach((c) => {
+    todos.forEach(({ nombre, lugar, tareas, fecha, seccion }) => {
       const item = document.createElement("div");
       item.className = "voluntarios-item";
       item.innerHTML = `
-        <p class="vol-nombre">${c.sinNombre ? c.direccion : c.nombre}</p>
-        <p class="vol-lugar">📍 ${[c.ciudad, canonicalPais(c.pais)].filter(Boolean).join(", ")}</p>
-        ${c.tareasVoluntarios ? `<p class="vol-tareas"><strong>${t("paraLbl")}</strong> ${c.tareasVoluntarios}</p>` : ""}
-        ${c.fechaVoluntarios ? `<p class="vol-fecha">📅 ${c.fechaVoluntarios}</p>` : ""}
+        <p class="vol-nombre">${nombre}</p>
+        ${lugar ? `<p class="vol-lugar">📍 ${lugar}</p>` : ""}
+        ${tareas ? `<p class="vol-tareas"><strong>${t("paraLbl")}</strong> ${tareas}</p>` : ""}
+        ${fecha ? `<p class="vol-fecha">📅 ${fecha}</p>` : ""}
+        <p class="vol-seccion">${seccion === "apoyo" ? "Recursos de apoyo" : "Centro de acopio"}</p>
       `;
       listEl2.appendChild(item);
     });
@@ -849,10 +855,69 @@
     });
   }
 
+  let APOYO_COMMUNITY = [];
+
+  async function loadApoyoCommunityVoluntarios() {
+    if (typeof APOYO_SHEET_CSV_URL === "undefined" || !APOYO_SHEET_CSV_URL || APOYO_SHEET_CSV_URL.includes("PEGA_AQUI")) return;
+    try {
+      const res = await fetch(APOYO_SHEET_CSV_URL);
+      if (!res.ok) return;
+      const text = await res.text();
+      const parseRows = (txt) => {
+        const rows = []; let row = [], field = "", q = false;
+        for (let i = 0; i < txt.length; i++) {
+          const ch = txt[i];
+          if (q) { if (ch === '"') { if (txt[i+1] === '"') { field += '"'; i++; } else q = false; } else field += ch; }
+          else if (ch === '"') q = true;
+          else if (ch === ",") { row.push(field); field = ""; }
+          else if (ch === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+          else if (ch !== "\r") field += ch;
+        }
+        if (row.length) { row.push(field); rows.push(row); }
+        return rows.filter((r) => r.some((c) => c.trim()));
+      };
+      const rows = parseRows(text);
+      if (rows.length < 2) return;
+      const normH = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+      const head = rows[0].map(normH);
+      const colIdx = (keys, excl) => head.findIndex((h) => keys.some((k) => h.includes(k)) && !(excl || []).some((e) => h.includes(e)));
+      const iNombre = colIdx(["institucion", "persona", "local", "recepcion", "nombre", "servicio"]);
+      const iPais = colIdx(["pais"]);
+      const iCiudad = colIdx(["ciudad"]);
+      const iVoluntario = colIdx(["necesita voluntario", "voluntario"]);
+      const iTipoVol = colIdx(["tipo de voluntario", "tipo voluntario", "que tipo"]);
+      APOYO_COMMUNITY = rows.slice(1).map((r) => {
+        const volRaw = normH(iVoluntario >= 0 ? r[iVoluntario] || "" : "");
+        return {
+          nombre: (iNombre >= 0 ? r[iNombre] || "" : "").trim() || "Recurso de apoyo",
+          pais: (iPais >= 0 ? r[iPais] || "" : "").trim(),
+          ciudad: (iCiudad >= 0 ? r[iCiudad] || "" : "").trim(),
+          necesitaVoluntarios: volRaw.startsWith("s") || volRaw.includes("yes"),
+          tipoVoluntarios: (iTipoVol >= 0 ? r[iTipoVol] || "" : "").trim(),
+        };
+      }).filter((p) => p.necesitaVoluntarios);
+      renderVoluntarios();
+    } catch (e) {
+      console.warn("No se pudo cargar voluntarios de apoyo:", e);
+    }
+  }
+
   renderInsumos();
   updateStats();
   applyFilters();
   loadCommunitySuggestions();
+  loadApoyoCommunityVoluntarios();
+
+  // ===== Botón "Buscar voluntarios" =====
+  const buscarVolBtn = document.getElementById("buscar-vol-btn");
+  const buscarVolPanel = document.getElementById("buscar-vol-panel");
+  if (buscarVolBtn && buscarVolPanel) {
+    buscarVolBtn.addEventListener("click", () => {
+      const abierto = !buscarVolPanel.hidden;
+      buscarVolPanel.hidden = abierto;
+      buscarVolBtn.setAttribute("aria-expanded", abierto ? "false" : "true");
+    });
+  }
 
   // ===== Cuadro de comentario incrustado (carga diferida) =====
   const COMMENTS_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSf7ZRDttThbIuz0whSE1OcL2Tv3Mg_xNTJmZNkjfKXZ1siokA/viewform?embedded=true";
