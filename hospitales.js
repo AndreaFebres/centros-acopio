@@ -102,14 +102,13 @@
     const ciudades = Object.keys(grupos).sort((a, b) => a.localeCompare(b, "es"));
     ciudades.forEach((ciudad) => {
       const det = document.createElement("details");
-      det.className = "group-ciudad-det";
+      det.className = "group-pais";
       det.id = "group-" + slugify(ciudad);
       const sum = document.createElement("summary");
-      sum.className = "group-ciudad";
       sum.innerHTML = `${ciudad} <span class="group-count">${grupos[ciudad].length}</span>`;
       det.appendChild(sum);
       const body = document.createElement("div");
-      body.className = "group-ciudad-body";
+      body.className = "group-pais-body";
       grupos[ciudad].forEach((h) => body.appendChild(buildHospCard(h)));
       det.appendChild(body);
       listEl.appendChild(det);

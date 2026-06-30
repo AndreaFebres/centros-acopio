@@ -131,14 +131,13 @@
     grid.className = "cat-grid";
     categorias.forEach((cat) => {
       const det = document.createElement("details");
-      det.className = "group-ciudad-det cat-det";
+      det.className = "group-pais cat-det";
       det.id = "group-" + slugify(cat);
       const sum = document.createElement("summary");
-      sum.className = "group-ciudad";
       sum.innerHTML = `${CAT_ICONOS[cat] || "🤝"} ${cat} <span class="group-count">${grupos[cat].length}</span>`;
       det.appendChild(sum);
       const body = document.createElement("div");
-      body.className = "group-ciudad-body";
+      body.className = "group-pais-body";
       grupos[cat].forEach((p) => body.appendChild(buildApoyoCard(p)));
       det.appendChild(body);
       det.addEventListener("toggle", () => {

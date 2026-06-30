@@ -109,9 +109,6 @@
   <h2 class="seccion-pagina" data-es="📦 Centros de acopio" data-en="📦 Donation centers">📦 Centros de acopio</h2>
   <section class="controls" aria-label="Filtros de búsqueda">
     <div class="filter-group" role="group" aria-label="Filtrar por tipo">
-      <button type="button" id="toggle-map" class="filter-btn filter-btn--map" aria-pressed="false" title="Usa datos móviles">
-        🗺️ <span data-es="Ver mapa" data-en="Show map">Ver mapa</span>
-      </button>
       <button class="filter-btn is-active" data-filter="todos" aria-pressed="true" data-es="Todos" data-en="All">Todos</button>
       <button class="filter-btn" data-filter="internacional" aria-pressed="false">
         <span class="dot dot--internacional"></span><span data-es="Internacional" data-en="International">Internacional</span>
@@ -125,6 +122,10 @@
       <label for="search" class="sr-only">Buscar</label>
       <input type="search" id="search" class="search-input" placeholder="Buscar ciudad, país o nombre…" data-ph-es="Buscar ciudad, país o nombre…" data-ph-en="Search city, country or name…" autocomplete="off" />
     </div>
+
+    <button type="button" id="toggle-map" class="filter-btn filter-btn--map" aria-pressed="false" title="Usa datos móviles">
+      🗺️ <span data-es="Ver mapa" data-en="Show map">Ver mapa</span>
+    </button>
 
     <button type="button" id="near-me" class="filter-btn" data-es="📍 Cerca de mí" data-en="📍 Near me">📍 Cerca de mí</button>
   </section>

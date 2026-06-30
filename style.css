@@ -144,7 +144,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   border-color: var(--ink);
   color: #fff;
 }
-.dot{ width:7px; height:7px; border-radius:50%; display:inline-block; }
+.dot{ width:11px; height:11px; border-radius:50%; display:inline-block; }
 .dot--internacional{ background: var(--blue); }
 .dot--nacional{ background: var(--red); }
 
@@ -300,6 +300,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 .group-pais[open] > summary::before{ transform: rotate(90deg); }
 .group-pais-body{ padding: 0 12px 12px; }
+.group-pais-body .group-ciudad{ padding-left: 1.5em; }
 .group-ciudad-det{ margin: 6px 0; }
 .group-ciudad{
   list-style: none;
@@ -310,7 +311,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   font-family: var(--font-display);
   font-size: 15px;
   font-weight: 700;
-  color: var(--ink);
+  color: var(--blue);
   margin: 12px 0 8px 0;
   padding: 2px 0;
 }
@@ -335,8 +336,8 @@ a:focus-visible, button:focus-visible, input:focus-visible{
     gap: 10px;
     align-items: start;
   }
-  .list--ciudades-2col > .group-ciudad-det{ margin: 0; }
-  .list--ciudades-2col > .group-ciudad-det[open]{ grid-column: 1 / -1; }
+  .list--ciudades-2col > .group-pais{ margin: 0; }
+  .list--ciudades-2col > .group-pais[open]{ grid-column: 1 / -1; }
 }
 .group-count{
   font-family: var(--font-mono);
@@ -1181,6 +1182,13 @@ main > .seccion-titulo:first-child{ margin-top: 4px; }
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+@media (min-width: 760px){
+  .resources-list{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
 }
 .resources-list a{
   display: flex;
